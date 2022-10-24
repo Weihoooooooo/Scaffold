@@ -5,7 +5,7 @@ import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.github.pagehelper.PageInfo;
 import com.weiho.scaffold.common.config.system.ScaffoldSystemProperties;
 import com.weiho.scaffold.common.exception.BadRequestException;
-import com.weiho.scaffold.common.util.aes.LikeCipher;
+import com.weiho.scaffold.common.util.cipher.LikeCipher;
 import com.weiho.scaffold.common.util.collection.SetUtils;
 import com.weiho.scaffold.common.util.date.DateUtils;
 import com.weiho.scaffold.common.util.date.FormatEnum;
@@ -33,7 +33,7 @@ import com.weiho.scaffold.system.mapper.RoleMapper;
 import com.weiho.scaffold.system.mapper.UserMapper;
 import com.weiho.scaffold.system.security.vo.JwtUserVO;
 import com.weiho.scaffold.system.service.*;
-import com.weiho.scaffold.tools.mail.enums.EmailTypeEnum;
+import com.weiho.scaffold.tools.mail.util.MailUtils;
 import lombok.RequiredArgsConstructor;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.Pageable;
@@ -189,7 +189,7 @@ public class UserServiceImpl extends CommonServiceImpl<UserMapper, User> impleme
         if (!oldUsername.equals(resource.getUsername())) {
             throw new BadRequestException(I18nMessagesUtils.get("update.username.tip"));
         }
-        checkEmail(resource.getEmail());
+        MailUtils.checkEmail(resource.getEmail());
         // 获取原来用户的角色ID列表
         Set<Long> oldRoleIds = resource.getRoles().stream().map(Role::getId).collect(Collectors.toSet());
         // 新的用户角色ID列表
@@ -269,7 +269,7 @@ public class UserServiceImpl extends CommonServiceImpl<UserMapper, User> impleme
     @Override
     @Transactional(rollbackFor = Exception.class)
     public boolean createUser(UserVO resource) {
-        checkEmail(resource.getEmail());
+        MailUtils.checkEmail(resource.getEmail());
         // 根据用户名去查询是否存在用户
         User userUsername = this.getOne(new LambdaQueryWrapper<User>().eq(User::getUsername, resource.getUsername()));
         if (userUsername != null) {
@@ -308,14 +308,5 @@ public class UserServiceImpl extends CommonServiceImpl<UserMapper, User> impleme
             usersRolesService.deleteRolesByUserId(id);
         }
         this.removeByIds(ids);
-    }
-
-    private void checkEmail(String email) {
-        String suffix = email.substring(email.indexOf('@'));
-        EmailTypeEnum[] emailTypeEnums = EmailTypeEnum.values();
-        Set<String> set = Arrays.stream(emailTypeEnums).map(EmailTypeEnum::getEmailSuffix).collect(Collectors.toSet());
-        if (!set.contains(suffix)) {
-            throw new BadRequestException(I18nMessagesUtils.get("email.suffix.error"));
-        }
     }
 }

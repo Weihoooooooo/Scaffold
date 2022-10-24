@@ -1,5 +1,6 @@
-package com.weiho.scaffold.common.util.aes;
+package com.weiho.scaffold.common.util.cipher;
 
+import com.weiho.scaffold.common.util.aes.AesUtils;
 import com.weiho.scaffold.common.util.verify.VerifyUtils;
 import lombok.experimental.UtilityClass;
 

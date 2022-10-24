@@ -11,29 +11,26 @@ import java.sql.SQLException;
 
 /**
  * @author Weiho
- * @since 2022/10/21
+ * @since 2022/10/24
  */
-public class PhoneHandler extends BaseTypeHandler<Object> {
+public class NameHandler extends BaseTypeHandler<Object> {
     @Override
     public void setNonNullParameter(PreparedStatement preparedStatement, int i, Object o, JdbcType jdbcType) throws SQLException {
-        preparedStatement.setString(i, LikeCipher.phoneLikeEncrypt((String) o));
+        preparedStatement.setString(i, LikeCipher.likeEncrypt((String) o));
     }
 
     @Override
     public Object getNullableResult(ResultSet resultSet, String s) throws SQLException {
-        String columnValue = resultSet.getString(s);
-        return LikeCipher.phoneLikeDecrypt(columnValue);
+        return LikeCipher.likeDecrypt(resultSet.getString(s));
     }
 
     @Override
     public Object getNullableResult(ResultSet resultSet, int i) throws SQLException {
-        String columnValue = resultSet.getString(i);
-        return LikeCipher.phoneLikeDecrypt(columnValue);
+        return LikeCipher.likeDecrypt(resultSet.getString(i));
     }
 
     @Override
     public Object getNullableResult(CallableStatement callableStatement, int i) throws SQLException {
-        String columnValue = callableStatement.getString(i);
-        return LikeCipher.phoneLikeDecrypt(columnValue);
+        return LikeCipher.likeDecrypt(callableStatement.getString(i));
     }
 }
