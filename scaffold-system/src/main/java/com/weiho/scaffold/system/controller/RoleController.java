@@ -107,7 +107,6 @@ public class RoleController {
     @PutMapping("/menus")
     @PreAuthorize("@el.check('Role:update')")
     public Result updateMenus(@RequestBody RoleVO resource) {
-        System.err.println(resource.getMenus().toString());
         RoleVO roleVO = roleService.findById(resource.getId());
         roleService.checkLevel(roleVO.getLevel());
         roleService.updateMenu(resource);

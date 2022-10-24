@@ -29,10 +29,10 @@ public class AesUtils {
     private static final String CIPHER_ALGORITHM = "AES/CBC/PKCS5Padding";
 
     public static void main(String[] args) {
-        String str = "Hello World!";
-        System.out.println("加密前:" + str);
-        System.out.println("加密后:" + encrypt(str));
-        System.out.println("解密后:" + decrypt(encrypt(str)));
+//        String str = "Hello World!";
+//        System.out.println("加密前:" + str);
+//        System.out.println("加密后:" + encrypt(str));
+//        System.out.println("解密后:" + decrypt(encrypt(str)));
     }
 
     /**

@@ -20,9 +20,13 @@ public class UserQueryCriteria {
     @ApiModelProperty("主键")
     private Long id;
 
-    @Query(blurry = "email,username")
+    @Query(blurry = "username")
     @ApiModelProperty("模糊查询字段")
     private String blurry;
+
+    @Query(type = QueryTypeEnum.INNER_LIKE)
+    @ApiModelProperty("手机号模糊查询")
+    private String phone;
 
     @Query
     @ApiModelProperty("账号是否启用")

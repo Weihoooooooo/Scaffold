@@ -6,6 +6,7 @@ import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
 import com.weiho.scaffold.mp.entity.CommonEntity;
 import com.weiho.scaffold.mp.handler.EncryptHandler;
+import com.weiho.scaffold.mp.handler.PhoneHandler;
 import com.weiho.scaffold.system.entity.enums.SexEnum;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
@@ -55,7 +56,7 @@ public class User extends CommonEntity {
     private String email;
 
     @ApiModelProperty("手机号码")
-    @TableField(value = "phone", typeHandler = EncryptHandler.class)
+    @TableField(value = "phone", typeHandler = PhoneHandler.class)
     private String phone;
 
     @ApiModelProperty("状态：1启用 0禁用")

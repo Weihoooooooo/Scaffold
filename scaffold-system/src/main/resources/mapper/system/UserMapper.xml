@@ -13,7 +13,7 @@
         <result column="password" property="password" typeHandler="com.weiho.scaffold.mp.handler.EncryptHandler"/>
         <result column="sex" property="sex"/>
         <result column="email" property="email" typeHandler="com.weiho.scaffold.mp.handler.EncryptHandler"/>
-        <result column="phone" property="phone" typeHandler="com.weiho.scaffold.mp.handler.EncryptHandler"/>
+        <result column="phone" property="phone" typeHandler="com.weiho.scaffold.mp.handler.PhoneHandler"/>
         <result column="enabled" property="enabled"/>
         <result column="last_pass_reset_time" property="lastPassResetTime"/>
     </resultMap>

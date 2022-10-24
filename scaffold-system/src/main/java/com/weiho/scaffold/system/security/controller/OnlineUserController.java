@@ -73,7 +73,6 @@ public class OnlineUserController {
     @PreAuthorize("@el.check('Online:list','Online:delete')")
     @DeleteMapping
     public Result delete(@RequestBody Set<String> keys) throws Exception {
-        System.err.println(keys.toString());
         Set<String> usernames = new HashSet<>();
         for (String key : keys) {
             OnlineUserVO onlineUserVO = JSON.parseObject(redisUtils.getString(properties.getJwtProperties().getOnlineKey() + DesUtils.desDecrypt(key)), OnlineUserVO.class);
