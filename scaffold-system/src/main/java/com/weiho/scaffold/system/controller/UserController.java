@@ -165,7 +165,6 @@ public class UserController {
     @PostMapping
     @PreAuthorize("@el.check('User:add')")
     public Result createUser(@Validated @RequestBody UserVO resources) {
-        System.err.println(resources.toString());
         roleService.checkLevel(resources.getRoles());
         userService.createUser(resources);
         return Result.success(I18nMessagesUtils.get("add.success.tip"));
