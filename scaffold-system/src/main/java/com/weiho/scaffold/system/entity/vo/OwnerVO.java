@@ -1,5 +1,7 @@
 package com.weiho.scaffold.system.entity.vo;
 
+import com.alibaba.fastjson2.annotation.JSONField;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.weiho.scaffold.common.annotation.Desensitize;
 import com.weiho.scaffold.common.sensitive.enums.SensitiveStrategy;
 import com.weiho.scaffold.mp.entity.CommonEntity;
@@ -10,6 +12,7 @@ import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
 
+import javax.validation.constraints.NotBlank;
 import java.io.Serializable;
 
 /**
@@ -25,18 +28,27 @@ public class OwnerVO extends CommonEntity implements Serializable {
     private Long id;
 
     @ApiModelProperty("业主姓名")
+    @NotBlank(message = "业主姓名不能为空！")
     @Desensitize(strategy = SensitiveStrategy.USERNAME)
     private String name;
 
     @ApiModelProperty("业主手机号码")
+    @NotBlank(message = "手机号不能为空！")
     private String phone;
 
     @ApiModelProperty("业主身份证号")
+    @NotBlank(message = "身份证号不能为空！")
     @Desensitize(strategy = SensitiveStrategy.ID_CARD)
     private String identityId;
 
     @ApiModelProperty("业主邮箱")
+    @NotBlank(message = "邮箱不能为空！")
     private String email;
+
+    @JsonIgnore
+    @JSONField(serialize = false)
+    @ApiModelProperty("业主密码")
+    private String password;
 
     @ApiModelProperty("性别 0-女 1-男")
     private SexEnum sex;
