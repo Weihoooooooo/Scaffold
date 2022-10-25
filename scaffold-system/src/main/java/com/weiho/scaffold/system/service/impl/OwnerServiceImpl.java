@@ -3,6 +3,7 @@ package com.weiho.scaffold.system.service.impl;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.github.pagehelper.PageInfo;
 import com.weiho.scaffold.common.exception.BadRequestException;
+import com.weiho.scaffold.common.util.aes.AesUtils;
 import com.weiho.scaffold.common.util.cipher.LikeCipher;
 import com.weiho.scaffold.common.util.file.FileUtils;
 import com.weiho.scaffold.common.util.message.I18nMessagesUtils;
@@ -12,6 +13,7 @@ import com.weiho.scaffold.mp.service.impl.CommonServiceImpl;
 import com.weiho.scaffold.system.entity.Owner;
 import com.weiho.scaffold.system.entity.convert.OwnerVOConvert;
 import com.weiho.scaffold.system.entity.criteria.OwnerQueryCriteria;
+import com.weiho.scaffold.system.entity.vo.OwnerPassVO;
 import com.weiho.scaffold.system.entity.vo.OwnerVO;
 import com.weiho.scaffold.system.mapper.OwnerMapper;
 import com.weiho.scaffold.system.service.OwnerService;
@@ -75,16 +77,28 @@ public class OwnerServiceImpl extends CommonServiceImpl<OwnerMapper, Owner> impl
     @Override
     @Transactional(rollbackFor = Exception.class)
     public boolean createOwner(OwnerVO ownerVO) {
-        if (this.getOne(new LambdaQueryWrapper<Owner>().eq(Owner::getIdentityId, ownerVO.getIdentityId())) != null) {
+        if (this.getOne(new LambdaQueryWrapper<Owner>().eq(Owner::getIdentityId, AesUtils.encrypt(ownerVO.getIdentityId()))) != null) {
             throw new BadRequestException(I18nMessagesUtils.get("identity.exist.tip"));
         }
-        if (this.getOne(new LambdaQueryWrapper<Owner>().eq(Owner::getEmail, ownerVO.getEmail())) != null) {
+        if (this.getOne(new LambdaQueryWrapper<Owner>().eq(Owner::getEmail, AesUtils.encrypt(ownerVO.getEmail()))) != null) {
             throw new BadRequestException(I18nMessagesUtils.get("mail.change.error"));
         }
         MailUtils.checkEmail(ownerVO.getEmail());
         Owner resource = ownerVOConvert.toEntity(ownerVO);
         // 业主默认密码为手机号
         resource.setPassword(ownerVO.getPhone());
+        System.err.println(resource);
         return this.save(resource);
+    }
+
+    @Override
+    public boolean updateOwner(OwnerVO ownerVO) {
+        return false;
+    }
+
+    @Override
+    public void resetPassword(OwnerPassVO ownerPassVO) {
+        this.lambdaUpdate().set(Owner::getPassword, ownerPassVO.getPhone(), "typeHandler=com.weiho.scaffold.mp.handler.EncryptHandler")
+                .eq(Owner::getId, ownerPassVO.getId()).eq(Owner::getIsDel, 0).update();
     }
 }

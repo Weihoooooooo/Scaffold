@@ -26,21 +26,6 @@
         id, avatar_id, username, password, sex, email, phone, enabled, last_pass_reset_time
     </sql>
 
-    <update id="updatePass">
-        UPDATE user
-        SET password             = #{password,typeHandler=com.weiho.scaffold.mp.handler.EncryptHandler},
-            last_pass_reset_time = #{lastPassResetTime}
-        WHERE username = #{username}
-          AND is_del = 0
-    </update>
-
-    <update id="updateEmail">
-        UPDATE user
-        SET email = #{newEmail,typeHandler=com.weiho.scaffold.mp.handler.EncryptHandler}
-        WHERE username = #{username}
-          AND is_del = 0
-    </update>
-
     <select id="findByUsername" resultMap="BaseResultMap">
         SELECT
         <include refid="Base_Column_List"/>

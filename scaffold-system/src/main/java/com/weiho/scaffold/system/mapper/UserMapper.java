@@ -24,24 +24,4 @@ public interface UserMapper extends CommonMapper<User> {
      * @return 返回的用户信息对象
      */
     User findByUsername(@Param("username") String username);
-
-    /**
-     * 修改用户密码
-     *
-     * @param password          密码
-     * @param lastPassResetTime 上一次修改密码时间
-     * @param username          用户名
-     */
-    void updatePass(@Param("username") String username,
-                    @Param("password") String password,
-                    @Param("lastPassResetTime") String lastPassResetTime);
-
-    /**
-     * 修改用户的邮箱
-     *
-     * @param newEmail 新邮箱
-     * @param username 用户名
-     */
-    void updateEmail(@Param("username") String username, @Param("newEmail") String newEmail);
-
 }

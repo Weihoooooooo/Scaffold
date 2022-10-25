@@ -5,6 +5,7 @@ import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.github.pagehelper.PageInfo;
 import com.weiho.scaffold.common.config.system.ScaffoldSystemProperties;
 import com.weiho.scaffold.common.exception.BadRequestException;
+import com.weiho.scaffold.common.util.aes.AesUtils;
 import com.weiho.scaffold.common.util.cipher.LikeCipher;
 import com.weiho.scaffold.common.util.collection.SetUtils;
 import com.weiho.scaffold.common.util.date.DateUtils;
@@ -97,13 +98,17 @@ public class UserServiceImpl extends CommonServiceImpl<UserMapper, User> impleme
     @Override
     @Transactional(rollbackFor = Exception.class)
     public void updatePass(String username, String encryptPassword) {
-        this.getBaseMapper().updatePass(username, encryptPassword, DateUtils.getNowDateFormat(FormatEnum.YYYY_MM_DD_HH_MM_SS));
+        this.lambdaUpdate().set(User::getPassword, encryptPassword, "typeHandler=com.weiho.scaffold.mp.handler.EncryptHandler")
+                .set(User::getLastPassResetTime, DateUtils.getNowDateFormat(FormatEnum.YYYY_MM_DD_HH_MM_SS))
+                .eq(User::getUsername, username)
+                .eq(User::getIsDel, 0).update();
     }
 
     @Override
     @Transactional(rollbackFor = Exception.class)
     public void updateEmail(String username, String newEmail) {
-        this.getBaseMapper().updateEmail(username, newEmail);
+        this.lambdaUpdate().set(User::getEmail, newEmail, "typeHandler=com.weiho.scaffold.mp.handler.EncryptHandler")
+                .eq(User::getUsername, username).eq(User::getIsDel, 0).update();
     }
 
     @Override
@@ -180,7 +185,7 @@ public class UserServiceImpl extends CommonServiceImpl<UserMapper, User> impleme
 
     @Override
     @Transactional(rollbackFor = Exception.class)
-    public void updateUser(UserVO resource) {
+    public boolean updateUser(UserVO resource) {
         // 根据ID查找用户
         User user = this.getOne(new LambdaQueryWrapper<User>().eq(User::getId, resource.getId()));
         // 保存旧的用户名
@@ -198,7 +203,7 @@ public class UserServiceImpl extends CommonServiceImpl<UserMapper, User> impleme
         // 根据该实体中的用户名去查找
         User userUsername = this.getOne(new LambdaQueryWrapper<User>().eq(User::getUsername, resource.getUsername()));
         // 根据该实体中的邮箱去查找
-        User userEmail = this.getOne(new LambdaQueryWrapper<User>().eq(User::getEmail, resource.getEmail()));
+        User userEmail = this.getOne(new LambdaQueryWrapper<User>().eq(User::getEmail, AesUtils.encrypt(resource.getEmail())));
 
         // 验证用户名是否存在
         if (userUsername != null && !user.getId().equals(userUsername.getId())) {
@@ -245,6 +250,7 @@ public class UserServiceImpl extends CommonServiceImpl<UserMapper, User> impleme
                 cacheRefresh.updateRolesCacheForRoleList(user);
             }
         }
+        return result;
     }
 
     @Override
@@ -276,7 +282,7 @@ public class UserServiceImpl extends CommonServiceImpl<UserMapper, User> impleme
             throw new BadRequestException(I18nMessagesUtils.get("username.exists"));
         }
         // 根据邮箱去查询
-        User userEmail = this.getOne(new LambdaQueryWrapper<User>().eq(User::getEmail, resource.getEmail()));
+        User userEmail = this.getOne(new LambdaQueryWrapper<User>().eq(User::getEmail, AesUtils.encrypt(resource.getEmail())));
         if (userEmail != null) {
             throw new BadRequestException(I18nMessagesUtils.get("email.exists"));
         }
@@ -303,10 +309,10 @@ public class UserServiceImpl extends CommonServiceImpl<UserMapper, User> impleme
 
     @Override
     @Transactional(rollbackFor = Exception.class)
-    public void delete(Set<Long> ids) {
+    public boolean delete(Set<Long> ids) {
         for (Long id : ids) {
             usersRolesService.deleteRolesByUserId(id);
         }
-        this.removeByIds(ids);
+        return this.removeByIds(ids);
     }
 }

@@ -101,7 +101,7 @@ public interface MenuService extends CommonService<Menu> {
      *
      * @param resources 菜单信息
      */
-    void create(Menu resources);
+    boolean create(Menu resources);
 
     /**
      * 修改菜单

@@ -109,8 +109,11 @@ public class MenuController {
         if (resources.getId() != null) {
             throw new BadRequestException("新增的菜单不能拥有ID");
         }
-        menuService.create(resources);
-        return Result.success(I18nMessagesUtils.get("add.success.tip"));
+        if (menuService.create(resources)) {
+            return Result.success(I18nMessagesUtils.get("add.success.tip"));
+        } else {
+            return Result.of(ResultCodeEnum.BAD_REQUEST_ERROR, I18nMessagesUtils.get("add.fail.tip"));
+        }
     }
 
     @Logging(title = "修改菜单", businessType = BusinessTypeEnum.UPDATE)

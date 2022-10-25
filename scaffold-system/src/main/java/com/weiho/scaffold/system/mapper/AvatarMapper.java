@@ -34,12 +34,4 @@ public interface AvatarMapper extends CommonMapper<Avatar> {
                                     @Param("createTimeStart") Timestamp createTimeStart,
                                     @Param("createTimeEnd") Timestamp createTimeEnd,
                                     @Param("enabled") Integer enabled);
-
-    /**
-     * 修改用户头像状态
-     *
-     * @param id      主键ID
-     * @param enabled 头像状态
-     */
-    void updateEnabled(@Param("id") Long id, @Param("enabled") Integer enabled);
 }
