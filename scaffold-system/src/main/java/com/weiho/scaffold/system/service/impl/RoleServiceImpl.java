@@ -209,7 +209,7 @@ public class RoleServiceImpl extends CommonServiceImpl<RoleMapper, Role> impleme
 
     @Override
     @Transactional(rollbackFor = Exception.class)
-    public void update(Role resource) {
+    public boolean update(Role resource) {
         Role role = this.getById(resource.getId());
 
         // 根据角色名查找
@@ -231,13 +231,13 @@ public class RoleServiceImpl extends CommonServiceImpl<RoleMapper, Role> impleme
         role.setNameZhTw(resource.getNameZhTw());
         role.setNameEnUs(resource.getNameEnUs());
 
-        this.saveOrUpdate(role);
+        return this.saveOrUpdate(role);
     }
 
     @Override
     @Transactional(rollbackFor = Exception.class)
-    public void delete(Set<Long> ids) {
-        this.removeByIds(ids);
+    public boolean delete(Set<Long> ids) {
+        return this.removeByIds(ids);
     }
 
     @Override
@@ -263,11 +263,11 @@ public class RoleServiceImpl extends CommonServiceImpl<RoleMapper, Role> impleme
     }
 
     @Override
-    public void create(Role resource) {
+    public boolean create(Role resource) {
         if (this.getOne(new LambdaQueryWrapper<Role>().eq(Role::getName, resource.getName())) != null) {
             throw new BadRequestException(I18nMessagesUtils.get("role.exist.error"));
         }
-        this.save(resource);
+        return this.save(resource);
     }
 
     public String getRoleNameForLanguage(Role role, String language) {

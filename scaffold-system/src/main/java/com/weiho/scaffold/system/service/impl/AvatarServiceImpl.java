@@ -89,13 +89,14 @@ public class AvatarServiceImpl extends CommonServiceImpl<AvatarMapper, Avatar> i
 
     @Override
     @Transactional(rollbackFor = Exception.class)
-    public void delete(Set<Long> ids) {
-        this.removeByIds(ids);
+    public boolean delete(Set<Long> ids) {
+        return this.removeByIds(ids);
     }
 
     @Override
     @Transactional(rollbackFor = Exception.class)
     public void updateEnabled(AvatarEnabledVO avatarEnabledVO) {
-        this.getBaseMapper().updateEnabled(avatarEnabledVO.getId(), avatarEnabledVO.getEnabled().getKey());
+        this.lambdaUpdate().set(Avatar::getEnabled, avatarEnabledVO.getEnabled()).eq(Avatar::getId, avatarEnabledVO.getId())
+                .eq(Avatar::getIsDel, 0).update();
     }
 }

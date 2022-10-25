@@ -209,12 +209,12 @@ public class MenuServiceImpl extends CommonServiceImpl<MenuMapper, Menu> impleme
     }
 
     @Override
-    public void create(Menu resources) {
+    public boolean create(Menu resources) {
         if (this.getOne(new LambdaQueryWrapper<Menu>().eq(Menu::getName, resources.getName())) != null) {
             throw new BadRequestException(I18nMessagesUtils.get("menu.name.tip"));
         }
         verifyResources(resources);
-        this.save(resources);
+        return this.save(resources);
     }
 
     @Override

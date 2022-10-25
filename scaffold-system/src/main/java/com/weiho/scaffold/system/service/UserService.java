@@ -84,7 +84,7 @@ public interface UserService extends CommonService<User> {
      *
      * @param resource 编辑后的用户信息
      */
-    void updateUser(UserVO resource);
+    boolean updateUser(UserVO resource);
 
     /**
      * 导出数据
@@ -100,7 +100,6 @@ public interface UserService extends CommonService<User> {
      * @param resource 用户信息
      * @return Boolean
      */
-    @SuppressWarnings("all")
     boolean createUser(UserVO resource);
 
     /**
@@ -108,5 +107,5 @@ public interface UserService extends CommonService<User> {
      *
      * @param ids 用户ID
      */
-    void delete(Set<Long> ids);
+    boolean delete(Set<Long> ids);
 }

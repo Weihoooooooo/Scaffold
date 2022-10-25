@@ -6,6 +6,7 @@ import com.weiho.scaffold.common.exception.BadRequestException;
 import com.weiho.scaffold.common.util.aes.AesUtils;
 import com.weiho.scaffold.common.util.message.I18nMessagesUtils;
 import com.weiho.scaffold.common.util.result.Result;
+import com.weiho.scaffold.common.util.result.enums.ResultCodeEnum;
 import com.weiho.scaffold.common.util.rsa.RsaUtils;
 import com.weiho.scaffold.common.util.security.SecurityUtils;
 import com.weiho.scaffold.common.util.string.StringUtils;
@@ -156,8 +157,11 @@ public class UserController {
     @PreAuthorize("@el.check('User:update')")
     public Result updateUser(@Validated @RequestBody UserVO resources) {
         roleService.checkLevel(resources.getId());
-        userService.updateUser(resources);
-        return Result.success(I18nMessagesUtils.get("update.success.tip"));
+        if (userService.updateUser(resources)) {
+            return Result.success(I18nMessagesUtils.get("update.success.tip"));
+        } else {
+            return Result.of(ResultCodeEnum.BAD_REQUEST_ERROR, I18nMessagesUtils.get("update.fail.tip"));
+        }
     }
 
     @Logging(title = "新增用户", businessType = BusinessTypeEnum.INSERT)
@@ -166,8 +170,11 @@ public class UserController {
     @PreAuthorize("@el.check('User:add')")
     public Result createUser(@Validated @RequestBody UserVO resources) {
         roleService.checkLevel(resources.getRoles());
-        userService.createUser(resources);
-        return Result.success(I18nMessagesUtils.get("add.success.tip"));
+        if (userService.createUser(resources)) {
+            return Result.success(I18nMessagesUtils.get("add.success.tip"));
+        } else {
+            return Result.of(ResultCodeEnum.BAD_REQUEST_ERROR, I18nMessagesUtils.get("add.fail.tip"));
+        }
     }
 
     @Logging(title = "删除用户", businessType = BusinessTypeEnum.DELETE)
@@ -178,13 +185,23 @@ public class UserController {
         for (Long id : ids) {
             // 当前操作用户的级别
             Integer currentLevel = Collections.min(roleMapper.findListByUserId(SecurityUtils.getUserId()).stream().map(Role::getLevel).collect(Collectors.toList()));
-            Integer optLevel = Collections.min(roleMapper.findListByUserId(id).stream().map(Role::getLevel).collect(Collectors.toList()));
+            Integer optLevel;
+            List<Role> roles = roleMapper.findListByUserId(id);
+            if (roles != null && roles.size() > 0) {
+                optLevel = Collections.min(roles.stream().map(Role::getLevel).collect(Collectors.toList()));
+            } else {
+                optLevel = 999;
+            }
             if (currentLevel > optLevel) {
                 throw new BadRequestException(I18nMessagesUtils.get("delete.error.tip") + ":[" + userService.getById(id).getUsername() + "]");
             }
         }
         userService.delete(ids);
-        return Result.success(I18nMessagesUtils.get("delete.success.tip"));
+        if (userService.delete(ids)) {
+            return Result.success(I18nMessagesUtils.get("delete.success.tip"));
+        } else {
+            return Result.of(ResultCodeEnum.BAD_REQUEST_ERROR, I18nMessagesUtils.get("delete.fail.tip"));
+        }
     }
 
     @Logging(title = "导出用户数据")

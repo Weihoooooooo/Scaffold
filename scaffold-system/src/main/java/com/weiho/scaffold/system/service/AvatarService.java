@@ -68,7 +68,7 @@ public interface AvatarService extends CommonService<Avatar> {
      *
      * @param ids 头像ID
      */
-    void delete(Set<Long> ids);
+    boolean delete(Set<Long> ids);
 
     /**
      * 修改用户头像状态

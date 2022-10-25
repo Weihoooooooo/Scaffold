@@ -23,5 +23,4 @@
         is_del,
         id, name, phone, identity_id, email, password, sex
     </sql>
-
 </mapper>
