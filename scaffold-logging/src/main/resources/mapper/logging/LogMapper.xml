@@ -34,13 +34,6 @@
         request_params, response_result, status, exception_detail, time
     </sql>
 
-    <update id="deleteByLogType">
-        UPDATE log
-        SET is_del = 1
-        WHERE log_type = #{logType}
-          AND is_del = 0
-    </update>
-
     <select id="selectByUsername" resultMap="BaseResultMap">
         SELECT
         <include refid="Base_Column_List"/>

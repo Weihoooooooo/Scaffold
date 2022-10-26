@@ -23,6 +23,6 @@ public class OwnerQueryCriteria {
     private String blurry;
 
     @Query(type = QueryTypeEnum.BETWEEN)
-    @ApiModelProperty("注册时间的范围")
+    @ApiModelProperty(value = "注册时间的范围", dataType = "String[]")
     private List<Timestamp> createTime;
 }

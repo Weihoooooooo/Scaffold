@@ -209,7 +209,7 @@ public class RoleServiceImpl extends CommonServiceImpl<RoleMapper, Role> impleme
 
     @Override
     @Transactional(rollbackFor = Exception.class)
-    public boolean update(Role resource) {
+    public boolean updateRole(Role resource) {
         Role role = this.getById(resource.getId());
 
         // 根据角色名查找
@@ -236,7 +236,7 @@ public class RoleServiceImpl extends CommonServiceImpl<RoleMapper, Role> impleme
 
     @Override
     @Transactional(rollbackFor = Exception.class)
-    public boolean delete(Set<Long> ids) {
+    public boolean deleteRole(Set<Long> ids) {
         return this.removeByIds(ids);
     }
 
@@ -249,6 +249,7 @@ public class RoleServiceImpl extends CommonServiceImpl<RoleMapper, Role> impleme
     }
 
     @Override
+    @Transactional(rollbackFor = Exception.class)
     public void updateMenu(RoleVO resource) {
         if (resource.getMenus().size() > 0) {
             List<RolesMenus> rolesMenusList = resource.getMenus().stream().map(i -> {
@@ -263,7 +264,8 @@ public class RoleServiceImpl extends CommonServiceImpl<RoleMapper, Role> impleme
     }
 
     @Override
-    public boolean create(Role resource) {
+    @Transactional(rollbackFor = Exception.class)
+    public boolean createRole(Role resource) {
         if (this.getOne(new LambdaQueryWrapper<Role>().eq(Role::getName, resource.getName())) != null) {
             throw new BadRequestException(I18nMessagesUtils.get("role.exist.error"));
         }

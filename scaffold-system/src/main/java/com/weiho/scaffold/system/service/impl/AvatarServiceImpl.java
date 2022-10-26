@@ -89,7 +89,7 @@ public class AvatarServiceImpl extends CommonServiceImpl<AvatarMapper, Avatar> i
 
     @Override
     @Transactional(rollbackFor = Exception.class)
-    public boolean delete(Set<Long> ids) {
+    public boolean deleteAvatar(Set<Long> ids) {
         return this.removeByIds(ids);
     }
 

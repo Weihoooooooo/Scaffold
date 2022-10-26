@@ -23,6 +23,7 @@ import com.weiho.scaffold.system.entity.vo.UserPassVO;
 import com.weiho.scaffold.system.entity.vo.UserVO;
 import com.weiho.scaffold.system.entity.vo.VerificationVO;
 import com.weiho.scaffold.system.mapper.RoleMapper;
+import com.weiho.scaffold.system.security.service.LoginService;
 import com.weiho.scaffold.system.security.token.utils.TokenUtils;
 import com.weiho.scaffold.system.service.RoleService;
 import com.weiho.scaffold.system.service.UserService;
@@ -63,6 +64,7 @@ public class UserController {
     private final UserService userService;
     private final CacheRefresh cacheRefresh;
     private final RoleService roleService;
+    private final LoginService loginService;
     private final RoleMapper roleMapper;
     private final RedisUtils redisUtils;
     private final TokenUtils tokenUtils;
@@ -196,8 +198,8 @@ public class UserController {
                 throw new BadRequestException(I18nMessagesUtils.get("delete.error.tip") + ":[" + userService.getById(id).getUsername() + "]");
             }
         }
-        userService.delete(ids);
-        if (userService.delete(ids)) {
+        boolean flag = userService.deleteUser(ids);
+        if (flag) {
             return Result.success(I18nMessagesUtils.get("delete.success.tip"));
         } else {
             return Result.of(ResultCodeEnum.BAD_REQUEST_ERROR, I18nMessagesUtils.get("delete.fail.tip"));
@@ -210,6 +212,12 @@ public class UserController {
     @PreAuthorize("@el.check('User:list')")
     public void download(HttpServletResponse response, UserQueryCriteria criteria) throws IOException {
         userService.download(userService.getAll(criteria), response);
+    }
+
+    @ApiOperation("验证当前登录用户的密码")
+    @PostMapping("/verifyAccount")
+    public Result verifyAccount(@RequestBody Map<String, Object> map) throws Exception {
+        return loginService.verifyAccount((String) map.get("password"));
     }
 
 }

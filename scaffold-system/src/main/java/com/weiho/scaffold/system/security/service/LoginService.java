@@ -1,5 +1,6 @@
 package com.weiho.scaffold.system.security.service;
 
+import com.weiho.scaffold.common.util.result.Result;
 import com.weiho.scaffold.system.security.vo.AuthUserVO;
 
 import javax.servlet.http.HttpServletRequest;
@@ -21,4 +22,12 @@ public interface LoginService {
      * @return 返回token和用户信息给前端
      */
     Map<String, Object> login(AuthUserVO authUserVO, HttpServletRequest request) throws Exception;
+
+    /**
+     * 验证当前登录用户的密码
+     *
+     * @param password 密码
+     * @return /
+     */
+    Result verifyAccount(String password) throws Exception;
 }

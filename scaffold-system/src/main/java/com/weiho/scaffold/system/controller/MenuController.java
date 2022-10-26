@@ -109,7 +109,7 @@ public class MenuController {
         if (resources.getId() != null) {
             throw new BadRequestException("新增的菜单不能拥有ID");
         }
-        if (menuService.create(resources)) {
+        if (menuService.createMenu(resources)) {
             return Result.success(I18nMessagesUtils.get("add.success.tip"));
         } else {
             return Result.of(ResultCodeEnum.BAD_REQUEST_ERROR, I18nMessagesUtils.get("add.fail.tip"));
@@ -122,7 +122,7 @@ public class MenuController {
     @PreAuthorize("@el.check('Menu:update')")
     public Result updateMenu(@Validated @RequestBody Menu resources, HttpServletRequest request) {
         // 刷新缓存
-        this.refreshMenuCache(menuService.update(resources), request);
+        this.refreshMenuCache(menuService.updateMenu(resources), request);
         return Result.success(I18nMessagesUtils.get("update.success.tip"));
     }
 
@@ -140,7 +140,7 @@ public class MenuController {
         }
         Set<Long> deleteIds = menuSet.stream().map(Menu::getId).collect(Collectors.toSet());
         // 执行删除并且更新缓存
-        this.refreshMenuCache(menuService.delete(deleteIds), request);
+        this.refreshMenuCache(menuService.deleteMenu(deleteIds), request);
         return Result.success(I18nMessagesUtils.get("delete.success.tip"));
     }
 

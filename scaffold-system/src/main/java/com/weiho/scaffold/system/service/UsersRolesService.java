@@ -19,5 +19,5 @@ public interface UsersRolesService {
      *
      * @param usersRoles 实体
      */
-    void save(UsersRoles usersRoles);
+    void saveUserRoles(UsersRoles usersRoles);
 }

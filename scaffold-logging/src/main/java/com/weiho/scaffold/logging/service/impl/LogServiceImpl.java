@@ -131,13 +131,13 @@ public class LogServiceImpl extends CommonServiceImpl<LogMapper, Log> implements
     @Override
     @Transactional(rollbackFor = Exception.class)
     public void deleteAllByInfo() {
-        this.getBaseMapper().deleteByLogType(LogTypeEnum.INFO.getMsg());
+        this.lambdaUpdate().set(Log::getIsDel, 1).eq(Log::getLogType, LogTypeEnum.INFO.getMsg()).eq(Log::getIsDel, 0).update();
     }
 
     @Override
     @Transactional(rollbackFor = Exception.class)
     public void deleteAllByError() {
-        this.getBaseMapper().deleteByLogType(LogTypeEnum.ERROR.getMsg());
+        this.lambdaUpdate().set(Log::getIsDel, 1).eq(Log::getLogType, LogTypeEnum.ERROR.getMsg()).eq(Log::getIsDel, 0).update();
     }
 
     @Override

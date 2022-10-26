@@ -47,7 +47,7 @@ public class EmailConfigServiceImpl extends CommonServiceImpl<EmailConfigMapper,
 
     @Override
     @CachePut(value = "Scaffold:Mail", key = "'config'")
-    public void updateEmailConfig(EmailConfigVO newConfig) {
+    public boolean updateEmailConfig(EmailConfigVO newConfig) {
         EmailConfig oldConfig = getConfig();
         try {
             if (!newConfig.getPass().equals(oldConfig.getPass())) {
@@ -56,7 +56,7 @@ public class EmailConfigServiceImpl extends CommonServiceImpl<EmailConfigMapper,
         } catch (Exception e) {
             throw new BadRequestException(I18nMessagesUtils.get("mail.update.error"));
         }
-        this.save(emailConfigVOConvert.toEntity(newConfig));
+        return this.save(emailConfigVOConvert.toEntity(newConfig));
     }
 
     @Override
@@ -89,8 +89,7 @@ public class EmailConfigServiceImpl extends CommonServiceImpl<EmailConfigMapper,
                     .setUseGlobalSession(false)
                     .send();
         } catch (Exception e) {
-            e.printStackTrace();
-//            throw new BadRequestException(I18nMessagesUtils.get("mail.send.error.tip"));
+            throw new BadRequestException(I18nMessagesUtils.get("mail.send.error.tip"));
         }
     }
 }

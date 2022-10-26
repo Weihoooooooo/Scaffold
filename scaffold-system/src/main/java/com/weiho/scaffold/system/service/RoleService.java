@@ -129,14 +129,14 @@ public interface RoleService extends CommonService<Role> {
      *
      * @param resource 修改后的实体
      */
-    boolean update(Role resource);
+    boolean updateRole(Role resource);
 
     /**
      * 删除角色
      *
      * @param ids 角色主键集合
      */
-    boolean delete(Set<Long> ids);
+    boolean deleteRole(Set<Long> ids);
 
     /**
      * 根据角色ID查询角色信息
@@ -158,5 +158,5 @@ public interface RoleService extends CommonService<Role> {
      *
      * @param resource 角色信息
      */
-    boolean create(Role resource);
+    boolean createRole(Role resource);
 }

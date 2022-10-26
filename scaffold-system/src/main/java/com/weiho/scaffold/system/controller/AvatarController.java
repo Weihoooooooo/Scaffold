@@ -64,7 +64,7 @@ public class AvatarController {
         if (ids.size() == 0) {
             throw new BadRequestException(I18nMessagesUtils.get("avatar.error.tip"));
         }
-        if (avatarService.delete(ids)) {
+        if (avatarService.deleteAvatar(ids)) {
             return Result.success(I18nMessagesUtils.get("delete.success.tip"));
         } else {
             return Result.of(ResultCodeEnum.BAD_REQUEST_ERROR, I18nMessagesUtils.get("delete.fail.tip"));

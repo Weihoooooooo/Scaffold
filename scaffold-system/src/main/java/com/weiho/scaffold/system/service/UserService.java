@@ -107,5 +107,5 @@ public interface UserService extends CommonService<User> {
      *
      * @param ids 用户ID
      */
-    boolean delete(Set<Long> ids);
+    boolean deleteUser(Set<Long> ids);
 }

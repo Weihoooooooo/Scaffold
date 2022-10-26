@@ -13,7 +13,6 @@ import com.weiho.scaffold.mp.service.impl.CommonServiceImpl;
 import com.weiho.scaffold.system.entity.Owner;
 import com.weiho.scaffold.system.entity.convert.OwnerVOConvert;
 import com.weiho.scaffold.system.entity.criteria.OwnerQueryCriteria;
-import com.weiho.scaffold.system.entity.vo.OwnerPassVO;
 import com.weiho.scaffold.system.entity.vo.OwnerVO;
 import com.weiho.scaffold.system.mapper.OwnerMapper;
 import com.weiho.scaffold.system.service.OwnerService;
@@ -27,10 +26,8 @@ import org.springframework.transaction.annotation.Transactional;
 
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.LinkedHashMap;
-import java.util.List;
-import java.util.Map;
+import java.io.Serializable;
+import java.util.*;
 
 /**
  * <p>
@@ -83,22 +80,58 @@ public class OwnerServiceImpl extends CommonServiceImpl<OwnerMapper, Owner> impl
         if (this.getOne(new LambdaQueryWrapper<Owner>().eq(Owner::getEmail, AesUtils.encrypt(ownerVO.getEmail()))) != null) {
             throw new BadRequestException(I18nMessagesUtils.get("mail.change.error"));
         }
+        if (this.getOne(new LambdaQueryWrapper<Owner>().eq(Owner::getPhone, LikeCipher.phoneLikeEncrypt(ownerVO.getPhone()))) != null) {
+            throw new BadRequestException(I18nMessagesUtils.get("phone.exist.tip"));
+        }
         MailUtils.checkEmail(ownerVO.getEmail());
         Owner resource = ownerVOConvert.toEntity(ownerVO);
-        // 业主默认密码为手机号
-        resource.setPassword(ownerVO.getPhone());
-        System.err.println(resource);
+        // 业主默认密码为身份证号后六位
+        String initPass = ownerVO.getIdentityId().substring(ownerVO.getIdentityId().length() - 6);
+        resource.setPassword(initPass);
         return this.save(resource);
     }
 
     @Override
+    @Transactional(rollbackFor = Exception.class)
     public boolean updateOwner(OwnerVO ownerVO) {
-        return false;
+        // 根据ID查找
+        Owner owner = this.getById(ownerVO.getId());
+        // 验证邮箱类型
+        MailUtils.checkEmail(ownerVO.getEmail());
+        // 根据身份证号码查找
+        Owner ownerIdentityId = this.getOne(new LambdaQueryWrapper<Owner>().eq(Owner::getIdentityId, AesUtils.encrypt(ownerVO.getIdentityId())));
+        // 根据邮箱查找
+        Owner ownerEmail = this.getOne(new LambdaQueryWrapper<Owner>().eq(Owner::getEmail, AesUtils.encrypt(ownerVO.getEmail())));
+        // 根据手机号查找
+        Owner ownerPhone = this.getOne(new LambdaQueryWrapper<Owner>().eq(Owner::getPhone, LikeCipher.phoneLikeEncrypt(ownerVO.getPhone())));
+
+        if (ownerIdentityId != null && !owner.getId().equals(ownerIdentityId.getId())) {
+            throw new BadRequestException(I18nMessagesUtils.get("identity.exist.tip"));
+        }
+
+        if (ownerEmail != null && !owner.getId().equals(ownerEmail.getId())) {
+            throw new BadRequestException(I18nMessagesUtils.get("mail.change.error"));
+        }
+
+        if (ownerPhone != null && !owner.getId().equals(ownerPhone.getId())) {
+            throw new BadRequestException(I18nMessagesUtils.get("phone.exist.tip"));
+        }
+        return this.saveOrUpdate(ownerVOConvert.toEntity(ownerVO));
     }
 
     @Override
-    public void resetPassword(OwnerPassVO ownerPassVO) {
-        this.lambdaUpdate().set(Owner::getPassword, ownerPassVO.getPhone(), "typeHandler=com.weiho.scaffold.mp.handler.EncryptHandler")
-                .eq(Owner::getId, ownerPassVO.getId()).eq(Owner::getIsDel, 0).update();
+    public void resetPassword(Serializable id) {
+        Owner owner = this.getById(id);
+        if (owner != null) {
+            String initPass = owner.getIdentityId().substring(owner.getIdentityId().length() - 6);
+            this.lambdaUpdate().set(Owner::getPassword, initPass, "typeHandler=com.weiho.scaffold.mp.handler.EncryptHandler")
+                    .eq(Owner::getId, id).eq(Owner::getIsDel, 0).update();
+        }
+    }
+
+    @Override
+    @Transactional(rollbackFor = Exception.class)
+    public boolean deleteOwner(Set<Long> ids) {
+        return this.removeByIds(ids);
     }
 }

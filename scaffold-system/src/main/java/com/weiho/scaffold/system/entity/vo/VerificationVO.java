@@ -1,7 +1,7 @@
 package com.weiho.scaffold.system.entity.vo;
 
 import com.weiho.scaffold.tools.mail.enums.EmailTypeEnum;
-import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 
@@ -12,7 +12,7 @@ import javax.validation.constraints.NotBlank;
  * @since 2022/9/6
  */
 @Data
-@Api(tags = "修改邮箱参数对象")
+@ApiModel("修改邮箱参数对象")
 public class VerificationVO {
     @NotBlank(message = "新邮箱不能为空")
     @ApiModelProperty(value = "新邮箱", required = true)

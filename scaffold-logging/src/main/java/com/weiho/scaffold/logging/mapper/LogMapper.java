@@ -20,13 +20,6 @@ import java.util.List;
 @Repository
 public interface LogMapper extends CommonMapper<Log> {
     /**
-     * 根据日志的类型删除日志
-     *
-     * @param logType 日志的类型(INFO ERROR)
-     */
-    void deleteByLogType(@Param("logType") String logType);
-
-    /**
      * 根据用户名查找操作日志
      *
      * @param username 用户名
