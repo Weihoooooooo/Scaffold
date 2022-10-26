@@ -80,7 +80,7 @@ public class RoleController {
     @PreAuthorize("@el.check('Role:update')")
     public Result update(@Validated @RequestBody Role resource) {
         roleService.checkLevel(resource.getLevel());
-        if (roleService.update(resource)) {
+        if (roleService.updateRole(resource)) {
             return Result.success(I18nMessagesUtils.get("update.success.tip"));
         } else {
             return Result.of(ResultCodeEnum.BAD_REQUEST_ERROR, I18nMessagesUtils.get("update.fail.tip"));
@@ -95,7 +95,7 @@ public class RoleController {
         for (Long id : ids) {
             roleService.checkLevel(roleService.getById(id).getLevel());
         }
-        if (roleService.delete(ids)) {
+        if (roleService.deleteRole(ids)) {
             return Result.success(I18nMessagesUtils.get("delete.success.tip"));
         } else {
             return Result.of(ResultCodeEnum.BAD_REQUEST_ERROR, I18nMessagesUtils.get("delete.fail.tip"));
@@ -124,12 +124,12 @@ public class RoleController {
     @ApiOperation("新增角色")
     @PostMapping
     @PreAuthorize("@el.check('Role:add')")
-    public Result add(@Validated @RequestBody Role resource) {
+    public Result createRole(@Validated @RequestBody Role resource) {
         if (resource.getId() != null) {
             throw new BadRequestException(I18nMessagesUtils.get("role.add.error"));
         }
         roleService.checkLevel(resource.getLevel());
-        if (roleService.create(resource)) {
+        if (roleService.createRole(resource)) {
             return Result.success(I18nMessagesUtils.get("add.success.tip"));
         } else {
             return Result.of(ResultCodeEnum.BAD_REQUEST_ERROR, I18nMessagesUtils.get("add.fail.tip"));

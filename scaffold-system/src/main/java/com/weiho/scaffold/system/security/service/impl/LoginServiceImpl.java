@@ -6,12 +6,14 @@ import com.weiho.scaffold.common.exception.BadRequestException;
 import com.weiho.scaffold.common.exception.CaptchaException;
 import com.weiho.scaffold.common.exception.SecurityException;
 import com.weiho.scaffold.common.util.message.I18nMessagesUtils;
+import com.weiho.scaffold.common.util.result.Result;
 import com.weiho.scaffold.common.util.result.enums.ResultCodeEnum;
 import com.weiho.scaffold.common.util.rsa.RsaUtils;
 import com.weiho.scaffold.common.util.security.SecurityUtils;
 import com.weiho.scaffold.common.util.string.StringUtils;
 import com.weiho.scaffold.redis.util.RedisUtils;
 import com.weiho.scaffold.system.entity.Role;
+import com.weiho.scaffold.system.entity.User;
 import com.weiho.scaffold.system.security.service.LoginService;
 import com.weiho.scaffold.system.security.service.OnlineUserService;
 import com.weiho.scaffold.system.security.token.utils.TokenUtils;
@@ -26,6 +28,7 @@ import org.springframework.security.config.annotation.authentication.builders.Au
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import javax.servlet.http.HttpServletRequest;
@@ -45,6 +48,7 @@ public class LoginServiceImpl implements LoginService {
     private final TokenUtils tokenUtils;
     private final OnlineUserService onlineUserService;
     private final UserService userService;
+    private final PasswordEncoder passwordEncoder;
     private final RoleService roleService;
 
     @Override
@@ -84,8 +88,6 @@ public class LoginServiceImpl implements LoginService {
         try {
             //使用RSA私钥解密
             String password = RsaUtils.decryptByPrivateKey(properties.getRsaProperties().getPrivateKey(), authUserVO.getPassword());
-            //测试用
-//        String password = authUserVO.getPassword();
             //查询验证码
             String code = (String) redisUtils.get(authUserVO.getUuid());
             //清除验证码
@@ -121,6 +123,18 @@ public class LoginServiceImpl implements LoginService {
             }};
         } catch (IllegalStateException e) {
             throw new SecurityException(ResultCodeEnum.SYSTEM_FORBIDDEN, I18nMessagesUtils.get("login.error"));
+        }
+    }
+
+    @Override
+    public Result verifyAccount(String password) throws Exception {
+        User user = userService.findByUsername(SecurityUtils.getUsername());
+        // Password解密
+        String decryptPass = RsaUtils.decryptByPrivateKey(properties.getRsaProperties().getPrivateKey(), password);
+        if (passwordEncoder.matches(decryptPass, user.getPassword())) {
+            return Result.of(ResultCodeEnum.SUCCESS);
+        } else {
+            return Result.of(ResultCodeEnum.SUCCESS, "Password error!");
         }
     }
 }

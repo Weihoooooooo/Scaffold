@@ -30,11 +30,6 @@ class LogServiceTest {
     }
 
     @Test
-    void deleteByLogType() {
-        logMapper.deleteByLogType("INFO");
-    }
-
-    @Test
     void findByErrorDetail() {
         System.err.println(logService.findByErrorDetail(79L));
     }

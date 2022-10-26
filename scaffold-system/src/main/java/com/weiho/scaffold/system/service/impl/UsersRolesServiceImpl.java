@@ -24,7 +24,8 @@ public class UsersRolesServiceImpl implements UsersRolesService {
     }
 
     @Override
-    public void save(UsersRoles usersRoles) {
+    @Transactional(rollbackFor = Exception.class)
+    public void saveUserRoles(UsersRoles usersRoles) {
         usersRolesMapper.save(usersRoles);
     }
 }

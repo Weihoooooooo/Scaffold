@@ -101,21 +101,21 @@ public interface MenuService extends CommonService<Menu> {
      *
      * @param resources 菜单信息
      */
-    boolean create(Menu resources);
+    boolean createMenu(Menu resources);
 
     /**
      * 修改菜单
      *
      * @param resources 菜单信息
      */
-    boolean update(Menu resources);
+    boolean updateMenu(Menu resources);
 
     /**
      * 删除菜单
      *
      * @param ids 主键列表
      */
-    boolean delete(Set<Long> ids);
+    boolean deleteMenu(Set<Long> ids);
 
     /**
      * 根据菜单ID获取所有的下级菜单列表

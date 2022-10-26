@@ -209,7 +209,7 @@ public class MenuServiceImpl extends CommonServiceImpl<MenuMapper, Menu> impleme
     }
 
     @Override
-    public boolean create(Menu resources) {
+    public boolean createMenu(Menu resources) {
         if (this.getOne(new LambdaQueryWrapper<Menu>().eq(Menu::getName, resources.getName())) != null) {
             throw new BadRequestException(I18nMessagesUtils.get("menu.name.tip"));
         }
@@ -219,7 +219,7 @@ public class MenuServiceImpl extends CommonServiceImpl<MenuMapper, Menu> impleme
 
     @Override
     @Transactional(rollbackFor = Exception.class)
-    public boolean update(Menu resources) {
+    public boolean updateMenu(Menu resources) {
         // 验证上级不能为自己
         if (resources.getId().equals(resources.getParentId())) {
             throw new BadRequestException(I18nMessagesUtils.get("menu.parentId.error"));
@@ -316,7 +316,7 @@ public class MenuServiceImpl extends CommonServiceImpl<MenuMapper, Menu> impleme
 
     @Override
     @Transactional(rollbackFor = Exception.class)
-    public boolean delete(Set<Long> ids) {
+    public boolean deleteMenu(Set<Long> ids) {
         return this.removeByIds(ids);
     }
 

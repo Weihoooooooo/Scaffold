@@ -3,14 +3,15 @@ package com.weiho.scaffold.system.service;
 import com.weiho.scaffold.mp.service.CommonService;
 import com.weiho.scaffold.system.entity.Owner;
 import com.weiho.scaffold.system.entity.criteria.OwnerQueryCriteria;
-import com.weiho.scaffold.system.entity.vo.OwnerPassVO;
 import com.weiho.scaffold.system.entity.vo.OwnerVO;
 import org.springframework.data.domain.Pageable;
 
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.io.Serializable;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 /**
  * <p>
@@ -65,7 +66,15 @@ public interface OwnerService extends CommonService<Owner> {
     /**
      * 为业主重置密码
      *
-     * @param ownerPassVO 参数
+     * @param id 主键
      */
-    void resetPassword(OwnerPassVO ownerPassVO);
+    void resetPassword(Serializable id);
+
+    /**
+     * 删除业主
+     *
+     * @param ids 业主ID
+     * @return /
+     */
+    boolean deleteOwner(Set<Long> ids);
 }

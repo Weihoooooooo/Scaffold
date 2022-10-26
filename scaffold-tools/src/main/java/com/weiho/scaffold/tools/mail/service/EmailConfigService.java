@@ -26,7 +26,7 @@ public interface EmailConfigService extends CommonService<EmailConfig> {
      *
      * @param newConfig 邮箱配置
      */
-    void updateEmailConfig(EmailConfigVO newConfig);
+    boolean updateEmailConfig(EmailConfigVO newConfig);
 
     /**
      * 发送邮件

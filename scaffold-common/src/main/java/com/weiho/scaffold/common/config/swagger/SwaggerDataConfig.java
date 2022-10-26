@@ -1,5 +1,6 @@
 package com.weiho.scaffold.common.config.swagger;
 
+import com.alibaba.fastjson2.TypeReference;
 import com.fasterxml.classmate.TypeResolver;
 import com.github.xiaoymin.knife4j.spring.annotations.EnableKnife4j;
 import io.swagger.annotations.ApiModel;
@@ -15,6 +16,9 @@ import springfox.documentation.schema.AlternateTypeRule;
 import springfox.documentation.schema.AlternateTypeRuleConvention;
 import springfox.documentation.swagger2.annotations.EnableSwagger2;
 
+import java.lang.reflect.Type;
+import java.sql.Timestamp;
+import java.util.Date;
 import java.util.List;
 
 import static com.google.common.collect.Lists.newArrayList;
@@ -38,7 +42,15 @@ public class SwaggerDataConfig {
 
             @Override
             public List<AlternateTypeRule> rules() {
-                return newArrayList(newRule(resolver.resolve(Pageable.class), resolver.resolve(Page.class)));
+                Type originalType = new TypeReference<List<Timestamp>>() {
+                }.getType();
+                Type alternateType = new TypeReference<List<Date>>() {
+                }.getType();
+                return newArrayList(
+                        newRule(resolver.resolve(Pageable.class), resolver.resolve(Page.class)),
+                        newRule(resolver.resolve(Timestamp.class), resolver.resolve(Date.class)),
+                        newRule(originalType, alternateType)
+                );
             }
         };
     }

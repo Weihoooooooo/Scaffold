@@ -235,7 +235,7 @@ public class UserServiceImpl extends CommonServiceImpl<UserMapper, User> impleme
             for (Role role : set) {
                 usersRoles.setRoleId(role.getId());
                 if (result) {
-                    usersRolesService.save(usersRoles);
+                    usersRolesService.saveUserRoles(usersRoles);
                 }
             }
 
@@ -301,7 +301,7 @@ public class UserServiceImpl extends CommonServiceImpl<UserMapper, User> impleme
         for (Role role : set) {
             usersRoles.setRoleId(role.getId());
             if (result) {
-                usersRolesService.save(usersRoles);
+                usersRolesService.saveUserRoles(usersRoles);
             }
         }
         return result;
@@ -309,7 +309,7 @@ public class UserServiceImpl extends CommonServiceImpl<UserMapper, User> impleme
 
     @Override
     @Transactional(rollbackFor = Exception.class)
-    public boolean delete(Set<Long> ids) {
+    public boolean deleteUser(Set<Long> ids) {
         for (Long id : ids) {
             usersRolesService.deleteRolesByUserId(id);
         }
