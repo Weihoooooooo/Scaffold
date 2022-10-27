@@ -54,7 +54,6 @@ import java.util.*;
 @RequiredArgsConstructor
 @Transactional(propagation = Propagation.SUPPORTS, readOnly = true, rollbackFor = Exception.class)
 public class LogServiceImpl extends CommonServiceImpl<LogMapper, Log> implements LogService {
-
     private final LogErrorVOConvert logErrorVOConvert;
     private final LogUserVOConvert logUserVOConvert;
     private final LogErrorUserVOConvert logErrorUserVOConvert;
@@ -151,7 +150,7 @@ public class LogServiceImpl extends CommonServiceImpl<LogMapper, Log> implements
     @Override
     public Map<String, Object> findByUsername(LogTypeEnum logType, Pageable pageable) {
         startPage(pageable);
-        PageInfo<Log> pageInfo = new PageInfo<>(this.getBaseMapper().selectByUsername(SecurityUtils.getUsername(), logType.getMsg()));
+        PageInfo<Log> pageInfo = new PageInfo<>(this.selectByUsername(SecurityUtils.getUsername(), logType.getMsg()));
         Map<String, Object> map;
         if (logType.equals(LogTypeEnum.INFO)) {
             map = PageUtils.toPageContainer(logUserVOConvert.toPojo(pageInfo.getList()), pageInfo.getTotal());
@@ -159,6 +158,11 @@ public class LogServiceImpl extends CommonServiceImpl<LogMapper, Log> implements
             map = PageUtils.toPageContainer(logErrorUserVOConvert.toPojo(pageInfo.getList()), pageInfo.getTotal());
         }
         return map;
+    }
+
+    @Override
+    public List<Log> selectByUsername(String username, String logType) {
+        return this.lambdaQuery().eq(Log::getUsername, username).eq(Log::getLogType, logType).list();
     }
 
     /**

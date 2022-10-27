@@ -61,13 +61,4 @@
         </foreach>
         ORDER BY m.sort
     </select>
-
-    <select id="findByParentId" resultType="com.weiho.scaffold.system.entity.Menu">
-        SELECT
-        <include refid="Base_Column_List"/>
-        FROM menu m
-        WHERE m.parent_id = #{parentId}
-        AND m.is_del = 0
-    </select>
-
 </mapper>

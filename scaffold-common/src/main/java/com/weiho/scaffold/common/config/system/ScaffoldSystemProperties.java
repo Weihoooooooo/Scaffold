@@ -18,6 +18,7 @@ import org.springframework.stereotype.Component;
 @ConfigurationProperties(prefix = "scaffold")
 public class ScaffoldSystemProperties {
     private String version;
+    private String ip;
     private SwaggerProperties swaggerProperties;
     private RateLimiterProperties rateLimiterProperties;
     private JwtProperties jwtProperties;
@@ -198,5 +199,11 @@ public class ScaffoldSystemProperties {
         private String avatarLocalAddressPrefix;
         // 头像服务器地址前缀
         private String avatarServerAddressPrefix;
+        // 文件上传最大的大小
+        private long storageUploadMaxSize;
+        // 存储本地地址前缀
+        private String storageLocalAddressPrefix;
+        // 存储服务器地址前缀
+        private String storageServerAddressPrefix;
     }
 }

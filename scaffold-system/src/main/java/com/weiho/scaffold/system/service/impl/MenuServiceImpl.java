@@ -152,7 +152,7 @@ public class MenuServiceImpl extends CommonServiceImpl<MenuMapper, Menu> impleme
         menus.forEach(menu -> {
             if (menu != null) {
                 // 获取子菜单
-                List<Menu> menuList = this.getBaseMapper().findByParentId(menu.getId());
+                List<Menu> menuList = this.findByParentId(menu.getId());
                 Map<String, Object> map = new HashMap<>(16);
                 map.put("id", menu.getId());
                 map.put("label", getMenuNameForLanguage(menu, language));
@@ -167,7 +167,7 @@ public class MenuServiceImpl extends CommonServiceImpl<MenuMapper, Menu> impleme
 
     @Override
     public List<Menu> findByParentId(long pid) {
-        return this.getBaseMapper().findByParentId(pid);
+        return this.lambdaQuery().eq(Menu::getParentId, pid).eq(Menu::getIsDel, 0).list();
     }
 
     @Override
@@ -326,7 +326,7 @@ public class MenuServiceImpl extends CommonServiceImpl<MenuMapper, Menu> impleme
         for (Menu menu : childrenList) {
             resultList.add(menu);
             // 查找子菜单列表
-            List<Menu> menus = this.getBaseMapper().findByParentId(menu.getId());
+            List<Menu> menus = this.findByParentId(menu.getId());
             if (menus != null && menus.size() != 0) {
                 // 再次递归
                 getLowerMenus(menus, resultList);

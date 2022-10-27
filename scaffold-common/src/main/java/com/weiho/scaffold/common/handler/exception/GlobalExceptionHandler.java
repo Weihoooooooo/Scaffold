@@ -2,6 +2,7 @@ package com.weiho.scaffold.common.handler.exception;
 
 import com.weiho.scaffold.common.exception.SecurityException;
 import com.weiho.scaffold.common.exception.*;
+import com.weiho.scaffold.common.util.message.I18nMessagesUtils;
 import com.weiho.scaffold.common.util.result.Result;
 import com.weiho.scaffold.common.util.result.enums.ResultCodeEnum;
 import com.weiho.scaffold.common.util.throwable.ThrowableUtils;
@@ -11,6 +12,7 @@ import org.springframework.validation.BindException;
 import org.springframework.validation.ObjectError;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
+import org.springframework.web.multipart.support.MissingServletRequestPartException;
 
 /**
  * 自定义全局异常处理
@@ -77,6 +79,14 @@ public class GlobalExceptionHandler {
     @ExceptionHandler({BadCredentialsException.class})
     public Result badCredentialsException(BadCredentialsException e) {
         return Result.of(ResultCodeEnum.BAD_REQUEST_ERROR, e.getMessage());
+    }
+
+    /**
+     * 在处理 MultipartFile 类型参数时候使用@RequestPart注解，当上传的文件为空时的异常处理
+     */
+    @ExceptionHandler({MissingServletRequestPartException.class})
+    public Result missingServletRequestPartException(MissingServletRequestPartException e) {
+        return Result.of(ResultCodeEnum.BAD_REQUEST_ERROR, I18nMessagesUtils.get("file.null.tip"));
     }
 
 }

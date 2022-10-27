@@ -25,14 +25,4 @@
         is_del,
         id, avatar_id, username, password, sex, email, phone, enabled, last_pass_reset_time
     </sql>
-
-    <select id="findByUsername" resultMap="BaseResultMap">
-        SELECT
-        <include refid="Base_Column_List"/>
-        FROM
-        user
-        WHERE username = #{username}
-        AND is_del = 0
-    </select>
-
 </mapper>

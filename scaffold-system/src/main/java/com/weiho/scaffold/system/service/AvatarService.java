@@ -64,7 +64,7 @@ public interface AvatarService extends CommonService<Avatar> {
     List<AvatarVO> getAll(AvatarQueryCriteria criteria);
 
     /**
-     * 删除用户
+     * 删除用户头像
      *
      * @param ids 头像ID
      */

@@ -123,8 +123,8 @@ public class SecurityConfig {
                         "/local/logo/logo.png",
                         // ICON列表的资源
                         "/local/iconList/**",
-                        // SVG图标
-                        "/local/svg/**"
+                        // 本地存储资源
+                        "/local/storage/**"
                 ).permitAll()
                 //放行Swagger文档
                 .antMatchers("/swagger-ui.html").permitAll()

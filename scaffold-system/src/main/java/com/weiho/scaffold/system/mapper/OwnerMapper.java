@@ -3,6 +3,7 @@ package com.weiho.scaffold.system.mapper;
 import com.weiho.scaffold.mp.mapper.CommonMapper;
 import com.weiho.scaffold.system.entity.Owner;
 import org.apache.ibatis.annotations.Mapper;
+import org.springframework.stereotype.Repository;
 
 /**
  * <p>
@@ -13,5 +14,6 @@ import org.apache.ibatis.annotations.Mapper;
  * @since 2022-10-21
  */
 @Mapper
+@Repository
 public interface OwnerMapper extends CommonMapper<Owner> {
 }

@@ -35,12 +35,4 @@ public interface MenuMapper extends CommonMapper<Menu> {
      * @return 菜单列表
      */
     List<Menu> findListByRoles(@Param("roleIds") List<Long> roleIds);
-
-    /**
-     * 根据上级ID查找菜单
-     *
-     * @param parentId 上级ID
-     * @return /
-     */
-    List<Menu> findByParentId(@Param("parentId") long parentId);
 }
