@@ -91,4 +91,13 @@ public interface LogService extends CommonService<Log> {
      * @return /
      */
     Map<String, Object> findByUsername(LogTypeEnum logType, Pageable pageable);
+
+    /**
+     * 查找对应用户名的对应类别的日志
+     *
+     * @param username 用户名
+     * @param logType  日志的级别
+     * @return /
+     */
+    List<Log> selectByUsername(String username, String logType);
 }

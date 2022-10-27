@@ -1,8 +1,6 @@
 package com.weiho.scaffold.system.service.impl;
 
-import com.github.pagehelper.PageInfo;
 import com.weiho.scaffold.common.util.file.FileUtils;
-import com.weiho.scaffold.common.util.page.PageUtils;
 import com.weiho.scaffold.mp.service.impl.CommonServiceImpl;
 import com.weiho.scaffold.system.entity.Avatar;
 import com.weiho.scaffold.system.entity.criteria.AvatarQueryCriteria;
@@ -49,8 +47,7 @@ public class AvatarServiceImpl extends CommonServiceImpl<AvatarMapper, Avatar> i
     @Override
     public Map<String, Object> selectAvatarList(AvatarQueryCriteria criteria, Pageable pageable) {
         startPage(pageable);
-        PageInfo<AvatarVO> pageInfo = new PageInfo<>(getAll(criteria));
-        return PageUtils.toPageContainer(pageInfo.getList(), pageInfo.getTotal());
+        return toPageContainer(getAll(criteria));
     }
 
     @Override

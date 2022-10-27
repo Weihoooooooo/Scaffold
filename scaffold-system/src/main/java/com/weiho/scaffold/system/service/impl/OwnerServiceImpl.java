@@ -1,13 +1,11 @@
 package com.weiho.scaffold.system.service.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
-import com.github.pagehelper.PageInfo;
 import com.weiho.scaffold.common.exception.BadRequestException;
 import com.weiho.scaffold.common.util.aes.AesUtils;
 import com.weiho.scaffold.common.util.cipher.LikeCipher;
 import com.weiho.scaffold.common.util.file.FileUtils;
 import com.weiho.scaffold.common.util.message.I18nMessagesUtils;
-import com.weiho.scaffold.common.util.page.PageUtils;
 import com.weiho.scaffold.mp.core.QueryHelper;
 import com.weiho.scaffold.mp.service.impl.CommonServiceImpl;
 import com.weiho.scaffold.system.entity.Owner;
@@ -53,8 +51,7 @@ public class OwnerServiceImpl extends CommonServiceImpl<OwnerMapper, Owner> impl
     @Override
     public Map<String, Object> getOwnerList(OwnerQueryCriteria criteria, Pageable pageable) {
         startPage(pageable);
-        PageInfo<OwnerVO> pageInfo = new PageInfo<>(this.findAll(criteria));
-        return PageUtils.toPageContainer(pageInfo.getList(), pageInfo.getTotal());
+        return toPageContainer(this.findAll(criteria));
     }
 
     @Override

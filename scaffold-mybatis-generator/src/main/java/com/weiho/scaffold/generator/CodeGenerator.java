@@ -29,13 +29,13 @@ public class CodeGenerator {
         //数据库连接密码
         String databasePassword = "970049938";
         //Java模块名称
-        String javaModuleName = "scaffold-system";
+        String javaModuleName = "scaffold-tools";
         //生成Java doc的作者名字
         String javaDocAuthorName = "Weiho";
         //父包名
-        String parentPackageName = "com.weiho.scaffold.system";
+        String parentPackageName = "com.weiho.scaffold.tools.storage";
         //要创建系列文件的表名
-        String[] tableNames = {"owner"};
+        String[] tableNames = {"local_storage"};
         //若要设置Entity、Service、ServiceImpl、Controller的父类滑动下去修改
 
 
@@ -57,7 +57,7 @@ public class CodeGenerator {
 //                    .moduleName("untitled")//模块名称
                     .xml("mapper")//Mapper XML 包名
                     //修改Mapper.xml到resources文件夹中的mapper文件夹中
-                    .pathInfo(Collections.singletonMap(OutputFile.mapperXml, System.getProperty("user.dir") + (javaModuleName.isEmpty() ? "" : "/" + javaModuleName) + "/src/main/resources/mapper/system/"));
+                    .pathInfo(Collections.singletonMap(OutputFile.mapperXml, System.getProperty("user.dir") + (javaModuleName.isEmpty() ? "" : "/" + javaModuleName) + "/src/main/resources/mapper/tools/"));
         }).strategyConfig(builder -> {//策略配置
             builder.addInclude(Arrays.asList(tableNames))//增加表匹配
                     //entity策略

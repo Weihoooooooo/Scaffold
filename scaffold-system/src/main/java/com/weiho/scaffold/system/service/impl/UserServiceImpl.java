@@ -1,8 +1,6 @@
 package com.weiho.scaffold.system.service.impl;
 
-import cn.hutool.core.io.FileUtil;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
-import com.github.pagehelper.PageInfo;
 import com.weiho.scaffold.common.config.system.ScaffoldSystemProperties;
 import com.weiho.scaffold.common.exception.BadRequestException;
 import com.weiho.scaffold.common.util.aes.AesUtils;
@@ -12,7 +10,6 @@ import com.weiho.scaffold.common.util.date.DateUtils;
 import com.weiho.scaffold.common.util.date.FormatEnum;
 import com.weiho.scaffold.common.util.file.FileUtils;
 import com.weiho.scaffold.common.util.message.I18nMessagesUtils;
-import com.weiho.scaffold.common.util.page.PageUtils;
 import com.weiho.scaffold.common.util.security.SecurityUtils;
 import com.weiho.scaffold.common.util.string.StringUtils;
 import com.weiho.scaffold.common.util.validation.ValidationUtils;
@@ -89,7 +86,7 @@ public class UserServiceImpl extends CommonServiceImpl<UserMapper, User> impleme
     @Cacheable(value = "Scaffold:Commons:User", key = "'loadUserByUsername:' + #p0", unless = "#result == null || #result.enabled == false")
     public User findByUsername(String username) {
         try {
-            return this.getBaseMapper().findByUsername(username);
+            return this.lambdaQuery().eq(User::getUsername, username).eq(User::getIsDel, 0).one();
         } catch (Exception e) {
             return null;
         }
@@ -139,7 +136,7 @@ public class UserServiceImpl extends CommonServiceImpl<UserMapper, User> impleme
             // 更新缓存
             avatarService.updateAvatar(avatar, user.getUsername());
             if (StringUtils.isNotBlank(oldFileNamePath)) {
-                FileUtil.del(oldFileNamePath);
+                FileUtils.del(oldFileNamePath);
             }
         }
     }
@@ -153,7 +150,7 @@ public class UserServiceImpl extends CommonServiceImpl<UserMapper, User> impleme
     private void getAvatar(MultipartFile multipartFile, Avatar avatar) {
         File file = FileUtils.upload(multipartFile, properties.getResourcesProperties().getAvatarLocalAddressPrefix());
         avatar.setRealName(file.getName());
-        avatar.setPath(properties.getResourcesProperties().getAvatarLocalAddressPrefix() + file.getName());
+        avatar.setPath(properties.getResourcesProperties().getAvatarServerAddressPrefix() + file.getName());
         avatar.setSize(FileUtils.getSize(multipartFile.getSize()));
         if (SecurityUtils.getUsername().equals("root")) {
             avatar.setEnabled(AuditEnum.AUDIT_OK);
@@ -165,8 +162,7 @@ public class UserServiceImpl extends CommonServiceImpl<UserMapper, User> impleme
     @Override
     public Map<String, Object> getUserList(UserQueryCriteria criteria, Pageable pageable) {
         startPage(pageable);
-        PageInfo<UserVO> pageInfo = new PageInfo<>(this.getAll(criteria));
-        return PageUtils.toPageContainer(pageInfo.getList(), pageInfo.getTotal());
+        return toPageContainer(this.getAll(criteria));
     }
 
     @Override

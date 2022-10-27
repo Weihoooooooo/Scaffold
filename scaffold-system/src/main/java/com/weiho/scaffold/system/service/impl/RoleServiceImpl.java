@@ -1,12 +1,10 @@
 package com.weiho.scaffold.system.service.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
-import com.github.pagehelper.PageInfo;
 import com.weiho.scaffold.common.exception.BadRequestException;
 import com.weiho.scaffold.common.exception.SecurityException;
 import com.weiho.scaffold.common.util.file.FileUtils;
 import com.weiho.scaffold.common.util.message.I18nMessagesUtils;
-import com.weiho.scaffold.common.util.page.PageUtils;
 import com.weiho.scaffold.common.util.result.enums.ResultCodeEnum;
 import com.weiho.scaffold.common.util.security.SecurityUtils;
 import com.weiho.scaffold.common.util.string.StringUtils;
@@ -102,8 +100,7 @@ public class RoleServiceImpl extends CommonServiceImpl<RoleMapper, Role> impleme
     @Override
     public Map<String, Object> findAll(RoleQueryCriteria criteria, Pageable pageable, HttpServletRequest request) {
         startPage(pageable, "level", SortTypeEnum.ASC);
-        PageInfo<RoleDTO> pageInfo = new PageInfo<>(this.findAllForLanguage(criteria, request));
-        return PageUtils.toPageContainer(pageInfo.getList(), pageInfo.getTotal());
+        return toPageContainer(this.findAllForLanguage(criteria, request));
     }
 
     @Override
@@ -115,8 +112,7 @@ public class RoleServiceImpl extends CommonServiceImpl<RoleMapper, Role> impleme
             // 过滤父节点菜单，避免前端的菜单树多选出现Bug
             roleVO.setMenus(menuService.findSetByRoleId(roleVO.getId()).stream().filter(m -> m.getParentId() != 0L).collect(Collectors.toSet()));
         }
-        PageInfo<RoleVO> pageInfo = new PageInfo<>(roleVOS);
-        return PageUtils.toPageContainer(pageInfo.getList(), pageInfo.getTotal());
+        return toPageContainer(roleVOS);
     }
 
     @Override

@@ -26,7 +26,7 @@ import java.util.Date;
  */
 @Getter
 @Setter
-@ToString
+@ToString(callSuper = true)
 @ApiModel(value = "User对象", description = "系统用户表")
 @TableName(value = "user", autoResultMap = true)
 public class User extends CommonEntity {
