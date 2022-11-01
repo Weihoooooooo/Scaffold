@@ -9,6 +9,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.io.Serializable;
 import java.util.List;
 import java.util.Map;
 
@@ -70,4 +71,12 @@ public interface LocalStorageService extends CommonService<LocalStorage> {
      * @return /
      */
     boolean updateFileName(LocalStorageVO localStorageVO);
+
+    /**
+     * 下载指定ID的文件
+     *
+     * @param localStorageId 文件主键ID
+     * @param response       响应参数
+     */
+    void download(Serializable localStorageId, HttpServletResponse response) throws IOException;
 }

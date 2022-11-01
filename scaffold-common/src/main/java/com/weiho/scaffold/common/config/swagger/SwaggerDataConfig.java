@@ -64,8 +64,8 @@ public class SwaggerDataConfig {
         @ApiModelProperty("每页显示的数目")
         private Integer size;
 
-        @ApiModelProperty("以下列格式排序标准：property [asc | desc],默认排序顺序为升序。 " +
-                "支持多种排序条件,不填则默认按照id升序[id,asc]")
+        @ApiModelProperty("以下列格式排序标准{property,[asc | desc]},默认排序顺序为升序。 " +
+                "多种排序条件,需要再起一个参数sort=property[asc | desc],不填则默认按照id升序[id,asc]")
         private List<String> sort;
     }
 }
