@@ -208,7 +208,7 @@ scaffold:
     avatar-local-address-prefix: ${scaffold.resources.local-address-prefix}avatar\
     # 头像服务器地址前缀
     avatar-server-address-prefix: http://${scaffold.ip}:${server.port}/local/avatar/
-    # 文件上传最大的大小
+    # 文件上传最大的大小(MB)
     storage-upload-max-size: 20
     # 存储本地地址前缀
     storage-local-address-prefix: ${scaffold.resources.local-address-prefix}storage\

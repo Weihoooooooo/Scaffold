@@ -22,6 +22,7 @@ import org.springframework.web.multipart.MultipartFile;
 import javax.servlet.http.HttpServletResponse;
 import java.io.File;
 import java.io.IOException;
+import java.io.Serializable;
 import java.util.Map;
 
 /**
@@ -66,6 +67,15 @@ public class LocalStorageController {
                                      @RequestParam(value = "filename", required = false) String filename) {
         return Result.success(localStorageService.upload(file, filename));
     }
+
+    @Logging(title = "下载文件")
+    @ApiOperation("下载文件")
+    @PreAuthorize("@el.check('Storage:download')")
+    @GetMapping("/download/{id}")
+    public void download(HttpServletResponse response, @PathVariable Serializable id) throws IOException {
+        localStorageService.download(id, response);
+    }
+
 
     @Logging(title = "修改文件名", businessType = BusinessTypeEnum.UPDATE)
     @PutMapping

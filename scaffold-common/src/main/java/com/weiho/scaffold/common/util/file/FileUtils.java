@@ -9,6 +9,7 @@ import com.weiho.scaffold.common.util.date.DateUtils;
 import com.weiho.scaffold.common.util.date.FormatEnum;
 import com.weiho.scaffold.common.util.md5.MD5Utils;
 import com.weiho.scaffold.common.util.message.I18nMessagesUtils;
+import com.weiho.scaffold.common.util.string.StringUtils;
 import lombok.experimental.UtilityClass;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -212,6 +213,25 @@ public class FileUtils extends cn.hutool.core.io.FileUtil {
         file.deleteOnExit();
         writer.flush(out, true);
         //此处记得关闭输出Servlet流
+        IoUtil.close(out);
+    }
+
+    /**
+     * 文件下载
+     *
+     * @param fileLocalPath 文件本地路径
+     * @param response      响应参数
+     */
+    public void downloadFile(String fileLocalPath, HttpServletResponse response) throws IOException {
+        if (StringUtils.isBlank(fileLocalPath)) {
+            throw new BadRequestException(I18nMessagesUtils.get("file.path.null"));
+        }
+        ServletOutputStream out = response.getOutputStream();
+        byte[] bytes = readBytes(fileLocalPath);
+        response.setContentType("application/octet-stream");
+        String fileName = fileLocalPath.substring(fileLocalPath.lastIndexOf("\\") + 1);
+        response.setHeader("Content-Disposition", "attachment;filename=" + fileName);
+        out.write(bytes);
         IoUtil.close(out);
     }
 

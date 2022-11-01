@@ -27,6 +27,7 @@ import org.springframework.web.multipart.MultipartFile;
 import javax.servlet.http.HttpServletResponse;
 import java.io.File;
 import java.io.IOException;
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -57,18 +58,20 @@ public class LocalStorageServiceImpl extends CommonServiceImpl<LocalStorageMappe
         FileUtils.checkSize(properties.getResourcesProperties().getStorageUploadMaxSize(), multipartFile.getSize());
         // 获取文件后缀
         String suffix = FileUtils.getExtensionName(multipartFile.getOriginalFilename());
+        // 获取文件的分类
+        String type = FileUtils.getFileType(suffix);
         // 处理上传的文件,保存文件
-        File file = FileUtils.upload(multipartFile, properties.getResourcesProperties().getStorageLocalAddressPrefix());
+        File file = FileUtils.upload(multipartFile, properties.getResourcesProperties().getStorageLocalAddressPrefix() + type + "\\");
         // 构建文件体
         LocalStorage localStorage = new LocalStorage();
         localStorage.setUsername(SecurityUtils.getUsername());
         localStorage.setFileName(StringUtils.isBlank(filename) ? FileUtils.getFileNameNoEx(file.getName()) : filename);
         localStorage.setRealName(file.getName());
-        localStorage.setType(FileUtils.getFileType(suffix));
+        localStorage.setType(type);
         localStorage.setSize(FileUtils.getSize(multipartFile.getSize()));
         localStorage.setSuffix(suffix);
-        localStorage.setServerUrl(properties.getResourcesProperties().getStorageServerAddressPrefix() + file.getName());
-        localStorage.setLocalUrl(properties.getResourcesProperties().getStorageLocalAddressPrefix() + file.getName());
+        localStorage.setServerUrl(properties.getResourcesProperties().getStorageServerAddressPrefix() + type + "/" + file.getName());
+        localStorage.setLocalUrl(properties.getResourcesProperties().getStorageLocalAddressPrefix() + type + "\\" + file.getName());
         localStorage.setMd5Code(FileUtils.getMd5(file));
         localStorage.setCreateTime(DateUtils.getNowDate());
 
@@ -87,7 +90,6 @@ public class LocalStorageServiceImpl extends CommonServiceImpl<LocalStorageMappe
     @Override
     public Map<String, Object> findAll(LocalStorageQueryCriteria criteria, Pageable pageable) {
         startPage(pageable);
-//        return toPageContainer(pageable, this.findAll(criteria));
         return toPageContainer(this.findAll(criteria));
     }
 
@@ -143,5 +145,13 @@ public class LocalStorageServiceImpl extends CommonServiceImpl<LocalStorageMappe
         } else {
             return true;
         }
+    }
+
+    @Override
+    public void download(Serializable localStorageId, HttpServletResponse response) throws IOException {
+        // 根据主键查找数据库
+        LocalStorage localStorage = this.getById(localStorageId);
+        String fileLocalPath = localStorage.getLocalUrl();
+        FileUtils.downloadFile(fileLocalPath, response);
     }
 }

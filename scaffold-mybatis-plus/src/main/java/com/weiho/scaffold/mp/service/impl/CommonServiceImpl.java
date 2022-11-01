@@ -35,7 +35,7 @@ public abstract class CommonServiceImpl<M extends BaseMapper<E>, E> extends Serv
     protected void startPage(Pageable pageable) {
         String order;
         order = pageable.getSort().toString();//获取排序信息
-        order = order.replace(": ASC", "");//拆分前端传入的字段 id:asc -> id asc
+        order = order.replace(":", "");//拆分前端传入的字段 id:asc -> id asc
         if ("UNSORTED".equals(order)) {
             order = "id ASC";//若没填写sort参数,则默认按照id升序
         }
@@ -58,7 +58,7 @@ public abstract class CommonServiceImpl<M extends BaseMapper<E>, E> extends Serv
     protected void startPage(Pageable pageable, String orderByDataBaseColumn, SortTypeEnum sortBy) {
         String order;
         order = pageable.getSort().toString();//获取排序信息
-        order = order.replace(": ASC", "");//拆分前端传入的字段 id:asc -> id asc
+        order = order.replace(":", "");//拆分前端传入的字段 id:asc -> id asc
         if ("UNSORTED".equals(order)) {
             order = orderByDataBaseColumn + " " + sortBy.getSort();
         }
