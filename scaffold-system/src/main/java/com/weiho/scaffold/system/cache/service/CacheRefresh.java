@@ -1,6 +1,7 @@
 package com.weiho.scaffold.system.cache.service;
 
 import com.weiho.scaffold.system.entity.Role;
+import com.weiho.scaffold.system.entity.SysSetting;
 import com.weiho.scaffold.system.entity.User;
 import com.weiho.scaffold.system.entity.dto.MenuDTO;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -56,4 +57,12 @@ public interface CacheRefresh {
      * @return /
      */
     Object updateMenuTree(HttpServletRequest request);
+
+    /**
+     * 更新系统设置
+     *
+     * @param sysSetting 新的系统设置
+     * @return
+     */
+    SysSetting updateSysSetting(SysSetting sysSetting);
 }

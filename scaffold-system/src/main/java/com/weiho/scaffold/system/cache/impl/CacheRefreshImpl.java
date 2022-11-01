@@ -3,6 +3,7 @@ package com.weiho.scaffold.system.cache.impl;
 import com.weiho.scaffold.system.cache.service.CacheRefresh;
 import com.weiho.scaffold.system.entity.Menu;
 import com.weiho.scaffold.system.entity.Role;
+import com.weiho.scaffold.system.entity.SysSetting;
 import com.weiho.scaffold.system.entity.User;
 import com.weiho.scaffold.system.entity.dto.MenuDTO;
 import com.weiho.scaffold.system.service.MenuService;
@@ -58,5 +59,11 @@ public class CacheRefreshImpl implements CacheRefresh {
     @CachePut(value = "Scaffold:System", key = "'MenuTree'")
     public Object updateMenuTree(HttpServletRequest request) {
         return menuService.getMenuTree(menuService.findByParentId(0L).stream().filter(Menu::isEnabled).collect(Collectors.toList()), request);
+    }
+
+    @Override
+    @CachePut(value = "Scaffold:System", key = "'settings'")
+    public SysSetting updateSysSetting(SysSetting sysSetting) {
+        return sysSetting;
     }
 }

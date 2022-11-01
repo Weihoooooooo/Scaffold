@@ -5,6 +5,7 @@ import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
 import com.weiho.scaffold.mp.entity.CommonEntity;
+import com.weiho.scaffold.mp.handler.EncryptHandler;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Getter;
@@ -22,7 +23,7 @@ import lombok.ToString;
 @Getter
 @Setter
 @ToString
-@TableName("sys_setting")
+@TableName(value = "sys_setting", autoResultMap = true)
 @ApiModel(value = "SysSetting对象", description = "系统参数表")
 public class SysSetting extends CommonEntity {
 
@@ -55,7 +56,7 @@ public class SysSetting extends CommonEntity {
     private String sysLogo;
 
     @ApiModelProperty("系统用户初始密码")
-    @TableField("user_init_password")
+    @TableField(value = "user_init_password", typeHandler = EncryptHandler.class)
     private String userInitPassword;
 
 }

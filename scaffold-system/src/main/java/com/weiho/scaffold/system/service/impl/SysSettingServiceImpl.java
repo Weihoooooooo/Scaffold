@@ -1,8 +1,12 @@
 package com.weiho.scaffold.system.service.impl;
 
+import com.weiho.scaffold.common.util.aes.AesUtils;
 import com.weiho.scaffold.mp.service.impl.CommonServiceImpl;
+import com.weiho.scaffold.system.cache.service.CacheRefresh;
 import com.weiho.scaffold.system.entity.SysSetting;
-import com.weiho.scaffold.system.entity.convert.SysSettingConvert;
+import com.weiho.scaffold.system.entity.convert.SysLogoTitleVOConvert;
+import com.weiho.scaffold.system.entity.convert.SysSettingVOConvert;
+import com.weiho.scaffold.system.entity.vo.SysLogoTitleVO;
 import com.weiho.scaffold.system.entity.vo.SysSettingVO;
 import com.weiho.scaffold.system.mapper.SysSettingMapper;
 import com.weiho.scaffold.system.service.SysSettingService;
@@ -25,7 +29,9 @@ import java.util.Map;
 @Service
 @RequiredArgsConstructor
 public class SysSettingServiceImpl extends CommonServiceImpl<SysSettingMapper, SysSetting> implements SysSettingService {
-    private final SysSettingConvert sysSettingConvert;
+    private final SysLogoTitleVOConvert sysLogoTitleVOConvert;
+    private final SysSettingVOConvert sysSettingVOConvert;
+    private final CacheRefresh cacheRefresh;
 
     @Override
     @Cacheable(value = "Scaffold:System", key = "'settings'")
@@ -36,26 +42,38 @@ public class SysSettingServiceImpl extends CommonServiceImpl<SysSettingMapper, S
     @Override
     public Map<String, Object> getLogoAndTitle(HttpServletRequest request, SysSetting sysSetting) {
         Map<String, Object> result = new HashMap<>();
-        SysSettingVO sysSettingVO = sysSettingConvert.toPojo(sysSetting);
-        result.put("logo", sysSettingVO.getSysLogo());
+        SysLogoTitleVO sysLogoTitleVO = sysLogoTitleVOConvert.toPojo(sysSetting);
+        result.put("logo", sysLogoTitleVO.getSysLogo());
         String language = request.getHeader("Accept-Language") == null ? "zh-CN" : request.getHeader("Accept-Language");
         switch (language) {
             case "zh-CN":
-                result.put("title", sysSettingVO.getSysNameZhCn());
+                result.put("title", sysLogoTitleVO.getSysNameZhCn());
                 break;
             case "zh-HK":
-                result.put("title", sysSettingVO.getSysNameZhHk());
+                result.put("title", sysLogoTitleVO.getSysNameZhHk());
                 break;
             case "zh-TW":
-                result.put("title", sysSettingVO.getSysNameZhTw());
+                result.put("title", sysLogoTitleVO.getSysNameZhTw());
                 break;
             case "en-US":
-                result.put("title", sysSettingVO.getSysNameEnUs());
+                result.put("title", sysLogoTitleVO.getSysNameEnUs());
                 break;
             default:
-                result.put("title", sysSettingVO.getSysName());
+                result.put("title", sysLogoTitleVO.getSysName());
                 break;
         }
         return result;
+    }
+
+    @Override
+    public boolean updateSysSettings(SysSettingVO resources) {
+        SysSetting sysSetting = sysSettingVOConvert.toEntity(resources);
+        sysSetting.setUserInitPassword(AesUtils.encrypt(sysSetting.getUserInitPassword()));
+        boolean flag = this.saveOrUpdate(sysSetting);
+        if (flag) {
+            // 更新缓存
+            cacheRefresh.updateSysSetting(sysSetting);
+        }
+        return flag;
     }
 }
