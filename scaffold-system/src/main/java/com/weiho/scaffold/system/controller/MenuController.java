@@ -5,6 +5,7 @@ import com.weiho.scaffold.common.exception.SecurityException;
 import com.weiho.scaffold.common.util.message.I18nMessagesUtils;
 import com.weiho.scaffold.common.util.page.PageUtils;
 import com.weiho.scaffold.common.util.result.Result;
+import com.weiho.scaffold.common.util.result.ResultUtils;
 import com.weiho.scaffold.common.util.result.enums.ResultCodeEnum;
 import com.weiho.scaffold.common.util.security.SecurityUtils;
 import com.weiho.scaffold.logging.annotation.Logging;
@@ -77,7 +78,7 @@ public class MenuController {
     @ApiOperation("获取菜单树")
     @GetMapping("/tree")
     @PreAuthorize("@el.check('Role:list','Menu:list')")
-    public Object getMenuTree(HttpServletRequest request) {
+    public List<Map<String, Object>> getMenuTree(HttpServletRequest request) {
         return menuService.getMenuTree(menuService.findByParentId(0L).stream().filter(Menu::isEnabled).collect(Collectors.toList()), request);
     }
 
@@ -109,11 +110,7 @@ public class MenuController {
         if (resources.getId() != null) {
             throw new BadRequestException("新增的菜单不能拥有ID");
         }
-        if (menuService.createMenu(resources)) {
-            return Result.success(I18nMessagesUtils.get("add.success.tip"));
-        } else {
-            return Result.of(ResultCodeEnum.BAD_REQUEST_ERROR, I18nMessagesUtils.get("add.fail.tip"));
-        }
+        return ResultUtils.addMessage(menuService.createMenu(resources));
     }
 
     @Logging(title = "修改菜单", businessType = BusinessTypeEnum.UPDATE)

@@ -9,6 +9,7 @@ import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import javax.servlet.http.HttpServletRequest;
 import java.util.Collection;
 import java.util.List;
+import java.util.Map;
 
 /**
  * @author Weiho
@@ -56,7 +57,7 @@ public interface CacheRefresh {
      * @param request 请求
      * @return /
      */
-    Object updateMenuTree(HttpServletRequest request);
+    List<Map<String, Object>> updateMenuTree(HttpServletRequest request);
 
     /**
      * 更新系统设置

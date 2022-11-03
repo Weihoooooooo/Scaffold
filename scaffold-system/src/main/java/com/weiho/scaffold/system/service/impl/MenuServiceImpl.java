@@ -146,7 +146,7 @@ public class MenuServiceImpl extends CommonServiceImpl<MenuMapper, Menu> impleme
 
     @Override
     @Cacheable(value = "Scaffold:System", key = "'MenuTree'")
-    public Object getMenuTree(List<Menu> menus, HttpServletRequest request) {
+    public List<Map<String, Object>> getMenuTree(List<Menu> menus, HttpServletRequest request) {
         String language = request.getHeader("Accept-Language") == null ? "zh-CN" : request.getHeader("Accept-Language");
         List<Map<String, Object>> list = new LinkedList<>();
         menus.forEach(menu -> {

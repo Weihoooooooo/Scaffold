@@ -54,7 +54,7 @@ public interface MenuService extends CommonService<Menu> {
      * @param request 请求对象
      * @return /
      */
-    Object getMenuTree(List<Menu> menus, HttpServletRequest request);
+    List<Map<String, Object>> getMenuTree(List<Menu> menus, HttpServletRequest request);
 
     /**
      * 根据上级ID查找菜单列表

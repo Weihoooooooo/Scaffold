@@ -1,5 +1,6 @@
 package com.weiho.scaffold.tools.storage.service.impl;
 
+import cn.hutool.core.util.ObjectUtil;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.weiho.scaffold.common.config.system.ScaffoldSystemProperties;
 import com.weiho.scaffold.common.exception.BadRequestException;
@@ -54,18 +55,31 @@ public class LocalStorageServiceImpl extends CommonServiceImpl<LocalStorageMappe
             throw new BadRequestException(I18nMessagesUtils.get("file.null.tip"));
         }
 
+        if (StringUtils.isNotBlank(filename) && filename.equals("undefined")) {
+            LocalStorage localStorageFileName = this.getOne(new LambdaQueryWrapper<LocalStorage>()
+                    .eq(LocalStorage::getFileName, filename));
+            if (localStorageFileName != null) {
+                throw new BadRequestException(I18nMessagesUtils.get("file.exist.tip"));
+            }
+        }
+
         // 检查文件的大小(最大50M)
         FileUtils.checkSize(properties.getResourcesProperties().getStorageUploadMaxSize(), multipartFile.getSize());
         // 获取文件后缀
         String suffix = FileUtils.getExtensionName(multipartFile.getOriginalFilename());
         // 获取文件的分类
         String type = FileUtils.getFileType(suffix);
+        System.err.println(properties.getResourcesProperties().getStorageLocalAddressPrefix());
         // 处理上传的文件,保存文件
         File file = FileUtils.upload(multipartFile, properties.getResourcesProperties().getStorageLocalAddressPrefix() + type + "\\");
+        if (ObjectUtil.isNull(file)) {
+            throw new BadRequestException(I18nMessagesUtils.get("upload.error"));
+        }
+
         // 构建文件体
         LocalStorage localStorage = new LocalStorage();
         localStorage.setUsername(SecurityUtils.getUsername());
-        localStorage.setFileName(StringUtils.isBlank(filename) ? FileUtils.getFileNameNoEx(file.getName()) : filename);
+        localStorage.setFileName(StringUtils.isBlank(filename) || filename.equals("undefined") ? FileUtils.getFileNameNoEx(file.getName()) : filename);
         localStorage.setRealName(file.getName());
         localStorage.setType(type);
         localStorage.setSize(FileUtils.getSize(multipartFile.getSize()));
