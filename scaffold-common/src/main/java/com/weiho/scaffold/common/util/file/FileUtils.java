@@ -265,6 +265,7 @@ public class FileUtils extends cn.hutool.core.io.FileUtil {
             } catch (IOException e) {
                 e.printStackTrace();
             }
+            IoUtil.close(in);
         } catch (FileNotFoundException e) {
             e.printStackTrace();
             return null;

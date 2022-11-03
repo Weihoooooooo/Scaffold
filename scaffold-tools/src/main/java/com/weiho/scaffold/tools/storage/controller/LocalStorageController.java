@@ -2,6 +2,7 @@ package com.weiho.scaffold.tools.storage.controller;
 
 import com.weiho.scaffold.common.util.message.I18nMessagesUtils;
 import com.weiho.scaffold.common.util.result.Result;
+import com.weiho.scaffold.common.util.result.ResultUtils;
 import com.weiho.scaffold.common.util.result.enums.ResultCodeEnum;
 import com.weiho.scaffold.logging.annotation.Logging;
 import com.weiho.scaffold.logging.enums.BusinessTypeEnum;
@@ -82,11 +83,7 @@ public class LocalStorageController {
     @ApiOperation("修改文件名")
     @PreAuthorize("@el.check('Storage:update')")
     public Result updateLocalStorage(@Validated @RequestBody LocalStorageVO localStorageVO) {
-        if (localStorageService.updateFileName(localStorageVO)) {
-            return Result.success(I18nMessagesUtils.get("update.success.tip"));
-        } else {
-            return Result.of(ResultCodeEnum.BAD_REQUEST_ERROR, I18nMessagesUtils.get("update.fail.tip"));
-        }
+        return ResultUtils.updateMessage(localStorageService.updateFileName(localStorageVO));
     }
 
     @Logging(title = "删除文件", businessType = BusinessTypeEnum.DELETE)

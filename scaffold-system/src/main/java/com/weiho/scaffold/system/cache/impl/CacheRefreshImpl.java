@@ -16,6 +16,7 @@ import org.springframework.stereotype.Service;
 import javax.servlet.http.HttpServletRequest;
 import java.util.Collection;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 /**
@@ -57,7 +58,7 @@ public class CacheRefreshImpl implements CacheRefresh {
 
     @Override
     @CachePut(value = "Scaffold:System", key = "'MenuTree'")
-    public Object updateMenuTree(HttpServletRequest request) {
+    public List<Map<String, Object>> updateMenuTree(HttpServletRequest request) {
         return menuService.getMenuTree(menuService.findByParentId(0L).stream().filter(Menu::isEnabled).collect(Collectors.toList()), request);
     }
 

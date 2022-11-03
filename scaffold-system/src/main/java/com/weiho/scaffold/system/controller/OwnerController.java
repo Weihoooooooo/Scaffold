@@ -3,6 +3,7 @@ package com.weiho.scaffold.system.controller;
 import com.weiho.scaffold.common.exception.BadRequestException;
 import com.weiho.scaffold.common.util.message.I18nMessagesUtils;
 import com.weiho.scaffold.common.util.result.Result;
+import com.weiho.scaffold.common.util.result.ResultUtils;
 import com.weiho.scaffold.common.util.result.enums.ResultCodeEnum;
 import com.weiho.scaffold.logging.annotation.Logging;
 import com.weiho.scaffold.logging.enums.BusinessTypeEnum;
@@ -60,11 +61,7 @@ public class OwnerController {
     @PostMapping
     @PreAuthorize("@el.check('OwnerInfo:add')")
     public Result createOwner(@Validated @RequestBody OwnerVO resources) {
-        if (ownerService.createOwner(resources)) {
-            return Result.success(I18nMessagesUtils.get("add.success.tip"));
-        } else {
-            return Result.of(ResultCodeEnum.BAD_REQUEST_ERROR, I18nMessagesUtils.get("add.fail.tip"));
-        }
+        return ResultUtils.addMessage(ownerService.createOwner(resources));
     }
 
     @Logging(title = "修改业主信息", businessType = BusinessTypeEnum.UPDATE)
@@ -72,11 +69,7 @@ public class OwnerController {
     @PutMapping
     @PreAuthorize("@el.check('OwnerInfo:update')")
     public Result updateOwner(@RequestBody OwnerVO resources) {
-        if (ownerService.updateOwner(resources)) {
-            return Result.success(I18nMessagesUtils.get("update.success.tip"));
-        } else {
-            return Result.of(ResultCodeEnum.BAD_REQUEST_ERROR, I18nMessagesUtils.get("update.fail.tip"));
-        }
+        return ResultUtils.updateMessage(ownerService.updateOwner(resources));
     }
 
     @ApiOperation("获取单个业主的信息")
@@ -118,14 +111,6 @@ public class OwnerController {
     @DeleteMapping
     @PreAuthorize("@el.check('OwnerInfo:delete')")
     public Result deleteOwner(@RequestBody Set<Long> ids) {
-        if (ids != null && ids.size() > 0) {
-            if (ownerService.deleteOwner(ids)) {
-                return Result.success(I18nMessagesUtils.get("delete.success.tip"));
-            } else {
-                return Result.of(ResultCodeEnum.BAD_REQUEST_ERROR, I18nMessagesUtils.get("delete.fail.tip"));
-            }
-        } else {
-            return Result.of(ResultCodeEnum.BAD_REQUEST_ERROR, I18nMessagesUtils.get("delete.fail.tip"));
-        }
+        return ResultUtils.deleteMessage(ids, ownerService.deleteOwner(ids));
     }
 }

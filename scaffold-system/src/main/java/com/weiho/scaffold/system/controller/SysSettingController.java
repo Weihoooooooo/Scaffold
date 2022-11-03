@@ -2,7 +2,7 @@ package com.weiho.scaffold.system.controller;
 
 import com.weiho.scaffold.common.util.message.I18nMessagesUtils;
 import com.weiho.scaffold.common.util.result.Result;
-import com.weiho.scaffold.common.util.result.enums.ResultCodeEnum;
+import com.weiho.scaffold.common.util.result.ResultUtils;
 import com.weiho.scaffold.logging.annotation.Logging;
 import com.weiho.scaffold.logging.enums.BusinessTypeEnum;
 import com.weiho.scaffold.redis.limiter.annotation.RateLimiter;
@@ -57,11 +57,7 @@ public class SysSettingController {
     public Result updateSys(@Validated @RequestBody SysSettingVO sysSettingVO) {
         SysSettingVO sysSettingVO1 = sysSettingVOConvert.toPojo(sysSettingService.getById(sysSettingVO.getId()));
         if (!sysSettingVO1.toString().equals(sysSettingVO.toString())) {
-            if (sysSettingService.updateSysSettings(sysSettingVO)) {
-                return Result.success(I18nMessagesUtils.get("update.success.tip"));
-            } else {
-                return Result.of(ResultCodeEnum.BAD_REQUEST_ERROR, I18nMessagesUtils.get("update.fail.tip"));
-            }
+            return ResultUtils.updateMessage(sysSettingService.updateSysSettings(sysSettingVO));
         } else {
             return Result.success(I18nMessagesUtils.get("update.success.tip"));
         }

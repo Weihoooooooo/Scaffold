@@ -3,7 +3,7 @@ package com.weiho.scaffold.tools.mail.controller;
 
 import com.weiho.scaffold.common.util.message.I18nMessagesUtils;
 import com.weiho.scaffold.common.util.result.Result;
-import com.weiho.scaffold.common.util.result.enums.ResultCodeEnum;
+import com.weiho.scaffold.common.util.result.ResultUtils;
 import com.weiho.scaffold.logging.annotation.Logging;
 import com.weiho.scaffold.logging.enums.BusinessTypeEnum;
 import com.weiho.scaffold.redis.limiter.annotation.RateLimiter;
@@ -45,11 +45,7 @@ public class EmailConfigController {
     @PutMapping
     @ApiOperation("修改邮件配置")
     public Result updateEmailConfig(@RequestBody EmailConfigVO config) {
-        if (emailService.updateEmailConfig(config)) {
-            return Result.success(I18nMessagesUtils.get("mail.update.success.tips"));
-        } else {
-            return Result.of(ResultCodeEnum.BAD_REQUEST_ERROR, I18nMessagesUtils.get("mail.update.fail.tips"));
-        }
+        return ResultUtils.updateMessage(emailService.updateEmailConfig(config));
     }
 
     @Logging(title = "发送邮件")

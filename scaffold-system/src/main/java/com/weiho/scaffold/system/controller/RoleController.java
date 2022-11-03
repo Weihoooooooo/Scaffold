@@ -3,7 +3,7 @@ package com.weiho.scaffold.system.controller;
 import com.weiho.scaffold.common.exception.BadRequestException;
 import com.weiho.scaffold.common.util.message.I18nMessagesUtils;
 import com.weiho.scaffold.common.util.result.Result;
-import com.weiho.scaffold.common.util.result.enums.ResultCodeEnum;
+import com.weiho.scaffold.common.util.result.ResultUtils;
 import com.weiho.scaffold.logging.annotation.Logging;
 import com.weiho.scaffold.logging.enums.BusinessTypeEnum;
 import com.weiho.scaffold.redis.limiter.annotation.RateLimiter;
@@ -80,11 +80,7 @@ public class RoleController {
     @PreAuthorize("@el.check('Role:update')")
     public Result update(@Validated @RequestBody Role resource) {
         roleService.checkLevel(resource.getLevel());
-        if (roleService.updateRole(resource)) {
-            return Result.success(I18nMessagesUtils.get("update.success.tip"));
-        } else {
-            return Result.of(ResultCodeEnum.BAD_REQUEST_ERROR, I18nMessagesUtils.get("update.fail.tip"));
-        }
+        return ResultUtils.updateMessage(roleService.updateRole(resource));
     }
 
     @Logging(title = "删除角色信息", businessType = BusinessTypeEnum.DELETE)
@@ -95,11 +91,7 @@ public class RoleController {
         for (Long id : ids) {
             roleService.checkLevel(roleService.getById(id).getLevel());
         }
-        if (roleService.deleteRole(ids)) {
-            return Result.success(I18nMessagesUtils.get("delete.success.tip"));
-        } else {
-            return Result.of(ResultCodeEnum.BAD_REQUEST_ERROR, I18nMessagesUtils.get("delete.fail.tip"));
-        }
+        return ResultUtils.deleteMessage(roleService.deleteRole(ids));
     }
 
     @ApiOperation("获取单个Role")
@@ -129,10 +121,6 @@ public class RoleController {
             throw new BadRequestException(I18nMessagesUtils.get("role.add.error"));
         }
         roleService.checkLevel(resource.getLevel());
-        if (roleService.createRole(resource)) {
-            return Result.success(I18nMessagesUtils.get("add.success.tip"));
-        } else {
-            return Result.of(ResultCodeEnum.BAD_REQUEST_ERROR, I18nMessagesUtils.get("add.fail.tip"));
-        }
+        return ResultUtils.addMessage(roleService.createRole(resource));
     }
 }
