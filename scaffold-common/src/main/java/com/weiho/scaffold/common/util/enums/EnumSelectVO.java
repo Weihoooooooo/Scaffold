@@ -1,4 +1,4 @@
-package com.weiho.scaffold.tools.mail.entity.vo;
+package com.weiho.scaffold.common.util.enums;
 
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
@@ -16,10 +16,13 @@ import lombok.ToString;
 @ToString
 @AllArgsConstructor
 @ApiModel("前端选择器VO对象")
-public class EmailSelectVO {
+public class EnumSelectVO {
     @ApiModelProperty("前端Option的value")
     private Integer value;
 
     @ApiModelProperty("前端Option的label")
     private String label;
+
+    @ApiModelProperty("枚举类的name")
+    private String name;
 }

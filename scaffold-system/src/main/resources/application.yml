@@ -1,5 +1,12 @@
 server:
   port: 8888
+# Actuator 监控
+management:
+  endpoints:
+    web:
+      exposure:
+        include:
+          - "*"
 spring:
   application:
     name: Scaffold

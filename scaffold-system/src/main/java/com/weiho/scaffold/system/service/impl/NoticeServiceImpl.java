@@ -2,16 +2,23 @@ package com.weiho.scaffold.system.service.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.github.pagehelper.PageInfo;
 import com.weiho.scaffold.common.exception.BadRequestException;
+import com.weiho.scaffold.common.util.enums.EnumSelectVO;
+import com.weiho.scaffold.common.util.enums.EnumUtils;
 import com.weiho.scaffold.common.util.file.FileUtils;
 import com.weiho.scaffold.common.util.message.I18nMessagesUtils;
+import com.weiho.scaffold.common.util.page.PageUtils;
 import com.weiho.scaffold.common.util.security.SecurityUtils;
 import com.weiho.scaffold.mp.core.QueryHelper;
+import com.weiho.scaffold.mp.enums.SortTypeEnum;
 import com.weiho.scaffold.mp.service.impl.CommonServiceImpl;
 import com.weiho.scaffold.system.entity.Notice;
 import com.weiho.scaffold.system.entity.User;
 import com.weiho.scaffold.system.entity.convert.NoticeVOConvert;
 import com.weiho.scaffold.system.entity.criteria.NoticeQueryCriteria;
+import com.weiho.scaffold.system.entity.enums.NoticeToEnum;
+import com.weiho.scaffold.system.entity.enums.OverdueEnum;
 import com.weiho.scaffold.system.entity.vo.NoticeVO;
 import com.weiho.scaffold.system.mapper.NoticeMapper;
 import com.weiho.scaffold.system.service.NoticeService;
@@ -44,9 +51,8 @@ public class NoticeServiceImpl extends CommonServiceImpl<NoticeMapper, Notice> i
     private final UserService userService;
 
     @Override
-    public List<NoticeVO> findAll(NoticeQueryCriteria criteria) {
-        List<Notice> noticeList = this.getBaseMapper().selectList(CastUtils.cast(QueryHelper.getQueryWrapper(Notice.class, criteria)));
-        List<NoticeVO> noticeVOList = noticeVOConvert.toPojo(noticeList);
+    public List<NoticeVO> convertToVO(List<Notice> notices) {
+        List<NoticeVO> noticeVOList = noticeVOConvert.toPojo(notices);
         for (NoticeVO noticeVO : noticeVOList) {
             User user = userService.getById(noticeVO.getUserId());
             noticeVO.setUsername(user.getUsername());
@@ -55,9 +61,16 @@ public class NoticeServiceImpl extends CommonServiceImpl<NoticeMapper, Notice> i
     }
 
     @Override
+    public List<Notice> findAll(NoticeQueryCriteria criteria) {
+        return this.getBaseMapper().selectList(CastUtils.cast(QueryHelper.getQueryWrapper(Notice.class, criteria)));
+    }
+
+
+    @Override
     public Map<String, Object> getNoticeList(NoticeQueryCriteria criteria, Pageable pageable) {
-        startPage(pageable);
-        return toPageContainer(this.findAll(criteria));
+        startPage(pageable, "create_time", SortTypeEnum.ASC);
+        PageInfo<Notice> pageInfo = new PageInfo<>(this.findAll(criteria));
+        return PageUtils.toPageContainer(this.convertToVO(pageInfo.getList()), pageInfo.getTotal());
     }
 
     @Override
@@ -115,8 +128,8 @@ public class NoticeServiceImpl extends CommonServiceImpl<NoticeMapper, Notice> i
         List<Long> userIds = this.getBaseMapper().selectList(queryWrapper).stream().map(Notice::getUserId).collect(Collectors.toList());
         for (Long userId : userIds) {
             Map<String, Object> map = new HashMap<>();
-            map.put("userId", userId);
-            map.put("username", userService.getById(userId).getUsername());
+            map.put("value", userId);
+            map.put("label", userService.getById(userId).getUsername());
             list.add(map);
         }
         return list;
@@ -126,5 +139,15 @@ public class NoticeServiceImpl extends CommonServiceImpl<NoticeMapper, Notice> i
     @Transactional(rollbackFor = Exception.class)
     public boolean delete(Set<Long> ids) {
         return this.removeByIds(ids);
+    }
+
+    @Override
+    public List<EnumSelectVO> getNoticeToTypeSelect() {
+        return EnumUtils.getEnumSelect(NoticeToEnum.class);
+    }
+
+    @Override
+    public List<EnumSelectVO> getOverdueSelect() {
+        return EnumUtils.getEnumSelect(OverdueEnum.class);
     }
 }

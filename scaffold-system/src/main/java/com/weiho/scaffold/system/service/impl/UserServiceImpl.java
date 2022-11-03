@@ -1,6 +1,7 @@
 package com.weiho.scaffold.system.service.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import com.github.pagehelper.PageInfo;
 import com.weiho.scaffold.common.config.system.ScaffoldSystemProperties;
 import com.weiho.scaffold.common.exception.BadRequestException;
 import com.weiho.scaffold.common.util.aes.AesUtils;
@@ -10,6 +11,7 @@ import com.weiho.scaffold.common.util.date.DateUtils;
 import com.weiho.scaffold.common.util.date.FormatEnum;
 import com.weiho.scaffold.common.util.file.FileUtils;
 import com.weiho.scaffold.common.util.message.I18nMessagesUtils;
+import com.weiho.scaffold.common.util.page.PageUtils;
 import com.weiho.scaffold.common.util.security.SecurityUtils;
 import com.weiho.scaffold.common.util.string.StringUtils;
 import com.weiho.scaffold.common.util.validation.ValidationUtils;
@@ -162,13 +164,12 @@ public class UserServiceImpl extends CommonServiceImpl<UserMapper, User> impleme
     @Override
     public Map<String, Object> getUserList(UserQueryCriteria criteria, Pageable pageable) {
         startPage(pageable);
-        return toPageContainer(this.getAll(criteria));
+        PageInfo<User> pageInfo = new PageInfo<>(this.getAll(criteria));
+        return PageUtils.toPageContainer(this.convertToVO(pageInfo.getList()), pageInfo.getTotal());
     }
 
     @Override
-    public List<UserVO> getAll(UserQueryCriteria criteria) {
-        criteria.setPhone(LikeCipher.likeEncrypt(criteria.getPhone()));
-        List<User> users = this.getBaseMapper().selectList(CastUtils.cast(QueryHelper.getQueryWrapper(User.class, criteria)));
+    public List<UserVO> convertToVO(List<User> users) {
         List<UserVO> userVOS = new ArrayList<>();
         for (User user : users) {
             UserVO userVO = userVOConvert.toPojo(user);
@@ -177,6 +178,12 @@ public class UserServiceImpl extends CommonServiceImpl<UserMapper, User> impleme
             userVOS.add(userVO);
         }
         return userVOS;
+    }
+
+    @Override
+    public List<User> getAll(UserQueryCriteria criteria) {
+        criteria.setPhone(LikeCipher.likeEncrypt(criteria.getPhone()));
+        return this.getBaseMapper().selectList(CastUtils.cast(QueryHelper.getQueryWrapper(User.class, criteria)));
     }
 
     @Override

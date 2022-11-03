@@ -1,5 +1,6 @@
 package com.weiho.scaffold.system.service;
 
+import com.weiho.scaffold.common.util.enums.EnumSelectVO;
 import com.weiho.scaffold.mp.service.CommonService;
 import com.weiho.scaffold.system.entity.Notice;
 import com.weiho.scaffold.system.entity.criteria.NoticeQueryCriteria;
@@ -22,12 +23,20 @@ import java.util.Set;
  */
 public interface NoticeService extends CommonService<Notice> {
     /**
+     * 将查询结果转为特殊VO
+     *
+     * @param notices 结果
+     * @return /
+     */
+    List<NoticeVO> convertToVO(List<Notice> notices);
+
+    /**
      * 查询所有符合条件的通知
      *
      * @param criteria 条件
      * @return /
      */
-    List<NoticeVO> findAll(NoticeQueryCriteria criteria);
+    List<Notice> findAll(NoticeQueryCriteria criteria);
 
     /**
      * 查询所有符合条件的通知(分页)
@@ -76,4 +85,18 @@ public interface NoticeService extends CommonService<Notice> {
      * @return /
      */
     boolean delete(Set<Long> ids);
+
+    /**
+     * 获取通知发送类型列表
+     *
+     * @return /
+     */
+    List<EnumSelectVO> getNoticeToTypeSelect();
+
+    /**
+     * 获取通知是否过期列表
+     *
+     * @return /
+     */
+    List<EnumSelectVO> getOverdueSelect();
 }

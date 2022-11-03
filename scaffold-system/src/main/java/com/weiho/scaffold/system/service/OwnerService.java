@@ -22,13 +22,14 @@ import java.util.Set;
  * @since 2022-10-21
  */
 public interface OwnerService extends CommonService<Owner> {
+
     /**
-     * 查询符合条件的业主列表
+     * 查询所有的业主
      *
-     * @param criteria 查询条件
+     * @param criteria 条件
      * @return /
      */
-    List<OwnerVO> findAll(OwnerQueryCriteria criteria);
+    List<Owner> findAll(OwnerQueryCriteria criteria);
 
     /**
      * 获取业主列表(分页)

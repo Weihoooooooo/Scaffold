@@ -2,6 +2,7 @@ package com.weiho.scaffold.system.entity.enums;
 
 import com.baomidou.mybatisplus.annotation.EnumValue;
 import com.fasterxml.jackson.annotation.JsonValue;
+import com.weiho.scaffold.common.util.enums.EnumSelect;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 
@@ -11,7 +12,7 @@ import lombok.Getter;
  */
 @Getter
 @AllArgsConstructor
-public enum SexEnum {
+public enum SexEnum implements EnumSelect {
     WOMAN(0, "女"),
     MAN(1, "男");
 

@@ -71,7 +71,7 @@ public class RoleController {
     @GetMapping("/download")
     @PreAuthorize("@el.check('Role:list')")
     public void download(RoleQueryCriteria criteria, HttpServletRequest request, HttpServletResponse response) throws IOException {
-        roleService.download(roleService.findAllForLanguage(criteria, request), response);
+        roleService.download(roleService.convertToDTOForLanguage(roleService.findAll(criteria), request), response);
     }
 
     @Logging(title = "修改角色信息", businessType = BusinessTypeEnum.UPDATE)

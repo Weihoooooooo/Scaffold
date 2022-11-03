@@ -111,7 +111,7 @@ public class UserController {
     @ApiOperation("修改邮箱")
     @PostMapping("/email")
     public Result updateEmail(@RequestBody VerificationVO verificationVO) throws Exception {
-        String newEmail = verificationVO.getNewEmail() + verificationVO.getSuffix().getEmailSuffix();
+        String newEmail = verificationVO.getNewEmail() + verificationVO.getSuffix().getDisplay();
         // 根据传入的新邮箱去查找数据库
         List<User> usersForNewEmail = userService.list(new LambdaQueryWrapper<User>().eq(User::getEmail, AesUtils.encrypt(newEmail)));
         // 如果存在结果
@@ -198,7 +198,7 @@ public class UserController {
     @GetMapping("/download")
     @PreAuthorize("@el.check('User:list')")
     public void download(HttpServletResponse response, UserQueryCriteria criteria) throws IOException {
-        userService.download(userService.getAll(criteria), response);
+        userService.download(userService.convertToVO(userService.getAll(criteria)), response);
     }
 
     @ApiOperation("验证当前登录用户的密码")

@@ -23,7 +23,7 @@ public class MailUtils {
     public void checkEmail(String email) {
         String suffix = email.substring(email.indexOf('@'));
         EmailTypeEnum[] emailTypeEnums = EmailTypeEnum.values();
-        Set<String> set = Arrays.stream(emailTypeEnums).map(EmailTypeEnum::getEmailSuffix).collect(Collectors.toSet());
+        Set<String> set = Arrays.stream(emailTypeEnums).map(EmailTypeEnum::getDisplay).collect(Collectors.toSet());
         if (!set.contains(suffix)) {
             throw new BadRequestException(I18nMessagesUtils.get("email.suffix.error"));
         }

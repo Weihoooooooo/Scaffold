@@ -1,7 +1,5 @@
 package com.weiho.scaffold.system.service;
 
-import com.weiho.scaffold.system.entity.criteria.NoticeQueryCriteria;
-import com.weiho.scaffold.system.entity.enums.NoticeToEnum;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -15,12 +13,12 @@ class NoticeServiceTest {
     @Autowired
     private NoticeService noticeService;
 
-    @Test
-    void findAll() {
-        NoticeQueryCriteria criteria = new NoticeQueryCriteria();
-        criteria.setType(NoticeToEnum.ALL);
-        System.err.println(noticeService.findAll(criteria));
-    }
+//    @Test
+//    void findAll() {
+//        NoticeQueryCriteria criteria = new NoticeQueryCriteria();
+//        criteria.setType(NoticeToEnum.ALL);
+//        System.err.println(noticeService.findAll(criteria));
+//    }
 
     @Test
     void test() {

@@ -53,6 +53,7 @@ public class GlobalCorsConfig implements WebMvcConfigurer {
         registry.addResourceHandler("/favicon.ico").addResourceLocations("classpath:/static/");
         registry.addResourceHandler("doc.html").addResourceLocations("classpath:/META-INF/resources/");
         registry.addResourceHandler("/webjars/**").addResourceLocations("classpath:/META-INF/resources/webjars/");
+        registry.addResourceHandler("/monitor/**").addResourceLocations("classpath:/META-INF/resources/monitor/");
     }
 }
 

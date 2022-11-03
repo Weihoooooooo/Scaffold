@@ -72,7 +72,7 @@ public class SecurityConfig {
     SecurityFilterChain filterChain(HttpSecurity httpSecurity) throws Exception {
         //扫描标记 URL ：@Anonymous
         Map<RequestMappingInfo, HandlerMethod> handlerMethodMap =
-                applicationContext.getBean(RequestMappingHandlerMapping.class).getHandlerMethods();
+                ((RequestMappingHandlerMapping) applicationContext.getBean("requestMappingHandlerMapping")).getHandlerMethods();
         Set<String> anonymousUrls = new HashSet<>();
         for (Map.Entry<RequestMappingInfo, HandlerMethod> infoEntry : handlerMethodMap.entrySet()) {
             HandlerMethod handlerMethod = infoEntry.getValue();
@@ -132,6 +132,12 @@ public class SecurityConfig {
                 .antMatchers("/webjars/**").permitAll()
                 .antMatchers("/*/api-docs").permitAll()
                 .antMatchers("/v2/api-docs-ext").permitAll()
+
+                // 放行Actuator
+                .antMatchers("/actuator/**").permitAll()
+
+                // 放行Monitor
+                .antMatchers("/monitor/**").permitAll()
 
                 //放行公开对外的api
                 .antMatchers("/scaffold-open/api/v1/**").permitAll()
