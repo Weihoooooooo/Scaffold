@@ -7,6 +7,7 @@ import com.weiho.scaffold.common.util.result.ResultUtils;
 import com.weiho.scaffold.common.util.result.enums.ResultCodeEnum;
 import com.weiho.scaffold.logging.annotation.Logging;
 import com.weiho.scaffold.logging.enums.BusinessTypeEnum;
+import com.weiho.scaffold.system.entity.convert.OwnerVOConvert;
 import com.weiho.scaffold.system.entity.criteria.OwnerQueryCriteria;
 import com.weiho.scaffold.system.entity.vo.OwnerVO;
 import com.weiho.scaffold.system.service.OwnerService;
@@ -40,6 +41,7 @@ import java.util.Set;
 @RequiredArgsConstructor
 public class OwnerController {
     private final OwnerService ownerService;
+    private final OwnerVOConvert ownerVOConvert;
 
     @ApiOperation("查询业主列表")
     @PreAuthorize("@el.check('OwnerInfo:list')")
@@ -53,7 +55,7 @@ public class OwnerController {
     @GetMapping("/download")
     @PreAuthorize("@el.check('OwnerInfo:list')")
     public void download(HttpServletResponse response, OwnerQueryCriteria criteria) throws IOException {
-        ownerService.download(ownerService.findAll(criteria), response);
+        ownerService.download(ownerVOConvert.toPojo(ownerService.findAll(criteria)), response);
     }
 
     @Logging(title = "新增业主信息", businessType = BusinessTypeEnum.INSERT)

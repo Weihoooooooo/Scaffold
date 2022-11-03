@@ -1,10 +1,12 @@
 package com.weiho.scaffold.system.service.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import com.github.pagehelper.PageInfo;
 import com.weiho.scaffold.common.exception.BadRequestException;
 import com.weiho.scaffold.common.exception.SecurityException;
 import com.weiho.scaffold.common.util.file.FileUtils;
 import com.weiho.scaffold.common.util.message.I18nMessagesUtils;
+import com.weiho.scaffold.common.util.page.PageUtils;
 import com.weiho.scaffold.common.util.result.enums.ResultCodeEnum;
 import com.weiho.scaffold.common.util.security.SecurityUtils;
 import com.weiho.scaffold.common.util.string.StringUtils;
@@ -100,19 +102,15 @@ public class RoleServiceImpl extends CommonServiceImpl<RoleMapper, Role> impleme
     @Override
     public Map<String, Object> findAll(RoleQueryCriteria criteria, Pageable pageable, HttpServletRequest request) {
         startPage(pageable, "level", SortTypeEnum.ASC);
-        return toPageContainer(this.findAllForLanguage(criteria, request));
+        PageInfo<Role> pageInfo = new PageInfo<>(this.findAll(criteria));
+        return PageUtils.toPageContainer(this.convertToDTOForLanguage(pageInfo.getList(), request), pageInfo.getTotal());
     }
 
     @Override
     public Map<String, Object> findAll(RoleQueryCriteria criteria, Pageable pageable) {
         startPage(pageable, "level", SortTypeEnum.ASC);
-        List<Role> roles = this.findAll(criteria);
-        List<RoleVO> roleVOS = roleVOConvert.toPojo(roles);
-        for (RoleVO roleVO : roleVOS) {
-            // 过滤父节点菜单，避免前端的菜单树多选出现Bug
-            roleVO.setMenus(menuService.findSetByRoleId(roleVO.getId()).stream().filter(m -> m.getParentId() != 0L).collect(Collectors.toSet()));
-        }
-        return toPageContainer(roleVOS);
+        PageInfo<Role> pageInfo = new PageInfo<>(this.findAll(criteria));
+        return PageUtils.toPageContainer(this.convertToVO(pageInfo.getList()), pageInfo.getTotal());
     }
 
     @Override
@@ -191,9 +189,18 @@ public class RoleServiceImpl extends CommonServiceImpl<RoleMapper, Role> impleme
     }
 
     @Override
-    public List<RoleDTO> findAllForLanguage(RoleQueryCriteria criteria, HttpServletRequest request) {
+    public List<RoleVO> convertToVO(List<Role> roles) {
+        List<RoleVO> roleVOS = roleVOConvert.toPojo(roles);
+        for (RoleVO roleVO : roleVOS) {
+            // 过滤父节点菜单，避免前端的菜单树多选出现Bug
+            roleVO.setMenus(menuService.findSetByRoleId(roleVO.getId()).stream().filter(m -> m.getParentId() != 0L).collect(Collectors.toSet()));
+        }
+        return roleVOS;
+    }
+
+    @Override
+    public List<RoleDTO> convertToDTOForLanguage(List<Role> roles, HttpServletRequest request) {
         String language = request.getHeader("Accept-Language") == null ? "zh-CN" : request.getHeader("Accept-Language");
-        List<Role> roles = this.findAll(criteria);
         List<RoleDTO> roleDTOS = roleDTOConvert.toPojo(roles);
         for (int i = 0; i < roleDTOS.size(); i++) {
             for (int j = 0; j < roles.size(); j++) {

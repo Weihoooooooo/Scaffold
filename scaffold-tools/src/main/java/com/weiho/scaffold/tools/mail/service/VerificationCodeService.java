@@ -1,6 +1,6 @@
 package com.weiho.scaffold.tools.mail.service;
 
-import com.weiho.scaffold.tools.mail.entity.vo.EmailSelectVO;
+import com.weiho.scaffold.common.util.enums.EnumSelectVO;
 import com.weiho.scaffold.tools.mail.entity.vo.VerificationCodeVO;
 
 import java.util.List;
@@ -24,5 +24,5 @@ public interface VerificationCodeService {
      *
      * @return List数组
      */
-    List<EmailSelectVO> getSelectList();
+    List<EnumSelectVO> getSelectList();
 }

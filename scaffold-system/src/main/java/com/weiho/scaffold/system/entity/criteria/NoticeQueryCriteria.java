@@ -1,12 +1,16 @@
 package com.weiho.scaffold.system.entity.criteria;
 
 import com.weiho.scaffold.mp.annotation.Query;
+import com.weiho.scaffold.mp.enums.QueryTypeEnum;
 import com.weiho.scaffold.system.entity.enums.NoticeToEnum;
 import com.weiho.scaffold.system.entity.enums.OverdueEnum;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 import lombok.ToString;
+
+import java.sql.Timestamp;
+import java.util.List;
 
 /**
  * @author Weiho
@@ -31,4 +35,8 @@ public class NoticeQueryCriteria {
     @Query
     @ApiModelProperty("通知发送目标范围")
     private NoticeToEnum type;
+
+    @Query(type = QueryTypeEnum.BETWEEN)
+    @ApiModelProperty("注册时间的范围")
+    private List<Timestamp> createTime;
 }

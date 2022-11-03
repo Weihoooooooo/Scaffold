@@ -1,11 +1,13 @@
 package com.weiho.scaffold.system.service.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import com.github.pagehelper.PageInfo;
 import com.weiho.scaffold.common.exception.BadRequestException;
 import com.weiho.scaffold.common.util.aes.AesUtils;
 import com.weiho.scaffold.common.util.cipher.LikeCipher;
 import com.weiho.scaffold.common.util.file.FileUtils;
 import com.weiho.scaffold.common.util.message.I18nMessagesUtils;
+import com.weiho.scaffold.common.util.page.PageUtils;
 import com.weiho.scaffold.mp.core.QueryHelper;
 import com.weiho.scaffold.mp.service.impl.CommonServiceImpl;
 import com.weiho.scaffold.system.entity.Owner;
@@ -42,16 +44,16 @@ public class OwnerServiceImpl extends CommonServiceImpl<OwnerMapper, Owner> impl
     private final OwnerVOConvert ownerVOConvert;
 
     @Override
-    public List<OwnerVO> findAll(OwnerQueryCriteria criteria) {
+    public List<Owner> findAll(OwnerQueryCriteria criteria) {
         criteria.setBlurry(LikeCipher.likeEncrypt(criteria.getBlurry()));
-        List<Owner> owners = this.getBaseMapper().selectList(CastUtils.cast(QueryHelper.getQueryWrapper(Owner.class, criteria)));
-        return ownerVOConvert.toPojo(owners);
+        return this.getBaseMapper().selectList(CastUtils.cast(QueryHelper.getQueryWrapper(Owner.class, criteria)));
     }
 
     @Override
     public Map<String, Object> getOwnerList(OwnerQueryCriteria criteria, Pageable pageable) {
         startPage(pageable);
-        return toPageContainer(this.findAll(criteria));
+        PageInfo<Owner> pageInfo = new PageInfo<>(this.findAll(criteria));
+        return PageUtils.toPageContainer(ownerVOConvert.toPojo(pageInfo.getList()), pageInfo.getTotal());
     }
 
     @Override

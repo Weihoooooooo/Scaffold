@@ -116,13 +116,21 @@ public interface RoleService extends CommonService<Role> {
     List<Role> findAll(RoleQueryCriteria criteria);
 
     /**
-     * 获取所有数据不分页，并且根据国际化转换结果语言
+     * 将结果转换为特殊VO
      *
-     * @param criteria 查询条件
-     * @param request  请求对象
+     * @param roles 结果
      * @return /
      */
-    List<RoleDTO> findAllForLanguage(RoleQueryCriteria criteria, HttpServletRequest request);
+    List<RoleVO> convertToVO(List<Role> roles);
+
+    /**
+     * 将结果转换为特殊DTO，并且根据国际化转换结果语言
+     *
+     * @param roles   查询结果
+     * @param request 请求对象
+     * @return /
+     */
+    List<RoleDTO> convertToDTOForLanguage(List<Role> roles, HttpServletRequest request);
 
     /**
      * 修改角色

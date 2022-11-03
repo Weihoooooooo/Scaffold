@@ -2,6 +2,7 @@ package com.weiho.scaffold.system.entity.enums;
 
 import com.baomidou.mybatisplus.annotation.EnumValue;
 import com.fasterxml.jackson.annotation.JsonValue;
+import com.weiho.scaffold.common.util.enums.EnumSelect;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 
@@ -11,7 +12,7 @@ import lombok.RequiredArgsConstructor;
  */
 @Getter
 @RequiredArgsConstructor
-public enum OverdueEnum {
+public enum OverdueEnum implements EnumSelect {
     OVERDUE(1, "已过期"),
     NO_OVERDUE(0, "未过期");
 

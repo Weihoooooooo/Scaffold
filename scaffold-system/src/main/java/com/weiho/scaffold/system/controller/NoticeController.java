@@ -1,9 +1,12 @@
 package com.weiho.scaffold.system.controller;
 
+import com.weiho.scaffold.common.util.enums.EnumSelectVO;
 import com.weiho.scaffold.common.util.result.Result;
 import com.weiho.scaffold.common.util.result.ResultUtils;
 import com.weiho.scaffold.logging.annotation.Logging;
 import com.weiho.scaffold.logging.enums.BusinessTypeEnum;
+import com.weiho.scaffold.redis.limiter.annotation.RateLimiter;
+import com.weiho.scaffold.redis.limiter.enums.LimitType;
 import com.weiho.scaffold.system.entity.criteria.NoticeQueryCriteria;
 import com.weiho.scaffold.system.entity.vo.NoticeVO;
 import com.weiho.scaffold.system.service.NoticeService;
@@ -17,6 +20,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
@@ -47,7 +51,7 @@ public class NoticeController {
     @GetMapping("/download")
     @PreAuthorize("@el.check('Notice:use')")
     public void download(HttpServletResponse response, NoticeQueryCriteria criteria) throws IOException {
-        noticeService.download(response, noticeService.findAll(criteria));
+        noticeService.download(response, noticeService.convertToVO(noticeService.findAll(criteria)));
     }
 
     @Logging(title = "添加通知信息", businessType = BusinessTypeEnum.INSERT)
@@ -72,5 +76,29 @@ public class NoticeController {
     @PreAuthorize("@el.check('Notice:delete')")
     public Result deleteNotice(@RequestBody Set<Long> ids) {
         return ResultUtils.deleteMessage(ids, noticeService.delete(ids));
+    }
+
+    @ApiOperation("获取通知发送范围列表")
+    @GetMapping("/noticeScope")
+    @PreAuthorize("@el.check('Notice:use')")
+    @RateLimiter(limitType = LimitType.IP)
+    public List<EnumSelectVO> getNoticeTypeScope() {
+        return noticeService.getNoticeToTypeSelect();
+    }
+
+    @ApiOperation("获取通知是否获取列表")
+    @GetMapping("/noticeOverdue")
+    @PreAuthorize("@el.check('Notice:use')")
+    @RateLimiter(limitType = LimitType.IP)
+    public List<EnumSelectVO> getNoticeOverdue() {
+        return noticeService.getOverdueSelect();
+    }
+
+    @ApiOperation("获取发送人列表")
+    @GetMapping("/distinctUser")
+    @PreAuthorize("@el.check('Notice:use')")
+    @RateLimiter(limitType = LimitType.IP)
+    public List<Map<String, Object>> getDistinctUser() {
+        return noticeService.getDistinctUser();
     }
 }

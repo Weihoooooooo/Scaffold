@@ -55,6 +55,7 @@
         <apachepoi.version>4.1.2</apachepoi.version>
         <xerces.version>2.11.0</xerces.version>
         <mail.version>1.4.7</mail.version>
+        <monitor.version>0.0.4</monitor.version>
     </properties>
 
     <dependencies>
@@ -247,6 +248,19 @@
             <groupId>com.alibaba.fastjson2</groupId>
             <artifactId>fastjson2</artifactId>
             <version>${fastjson.version}</version>
+        </dependency>
+
+        <!-- Spring Boot Actuator -->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-actuator</artifactId>
+        </dependency>
+
+
+        <dependency>
+            <groupId>cn.pomit</groupId>
+            <artifactId>spring-boot-monitor</artifactId>
+            <version>${monitor.version}</version>
         </dependency>
     </dependencies>
 

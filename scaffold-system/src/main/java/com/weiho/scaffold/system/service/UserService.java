@@ -72,12 +72,20 @@ public interface UserService extends CommonService<User> {
     Map<String, Object> getUserList(UserQueryCriteria criteria, Pageable pageable);
 
     /**
+     * 将查询结果转换为特殊VO
+     *
+     * @param users 结果
+     * @return /
+     */
+    List<UserVO> convertToVO(List<User> users);
+
+    /**
      * 根据条件查询所有的用户列表
      *
      * @param criteria 条件
      * @return /
      */
-    List<UserVO> getAll(UserQueryCriteria criteria);
+    List<User> getAll(UserQueryCriteria criteria);
 
     /**
      * 编辑用户
