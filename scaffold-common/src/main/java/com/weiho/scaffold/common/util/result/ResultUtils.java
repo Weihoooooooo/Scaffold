@@ -27,6 +27,20 @@ public class ResultUtils {
     }
 
     /**
+     * 操作的时候返回
+     *
+     * @param flag 布尔
+     * @return /
+     */
+    public Result operateMessage(boolean flag) {
+        if (flag) {
+            return Result.success(I18nMessagesUtils.get("operate.success.tip"));
+        } else {
+            return Result.of(ResultCodeEnum.BAD_REQUEST_ERROR, I18nMessagesUtils.get("operate.fail.tip"));
+        }
+    }
+
+    /**
      * 添加信息的时候返回
      *
      * @param flag 布尔
