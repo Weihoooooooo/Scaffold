@@ -1,5 +1,6 @@
 package com.weiho.scaffold.common.config.swagger;
 
+import com.github.xiaoymin.knife4j.spring.annotations.EnableKnife4j;
 import com.weiho.scaffold.common.config.system.ScaffoldSystemProperties;
 import com.weiho.scaffold.common.util.result.enums.ResultCodeEnum;
 import lombok.RequiredArgsConstructor;
@@ -26,6 +27,7 @@ import java.util.List;
 @Slf4j
 @Configuration
 @EnableSwagger2
+@EnableKnife4j
 @RequiredArgsConstructor
 public class SwaggerConfig {
     private final ScaffoldSystemProperties properties;

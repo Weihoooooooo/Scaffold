@@ -101,6 +101,9 @@ public class DateUtils extends org.apache.commons.lang3.time.DateUtils {
      * @return String
      */
     public String parseDateToStr(FormatEnum format, Date date) {
+        if (date == null) {
+            return null;
+        }
         return new SimpleDateFormat(format.getFormat()).format(date);
     }
 

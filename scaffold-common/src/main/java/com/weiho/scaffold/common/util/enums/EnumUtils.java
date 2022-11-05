@@ -1,5 +1,6 @@
 package com.weiho.scaffold.common.util.enums;
 
+import cn.hutool.core.util.EnumUtil;
 import lombok.experimental.UtilityClass;
 
 import java.util.ArrayList;
@@ -10,7 +11,7 @@ import java.util.List;
  * @since 2022/11/3
  */
 @UtilityClass
-public class EnumUtils {
+public class EnumUtils extends EnumUtil {
 
     /**
      * 将枚举类转换成前端所需的下拉Select数据
