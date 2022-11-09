@@ -46,7 +46,7 @@ public class RoleController {
     @GetMapping("/select")
     @ApiOperation("获取所有角色列表(带国际化)")
     @PreAuthorize("@el.check('Role:list')")
-    public Map<String, Object> getAllRoles(RoleQueryCriteria criteria, HttpServletRequest request,
+    public Map<String, Object> getAllRoles(@Validated RoleQueryCriteria criteria, HttpServletRequest request,
                                            @PageableDefault(value = 2000, sort = {"level"}, direction = Sort.Direction.ASC) Pageable pageable) {
         return roleService.findAll(criteria, pageable, request);
     }
@@ -54,7 +54,7 @@ public class RoleController {
     @GetMapping
     @ApiOperation("获取所有角色列表(不带国际化)")
     @PreAuthorize("@el.check('Role:list')")
-    public Map<String, Object> getAll(RoleQueryCriteria criteria,
+    public Map<String, Object> getAll(@Validated RoleQueryCriteria criteria,
                                       @PageableDefault(value = 2000, sort = {"level"}, direction = Sort.Direction.ASC) Pageable pageable) {
         return roleService.findAll(criteria, pageable);
     }
@@ -70,7 +70,7 @@ public class RoleController {
     @ApiOperation("导出角色数据")
     @GetMapping("/download")
     @PreAuthorize("@el.check('Role:list')")
-    public void download(RoleQueryCriteria criteria, HttpServletRequest request, HttpServletResponse response) throws IOException {
+    public void download(@Validated RoleQueryCriteria criteria, HttpServletRequest request, HttpServletResponse response) throws IOException {
         roleService.download(roleService.convertToDTOForLanguage(roleService.findAll(criteria), request), response);
     }
 

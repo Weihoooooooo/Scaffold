@@ -2,20 +2,22 @@ package com.weiho.scaffold.system.entity.criteria;
 
 import com.weiho.scaffold.mp.annotation.Query;
 import com.weiho.scaffold.mp.enums.QueryTypeEnum;
+import com.weiho.scaffold.system.entity.criteria.base.BaseQueryCriteria;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
-import lombok.Data;
-
-import java.sql.Timestamp;
-import java.util.List;
+import lombok.Getter;
+import lombok.Setter;
+import lombok.ToString;
 
 /**
  * @author Weiho
  * @since 2022/9/14
  */
-@Data
+@Getter
+@Setter
+@ToString(callSuper = true)
 @ApiModel("用户查询实体")
-public class UserQueryCriteria {
+public class UserQueryCriteria extends BaseQueryCriteria {
     @Query
     @ApiModelProperty("主键")
     private Long id;
@@ -31,8 +33,4 @@ public class UserQueryCriteria {
     @Query
     @ApiModelProperty("账号是否启用")
     private Boolean enabled;
-
-    @Query(type = QueryTypeEnum.BETWEEN)
-    @ApiModelProperty("注册时间的范围")
-    private List<Timestamp> createTime;
 }

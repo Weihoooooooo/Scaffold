@@ -137,7 +137,7 @@ public class NoticeServiceImpl extends CommonServiceImpl<NoticeMapper, Notice> i
 
     @Override
     @Transactional(rollbackFor = Exception.class)
-    public boolean delete(Set<Long> ids) {
+    public boolean deleteNotice(Set<Long> ids) {
         return this.removeByIds(ids);
     }
 

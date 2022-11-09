@@ -46,7 +46,7 @@ public class OwnerController {
     @ApiOperation("查询业主列表")
     @PreAuthorize("@el.check('OwnerInfo:list')")
     @GetMapping
-    public Map<String, Object> getOwnerList(OwnerQueryCriteria criteria, Pageable pageable) {
+    public Map<String, Object> getOwnerList(@Validated OwnerQueryCriteria criteria, Pageable pageable) {
         return ownerService.getOwnerList(criteria, pageable);
     }
 
@@ -54,7 +54,7 @@ public class OwnerController {
     @ApiOperation("导出业主信息")
     @GetMapping("/download")
     @PreAuthorize("@el.check('OwnerInfo:list')")
-    public void download(HttpServletResponse response, OwnerQueryCriteria criteria) throws IOException {
+    public void download(HttpServletResponse response, @Validated OwnerQueryCriteria criteria) throws IOException {
         ownerService.download(ownerVOConvert.toPojo(ownerService.findAll(criteria)), response);
     }
 
@@ -70,7 +70,7 @@ public class OwnerController {
     @ApiOperation("修改业主信息")
     @PutMapping
     @PreAuthorize("@el.check('OwnerInfo:update')")
-    public Result updateOwner(@RequestBody OwnerVO resources) {
+    public Result updateOwner(@Validated @RequestBody OwnerVO resources) {
         return ResultUtils.updateMessage(ownerService.updateOwner(resources));
     }
 

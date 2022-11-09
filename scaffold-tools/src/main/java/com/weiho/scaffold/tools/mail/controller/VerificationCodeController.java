@@ -15,6 +15,7 @@ import com.weiho.scaffold.tools.rabbitmq.core.MqPublisher;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -36,7 +37,7 @@ public class VerificationCodeController {
     @PostMapping(value = "/code")
     @ApiOperation("请求发送邮箱验证码")
     @RateLimiter(count = 1, limitType = LimitType.IP)// 一分钟之内只能请求1次
-    public Result getEmailCode(@RequestBody VerificationCodeVO codeVO) {
+    public Result getEmailCode(@Validated @RequestBody VerificationCodeVO codeVO) {
         System.err.println(codeVO.toString());
         if (!VerifyUtils.isEmail(codeVO.getAccount() + codeVO.getSuffix().getDisplay())) {
             throw new BadRequestException(I18nMessagesUtils.get("mail.error.no.email"));

@@ -10,14 +10,14 @@ import lombok.ToString;
 
 /**
  * @author Weiho
- * @since 2022/9/14
+ * @since 2022/11/9
  */
 @Getter
 @Setter
 @ToString(callSuper = true)
-@ApiModel("角色查询实体")
-public class RoleQueryCriteria extends BaseQueryCriteria {
-    @Query(blurry = "name,permission,nameZhCn,nameZhTw,nameZhHk,nameEnUs")
-    @ApiModelProperty("模糊查询字段")
+@ApiModel("楼宇查询实体")
+public class BuildingQueryCriteria extends BaseQueryCriteria {
+    @Query(blurry = "buildingNum")
+    @ApiModelProperty("建筑栋号模糊查询！")
     private String blurry;
 }

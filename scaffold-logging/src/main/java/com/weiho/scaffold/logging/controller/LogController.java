@@ -11,6 +11,7 @@ import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletResponse;
@@ -35,7 +36,7 @@ public class LogController {
     @ApiOperation("查询操作日志")
     @GetMapping("/logs")
     @PreAuthorize("@el.check('PlayLog:list')")
-    public Map<String, Object> getAll(LogQueryCriteria criteria, Pageable pageable) {
+    public Map<String, Object> getAll(@Validated LogQueryCriteria criteria, Pageable pageable) {
         criteria.setLogType(LogTypeEnum.INFO.getMsg());
         return logService.findAllByPage(criteria, pageable);
     }
@@ -43,7 +44,7 @@ public class LogController {
     @ApiOperation("查询异常日志")
     @GetMapping("/errorLogs")
     @PreAuthorize("@el.check('ErrorLog:list')")
-    public Map<String, Object> getAllError(LogQueryCriteria criteria, Pageable pageable) {
+    public Map<String, Object> getAllError(@Validated LogQueryCriteria criteria, Pageable pageable) {
         criteria.setLogType(LogTypeEnum.ERROR.getMsg());
         return logService.findAllByPage(criteria, pageable);
     }
@@ -52,7 +53,7 @@ public class LogController {
     @ApiOperation("导出操作日志")
     @GetMapping("/logs/download")
     @PreAuthorize("@el.check('PlayLog:list')")
-    public void downloadInfo(LogQueryCriteria criteria, HttpServletResponse response) throws IOException {
+    public void downloadInfo(@Validated LogQueryCriteria criteria, HttpServletResponse response) throws IOException {
         criteria.setLogType(LogTypeEnum.INFO.getMsg());
         logService.download(logService.findAll(criteria), response);
     }
@@ -61,7 +62,7 @@ public class LogController {
     @ApiOperation("导出异常日志")
     @GetMapping("/errorLogs/download")
     @PreAuthorize("@el.check('ErrorLog:list')")
-    public void downloadError(LogQueryCriteria criteria, HttpServletResponse response) throws IOException {
+    public void downloadError(@Validated LogQueryCriteria criteria, HttpServletResponse response) throws IOException {
         criteria.setLogType(LogTypeEnum.ERROR.getMsg());
         logService.download(logService.findAll(criteria), response);
     }

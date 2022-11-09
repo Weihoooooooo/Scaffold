@@ -85,7 +85,7 @@ public class MenuController {
     @ApiOperation("查询菜单列表")
     @GetMapping
     @PreAuthorize("@el.check('Menu:list')")
-    public Map<String, Object> getMenuList(MenuQueryCriteria criteria) {
+    public Map<String, Object> getMenuList(@Validated MenuQueryCriteria criteria) {
         List<MenuDTO> menuDTOS = menuDTOConvert.toPojo(menuService.getAll(criteria));
         if (criteria.getEnabled() == null || criteria.getEnabled()) {
             return menuService.buildTreeForList(menuDTOS);
@@ -98,7 +98,7 @@ public class MenuController {
     @ApiOperation("导出菜单数据")
     @GetMapping("/download")
     @PreAuthorize("@el.check('Menu:list')")
-    public void download(HttpServletResponse response, MenuQueryCriteria criteria) throws IOException {
+    public void download(HttpServletResponse response, @Validated MenuQueryCriteria criteria) throws IOException {
         menuService.download(menuDTOConvert.toPojo(menuService.getAll(criteria)), response);
     }
 

@@ -42,7 +42,7 @@ public class NoticeController {
     @ApiOperation("查询通知列表")
     @GetMapping
     @PreAuthorize("@el.check('Notice:use')")
-    public Map<String, Object> getNoticeList(NoticeQueryCriteria criteria, Pageable pageable) {
+    public Map<String, Object> getNoticeList(@Validated NoticeQueryCriteria criteria, Pageable pageable) {
         return noticeService.getNoticeList(criteria, pageable);
     }
 
@@ -50,7 +50,7 @@ public class NoticeController {
     @ApiOperation("导出通知信息")
     @GetMapping("/download")
     @PreAuthorize("@el.check('Notice:use')")
-    public void download(HttpServletResponse response, NoticeQueryCriteria criteria) throws IOException {
+    public void download(HttpServletResponse response, @Validated NoticeQueryCriteria criteria) throws IOException {
         noticeService.download(response, noticeService.convertToVO(noticeService.findAll(criteria)));
     }
 
@@ -66,7 +66,7 @@ public class NoticeController {
     @ApiOperation("修改通知信息")
     @PutMapping
     @PreAuthorize("@el.check('Notice:update')")
-    public Result updateNotice(@RequestBody NoticeVO resources) {
+    public Result updateNotice(@Validated @RequestBody NoticeVO resources) {
         return ResultUtils.updateMessage(noticeService.updateNotice(resources));
     }
 
@@ -75,7 +75,7 @@ public class NoticeController {
     @DeleteMapping
     @PreAuthorize("@el.check('Notice:delete')")
     public Result deleteNotice(@RequestBody Set<Long> ids) {
-        return ResultUtils.deleteMessage(ids, noticeService.delete(ids));
+        return ResultUtils.deleteMessage(ids, noticeService.deleteNotice(ids));
     }
 
     @ApiOperation("获取通知发送范围列表")

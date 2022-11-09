@@ -84,7 +84,7 @@ public interface NoticeService extends CommonService<Notice> {
      * @param ids 通知ID
      * @return /
      */
-    boolean delete(Set<Long> ids);
+    boolean deleteNotice(Set<Long> ids);
 
     /**
      * 获取通知发送类型列表

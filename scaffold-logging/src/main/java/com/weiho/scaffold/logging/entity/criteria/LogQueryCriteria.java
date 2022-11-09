@@ -6,6 +6,7 @@ import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 
+import javax.validation.constraints.Size;
 import java.sql.Timestamp;
 import java.util.List;
 
@@ -28,5 +29,6 @@ public class LogQueryCriteria {
 
     @Query(type = QueryTypeEnum.BETWEEN)
     @ApiModelProperty("创建时间的范围(List装)")
+    @Size(max = 2, message = "时间范围必须是两个！")
     private List<Timestamp> createTime;
 }

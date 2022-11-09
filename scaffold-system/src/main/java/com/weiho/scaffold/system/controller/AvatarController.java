@@ -14,6 +14,7 @@ import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletResponse;
@@ -41,7 +42,7 @@ public class AvatarController {
     @ApiOperation("查询头像列表")
     @GetMapping
     @PreAuthorize("@el.check('Avatar:list')")
-    public Map<String, Object> getAvatarList(AvatarQueryCriteria criteria, Pageable pageable) {
+    public Map<String, Object> getAvatarList(@Validated AvatarQueryCriteria criteria, Pageable pageable) {
         return avatarService.selectAvatarList(criteria, pageable);
     }
 
@@ -49,7 +50,7 @@ public class AvatarController {
     @GetMapping("/download")
     @ApiOperation("导出头像信息")
     @PreAuthorize("@el.check('Avatar:list')")
-    public void download(HttpServletResponse response, AvatarQueryCriteria criteria) throws IOException {
+    public void download(HttpServletResponse response, @Validated AvatarQueryCriteria criteria) throws IOException {
         avatarService.download(avatarService.getAll(criteria), response);
     }
 
