@@ -1,4 +1,4 @@
-package com.weiho.scaffold.tools.storage.entity.criteria;
+package com.weiho.scaffold.system.entity.criteria.base;
 
 import com.weiho.scaffold.mp.annotation.Query;
 import com.weiho.scaffold.mp.enums.QueryTypeEnum;
@@ -14,18 +14,16 @@ import java.util.List;
 
 /**
  * @author Weiho
- * @since 2022/10/27
+ * @since 2022/11/9
  */
 @Data
 @ToString
-@ApiModel("本地存储查询实体")
-public class LocalStorageQueryCriteria implements Serializable {
-    @Query(blurry = "username,fileName,realName,type,suffix")
-    @ApiModelProperty("模糊查询")
-    private String blurry;
+@ApiModel("基础查询条件实体")
+public class BaseQueryCriteria implements Serializable {
 
     @Query(type = QueryTypeEnum.BETWEEN)
-    @ApiModelProperty("注册时间的范围")
+    @ApiModelProperty("创建时间范围")
     @Size(max = 2, message = "时间范围必须是两个！")
     private List<Timestamp> createTime;
+
 }

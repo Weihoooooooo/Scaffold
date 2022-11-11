@@ -46,7 +46,8 @@ public class OnlineUserServiceImpl implements OnlineUserService {
         //获取用户登录时的浏览器
         String browser = IpUtils.getBrowser(request);
         //获取登录时候用户IP地址所在城市
-        String address = IpUtils.getCityInfo(ip);
+//        String address = IpUtils.getCityInfo(ip);
+        String address = "局域网"; // TODO:无网络环境
         OnlineUserVO onlineUser = null;
         try {
             //构造实体

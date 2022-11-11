@@ -1,6 +1,5 @@
 package com.weiho.scaffold.system.controller;
 
-
 import com.weiho.scaffold.common.util.enums.EnumSelectVO;
 import com.weiho.scaffold.common.util.result.Result;
 import com.weiho.scaffold.common.util.result.ResultUtils;
@@ -43,7 +42,7 @@ public class FeedbackController {
     @ApiOperation("查询所有的反馈列表")
     @GetMapping
     @PreAuthorize("@el.check('Feedback:list')")
-    public Map<String, Object> getFeedbackList(FeedbackQueryCriteria criteria, Pageable pageable) {
+    public Map<String, Object> getFeedbackList(@Validated FeedbackQueryCriteria criteria, Pageable pageable) {
         return feedbackService.findAll(criteria, pageable);
     }
 
@@ -68,7 +67,7 @@ public class FeedbackController {
     @ApiOperation("导出反馈信息")
     @GetMapping("/download")
     @PreAuthorize("@el.check('Feedback:list')")
-    public void download(FeedbackQueryCriteria criteria, HttpServletResponse response) throws IOException {
+    public void download(@Validated FeedbackQueryCriteria criteria, HttpServletResponse response) throws IOException {
         feedbackService.download(feedbackService.convertToVO(feedbackService.findAll(criteria)), response);
     }
 

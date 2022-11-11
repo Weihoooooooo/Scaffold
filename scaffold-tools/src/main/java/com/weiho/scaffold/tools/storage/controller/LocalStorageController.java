@@ -44,7 +44,7 @@ public class LocalStorageController {
     @ApiOperation("查询文件")
     @PreAuthorize("@el.check('Storage:list')")
     @GetMapping
-    public Map<String, Object> getLocalStorage(LocalStorageQueryCriteria criteria, Pageable pageable) {
+    public Map<String, Object> getLocalStorage(@Validated LocalStorageQueryCriteria criteria, Pageable pageable) {
         return localStorageService.findAll(criteria, pageable);
     }
 
@@ -52,7 +52,7 @@ public class LocalStorageController {
     @ApiOperation("导出文件数据")
     @GetMapping("/download")
     @PreAuthorize("@el.check('Storage:list')")
-    public void download(HttpServletResponse response, LocalStorageQueryCriteria criteria) throws IOException {
+    public void download(HttpServletResponse response, @Validated LocalStorageQueryCriteria criteria) throws IOException {
         localStorageService.download(localStorageService.findAll(criteria), response);
     }
 

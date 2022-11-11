@@ -6,6 +6,8 @@ import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
 
+import javax.validation.constraints.NotBlank;
+
 /**
  * @author Weiho
  * @since 2022/9/5
@@ -22,12 +24,15 @@ public class EmailConfigVO {
     private String fromUser;
 
     @ApiModelProperty("邮件服务器SMTP地址")
+    @NotBlank(message = "邮件服务器SMTP地址不能为空！")
     private String host;
 
     @ApiModelProperty("端口")
+    @NotBlank(message = "端口不能为空！")
     private String port;
 
     @ApiModelProperty("授权码")
+    @NotBlank(message = "授权码不能为空！")
     private String pass;
 
     @ApiModelProperty("发送人名称")

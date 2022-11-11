@@ -83,7 +83,7 @@ public class UserController {
     @ApiOperation("查询用户列表")
     @PreAuthorize("@el.check('User:list')")
     @GetMapping
-    public Map<String, Object> getUserList(UserQueryCriteria criteria, Pageable pageable) {
+    public Map<String, Object> getUserList(@Validated UserQueryCriteria criteria, Pageable pageable) {
         return userService.getUserList(criteria, pageable);
     }
 
@@ -110,7 +110,7 @@ public class UserController {
     @Logging(title = "修改邮箱", businessType = BusinessTypeEnum.UPDATE)
     @ApiOperation("修改邮箱")
     @PostMapping("/email")
-    public Result updateEmail(@RequestBody VerificationVO verificationVO) throws Exception {
+    public Result updateEmail(@Validated @RequestBody VerificationVO verificationVO) throws Exception {
         String newEmail = verificationVO.getNewEmail() + verificationVO.getSuffix().getDisplay();
         // 根据传入的新邮箱去查找数据库
         List<User> usersForNewEmail = userService.list(new LambdaQueryWrapper<User>().eq(User::getEmail, AesUtils.encrypt(newEmail)));
@@ -197,7 +197,7 @@ public class UserController {
     @ApiOperation("导出用户数据")
     @GetMapping("/download")
     @PreAuthorize("@el.check('User:list')")
-    public void download(HttpServletResponse response, UserQueryCriteria criteria) throws IOException {
+    public void download(HttpServletResponse response, @Validated UserQueryCriteria criteria) throws IOException {
         userService.download(userService.convertToVO(userService.getAll(criteria)), response);
     }
 

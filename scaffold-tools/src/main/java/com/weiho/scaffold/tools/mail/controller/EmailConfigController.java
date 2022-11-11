@@ -44,7 +44,7 @@ public class EmailConfigController {
     @Logging(title = "修改邮件配置", businessType = BusinessTypeEnum.UPDATE)
     @PutMapping
     @ApiOperation("修改邮件配置")
-    public Result updateEmailConfig(@RequestBody EmailConfigVO config) {
+    public Result updateEmailConfig(@Validated @RequestBody EmailConfigVO config) {
         return ResultUtils.updateMessage(emailService.updateEmailConfig(config));
     }
 
