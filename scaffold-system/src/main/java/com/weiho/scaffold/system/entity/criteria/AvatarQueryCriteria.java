@@ -15,7 +15,7 @@ import lombok.ToString;
 @Getter
 @Setter
 @ToString(callSuper = true)
-@ApiModel("头像查询实体")
+@ApiModel("头像查询条件")
 public class AvatarQueryCriteria extends BaseQueryCriteria {
     @ApiModelProperty("用户名模糊查询")
     private String blurry;

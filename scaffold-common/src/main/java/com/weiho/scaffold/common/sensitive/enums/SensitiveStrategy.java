@@ -1,7 +1,6 @@
 package com.weiho.scaffold.common.sensitive.enums;
 
-import com.weiho.scaffold.common.util.string.StringUtils;
-import com.weiho.scaffold.common.util.verify.VerifyUtils;
+import cn.hutool.core.util.DesensitizedUtil;
 
 import java.util.function.Function;
 
@@ -15,22 +14,32 @@ public enum SensitiveStrategy {
     /**
      * 用户名
      */
-    USERNAME(SensitiveStrategy::desensitizeForUsername),
+    USERNAME(DesensitizedUtil::chineseName),
 
     /**
      * 身份证号
      */
-    ID_CARD(SensitiveStrategy::desensitizeForIDCard),
+    ID_CARD(idCard -> DesensitizedUtil.desensitized(idCard, DesensitizedUtil.DesensitizedType.ID_CARD)),
 
     /**
      * 电话号码
      */
-    PHONE(SensitiveStrategy::desensitizeForPhone),
+    PHONE(DesensitizedUtil::mobilePhone),
 
     /**
      * 邮箱
      */
-    EMAIL(SensitiveStrategy::desensitizeForEmail);
+    EMAIL(DesensitizedUtil::email),
+
+    /**
+     * 地址
+     */
+    ADDRESS(address -> DesensitizedUtil.desensitized(address, DesensitizedUtil.DesensitizedType.ADDRESS)),
+
+    /**
+     * 车牌号
+     */
+    CARD(DesensitizedUtil::carLicense);
 
     private final Function<String, String> desensitize;
 
@@ -40,66 +49,5 @@ public enum SensitiveStrategy {
 
     public Function<String, String> desensitize() {
         return desensitize;
-    }
-
-    /**
-     * 为用户名脱敏(只将姓名的第二个字脱敏)
-     *
-     * @param username 原始字段值
-     * @return 脱敏后
-     */
-    public static String desensitizeForUsername(String username) {
-        if (username.length() == 0 || username.length() == 1) {
-            return "This doesn't look like a domestic name.";
-        } else if (username.length() < 4) {
-            return username.replace(username.charAt(1), '*');
-        } else {
-            return username.replace(username.charAt(2), '*');
-        }
-    }
-
-    /**
-     * 为身份证脱敏(将身份证号码11 - 16位脱敏)
-     *
-     * @param idCard 身份证号
-     * @return 脱敏后
-     */
-    public static String desensitizeForIDCard(String idCard) {
-        if (!VerifyUtils.isIdCard(idCard)) {
-            return "This doesn't look like ID number.";
-        } else {
-            return idCard.replace(idCard.substring(10, 16), "******");
-        }
-    }
-
-    /**
-     * 为电话号码脱敏(将电话号码4 - 7位脱敏)
-     *
-     * @param phone 电话号码
-     * @return 脱敏后
-     */
-    public static String desensitizeForPhone(String phone) {
-        if (!VerifyUtils.isMobileExact(phone)) {
-            return "This doesn't look like a domestic phone number.";
-        } else {
-            return phone.replace(phone.substring(3, 7), "****");
-        }
-    }
-
-    /**
-     * 为邮箱脱敏(邮箱前缀仅显示第一个字母，前缀其他隐藏，用星号代替，@及后面的地址显示<例子:g**@163.com>)
-     *
-     * @param email 邮箱
-     * @return 脱敏后
-     */
-    public static String desensitizeForEmail(String email) {
-        if (StringUtils.isBlank(email)) {
-            return "";
-        }
-        int index = StringUtils.indexOf(email, "@");
-        if (index <= 1) {
-            return email;
-        }
-        return StringUtils.rightPad(StringUtils.left(email, 1), index, "*").concat(StringUtils.mid(email, index, StringUtils.length(email)));
     }
 }

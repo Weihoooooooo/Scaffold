@@ -17,7 +17,7 @@ import lombok.ToString;
 @Getter
 @Setter
 @ToString(callSuper = true)
-@ApiModel("反馈查询实体")
+@ApiModel("反馈查询条件")
 public class FeedbackQueryCriteria extends BaseQueryCriteria {
 
     @Query(blurry = "title,content,remarks")

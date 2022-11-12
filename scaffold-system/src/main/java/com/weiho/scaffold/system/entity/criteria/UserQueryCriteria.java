@@ -16,7 +16,7 @@ import lombok.ToString;
 @Getter
 @Setter
 @ToString(callSuper = true)
-@ApiModel("用户查询实体")
+@ApiModel("用户查询条件")
 public class UserQueryCriteria extends BaseQueryCriteria {
     @Query
     @ApiModelProperty("主键")

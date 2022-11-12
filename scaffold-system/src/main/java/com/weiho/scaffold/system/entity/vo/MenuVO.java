@@ -14,7 +14,7 @@ import java.util.List;
  */
 @Data
 @JsonInclude(JsonInclude.Include.NON_EMPTY)
-@ApiModel(value = "前端路由对象", description = "前端路由表所需对象")
+@ApiModel(value = "前端路由VO", description = "前端路由表所需对象")
 public class MenuVO implements Serializable {
     @ApiModelProperty("菜单名称")
     private String name;

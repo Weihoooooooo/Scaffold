@@ -1,9 +1,12 @@
 package com.weiho.scaffold.system.entity;
 
+import com.alibaba.fastjson2.annotation.JSONField;
 import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
+import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.weiho.scaffold.mp.entity.CommonEntity;
 import com.weiho.scaffold.system.entity.enums.FeedbackResultEnum;
 import com.weiho.scaffold.system.entity.enums.FeedbackTypeEnum;
@@ -34,6 +37,8 @@ public class Feedback extends CommonEntity {
 
     @ApiModelProperty("业主ID")
     @TableField("owner_id")
+    @JsonIgnore
+    @JSONField(serialize = false)
     private Long ownerId;
 
     @ApiModelProperty("处理人")
@@ -62,6 +67,8 @@ public class Feedback extends CommonEntity {
 
     @ApiModelProperty("回复时间")
     @TableField("answer_time")
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+8")
+    @JSONField(format = "yyyy-MM-dd HH:mm:ss")
     private Date answerTime;
 
     @ApiModelProperty("处理结果 0-未解决 1-已解决 2-其他")

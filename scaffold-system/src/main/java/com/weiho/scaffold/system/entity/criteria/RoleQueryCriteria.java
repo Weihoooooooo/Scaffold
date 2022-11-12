@@ -15,7 +15,7 @@ import lombok.ToString;
 @Getter
 @Setter
 @ToString(callSuper = true)
-@ApiModel("角色查询实体")
+@ApiModel("角色查询条件")
 public class RoleQueryCriteria extends BaseQueryCriteria {
     @Query(blurry = "name,permission,nameZhCn,nameZhTw,nameZhHk,nameEnUs")
     @ApiModelProperty("模糊查询字段")

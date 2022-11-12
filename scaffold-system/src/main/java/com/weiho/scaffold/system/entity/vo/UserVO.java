@@ -27,7 +27,7 @@ import java.util.Set;
 @Getter
 @Setter
 @ToString
-@ApiModel("用户列表VO")
+@ApiModel("用户VO")
 @NoArgsConstructor
 public class UserVO extends CommonEntity implements Serializable {
     @ApiModelProperty("主键ID")

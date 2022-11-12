@@ -11,7 +11,7 @@ import javax.validation.constraints.NotBlank;
  * @since 2022/9/5
  */
 @Data
-@ApiModel("用户修改密码实体")
+@ApiModel("用户修改密码VO")
 public class UserPassVO {
     @NotBlank(message = "旧密码不能为空")
     @ApiModelProperty(value = "旧密码", required = true)

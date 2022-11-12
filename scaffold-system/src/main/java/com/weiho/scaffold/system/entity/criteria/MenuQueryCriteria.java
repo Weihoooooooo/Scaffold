@@ -15,7 +15,7 @@ import lombok.ToString;
 @Getter
 @Setter
 @ToString(callSuper = true)
-@ApiModel("菜单查询实体")
+@ApiModel("菜单查询条件")
 public class MenuQueryCriteria extends BaseQueryCriteria {
     @Query(blurry = "name,nameZhCn,nameZhHk,nameZhTw,nameEnUs,iconCls,permission")
     @ApiModelProperty("用户名模糊查询")

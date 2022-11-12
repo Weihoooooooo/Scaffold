@@ -86,6 +86,7 @@ public class FeedbackServiceImpl extends CommonServiceImpl<FeedbackMapper, Feedb
         feedback.setAnswer(resource.getAnswer());
         feedback.setAnswerTime(DateUtils.getNowDate());
         feedback.setRemarks(resource.getRemarks());
+        feedback.setResult(resource.getResult());
 
         return this.saveOrUpdate(feedback);
     }

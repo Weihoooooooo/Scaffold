@@ -1,6 +1,6 @@
 package com.weiho.scaffold.system.entity.vo;
 
-import com.weiho.scaffold.system.entity.Notice;
+import com.weiho.scaffold.system.entity.Elevator;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Getter;
@@ -11,15 +11,15 @@ import java.io.Serializable;
 
 /**
  * @author Weiho
- * @since 2022/11/2
+ * @since 2022/11/12
  */
-@Setter
 @Getter
+@Setter
 @ToString
-@ApiModel("通知VO")
-public class NoticeVO extends Notice implements Serializable {
+@ApiModel("电梯VO")
+public class ElevatorVO extends Elevator implements Serializable {
 
-    @ApiModelProperty("通知人")
-    private String username;
+    @ApiModelProperty("建筑栋号")
+    private String buildingNum;
 
 }

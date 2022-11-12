@@ -28,7 +28,7 @@ import java.util.Set;
  * @author Weiho
  * @since 2022-11-07
  */
-@Api(tags = "建筑管理")
+@Api(tags = "楼宇管理")
 @RestController
 @RequestMapping("/api/v1/buildings")
 @RequiredArgsConstructor

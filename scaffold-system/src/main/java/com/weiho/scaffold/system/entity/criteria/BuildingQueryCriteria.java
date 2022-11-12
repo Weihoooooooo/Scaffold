@@ -15,7 +15,7 @@ import lombok.ToString;
 @Getter
 @Setter
 @ToString(callSuper = true)
-@ApiModel("楼宇查询实体")
+@ApiModel("楼宇查询条件")
 public class BuildingQueryCriteria extends BaseQueryCriteria {
     @Query(blurry = "buildingNum")
     @ApiModelProperty("建筑栋号模糊查询！")

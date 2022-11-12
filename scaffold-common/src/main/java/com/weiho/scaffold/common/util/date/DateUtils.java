@@ -1,10 +1,10 @@
 package com.weiho.scaffold.common.util.date;
 
+import cn.hutool.core.date.DateUtil;
 import lombok.experimental.UtilityClass;
 
 import java.lang.management.ManagementFactory;
 import java.sql.Timestamp;
-import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
@@ -16,17 +16,7 @@ import java.util.Date;
  * @author <a href="https://gitee.com/guchengwuyue/yshopmall">参考链接</a>
  */
 @UtilityClass
-public class DateUtils extends org.apache.commons.lang3.time.DateUtils {
-    /**
-     * 列举可能出现的格式方式
-     */
-    private static final String[] PARSE_PATTERNS = {
-            "yyyy-MM-dd", "yyyy-MM-dd HH:mm:ss", "yyyy-MM-dd HH:mm", "yyyy-MM",
-            "yyyy/MM/dd", "yyyy/MM/dd HH:mm:ss", "yyyy/MM/dd HH:mm", "yyyy/MM",
-            "yyyy.MM.dd", "yyyy.MM.dd HH:mm:ss", "yyyy.MM.dd HH:mm", "yyyy.MM",
-            "yyyy^MM^dd", "yyyy^MM^dd HH:mm:ss", "yyyy^MM^dd HH:mm", "yyyy^MM"
-    };
-
+public class DateUtils extends DateUtil {
     /**
      * 获取服务器启动时间
      *
@@ -148,14 +138,7 @@ public class DateUtils extends org.apache.commons.lang3.time.DateUtils {
      * @return Date
      */
     public Date parseStringToDate(String str) {
-        if (str == null) {
-            return null;
-        }
-        try {
-            return parseDate(str, PARSE_PATTERNS);
-        } catch (ParseException e) {
-            return null;
-        }
+        return parse(str);
     }
 
     /**
@@ -197,5 +180,30 @@ public class DateUtils extends org.apache.commons.lang3.time.DateUtils {
             w = 0;
         }
         return weekDays[w];
+    }
+
+    /**
+     * 获取某个日期几天(前/后)的日期(正数是往后，负数是往前)
+     *
+     * @param date 指定的日期
+     * @param day  n天(前/后)
+     * @return 结果日期
+     */
+    public Date getDateScope(Date date, int day) {
+        Calendar now = Calendar.getInstance();
+        now.setTime(date);
+        now.set(Calendar.DATE, now.get(Calendar.DATE) + day);
+        return now.getTime();
+    }
+
+    /**
+     * 获取某个日期几天(前/后)的日期(正数是往后，负数是往前)
+     *
+     * @param timestamp 指定的日期(时间戳)
+     * @param day       n天(前/后)
+     * @return 结果日期
+     */
+    public Date getDateScope(Timestamp timestamp, int day) {
+        return getDateScope(parseTimestampToDate(timestamp), day);
     }
 }
