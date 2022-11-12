@@ -12,7 +12,7 @@ import javax.validation.constraints.NotBlank;
  * @since 2022/9/6
  */
 @Data
-@ApiModel("修改邮箱参数对象")
+@ApiModel("修改邮箱参数VO")
 public class VerificationVO {
     @NotBlank(message = "新邮箱不能为空")
     @ApiModelProperty(value = "新邮箱", required = true)

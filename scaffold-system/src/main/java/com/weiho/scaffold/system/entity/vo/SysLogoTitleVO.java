@@ -13,7 +13,7 @@ import lombok.ToString;
 @Getter
 @Setter
 @ToString
-@ApiModel(value = "SysSettingVO")
+@ApiModel(value = "系统Logo和标题VO")
 public class SysLogoTitleVO {
     @ApiModelProperty("系统名称")
     private String sysName;

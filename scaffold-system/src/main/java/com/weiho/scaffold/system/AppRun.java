@@ -2,7 +2,6 @@ package com.weiho.scaffold.system;
 
 import com.weiho.scaffold.common.annotation.Anonymous;
 import com.weiho.scaffold.common.annotation.NotControllerResponseAdvice;
-import com.weiho.scaffold.common.util.spring.SpringContextHolder;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.mybatis.spring.annotation.MapperScan;
@@ -25,19 +24,11 @@ import springfox.documentation.swagger2.annotations.EnableSwagger2;
 @SpringBootApplication
 @RestController
 @MapperScan(basePackages = {"com.weiho.scaffold.**.mapper"}) //Mybatis扫描Mapper
-@ComponentScan(basePackages = {"com.weiho.scaffold"}) //扫描Spring Boot上下文的Bean
+@ComponentScan(basePackages = {"com.weiho.scaffold", "cn.hutool.extra.spring"}) //扫描Spring Boot上下文的Bean
 public class AppRun {
 
     public static void main(String[] args) {
         SpringApplication.run(AppRun.class, args);
-    }
-
-    /**
-     * 帮助工具类、过滤器等获取Spring容器中的实例
-     */
-    @Bean
-    public SpringContextHolder springContextHolder() {
-        return new SpringContextHolder();
     }
 
     /**

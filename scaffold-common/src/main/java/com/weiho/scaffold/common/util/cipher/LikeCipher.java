@@ -1,7 +1,7 @@
 package com.weiho.scaffold.common.util.cipher;
 
+import cn.hutool.core.lang.Validator;
 import com.weiho.scaffold.common.util.aes.AesUtils;
-import com.weiho.scaffold.common.util.verify.VerifyUtils;
 import lombok.experimental.UtilityClass;
 
 /**
@@ -55,7 +55,7 @@ public class LikeCipher {
      * @return 密文
      */
     public String phoneLikeEncrypt(String str) {
-        if (str == null || !VerifyUtils.isMobileExact(str)) {
+        if (!Validator.isMobile(str)) {
             return null;
         }
         return "$" + AesUtils.encrypt(str.substring(0, 7)) + likeEncrypt(str.substring(7));

@@ -1,10 +1,10 @@
 package com.weiho.scaffold.common.util.security;
 
+import cn.hutool.extra.spring.SpringUtil;
 import cn.hutool.json.JSONObject;
 import com.weiho.scaffold.common.exception.BadRequestException;
 import com.weiho.scaffold.common.util.message.I18nMessagesUtils;
 import com.weiho.scaffold.common.util.result.enums.ResultCodeEnum;
-import com.weiho.scaffold.common.util.spring.SpringContextHolder;
 import lombok.experimental.UtilityClass;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -31,7 +31,7 @@ public class SecurityUtils {
         }
         if (authentication.getPrincipal() instanceof UserDetails) {
             UserDetails userDetails = (UserDetails) authentication.getPrincipal();
-            UserDetailsService userDetailsService = SpringContextHolder.getBean(UserDetailsService.class);
+            UserDetailsService userDetailsService = SpringUtil.getBean(UserDetailsService.class);
             return userDetailsService.loadUserByUsername(userDetails.getUsername());
         }
         throw new BadRequestException(ResultCodeEnum.SYSTEM_FORBIDDEN, I18nMessagesUtils.get("security.login.not.found"));

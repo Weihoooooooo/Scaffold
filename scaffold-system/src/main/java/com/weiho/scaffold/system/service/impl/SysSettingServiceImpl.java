@@ -36,7 +36,9 @@ public class SysSettingServiceImpl extends CommonServiceImpl<SysSettingMapper, S
     @Override
     @Cacheable(value = "Scaffold:System", key = "'settings'")
     public SysSetting getSysSettings() {
-        return this.list().get(0);
+        SysSetting sysSetting = this.list().get(0);
+        sysSetting.setUserInitPassword(AesUtils.decrypt(sysSetting.getUserInitPassword()));
+        return sysSetting;
     }
 
     @Override

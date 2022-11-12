@@ -1,5 +1,6 @@
 package com.weiho.scaffold.tools.mail.util;
 
+import cn.hutool.extra.mail.MailUtil;
 import com.weiho.scaffold.common.exception.BadRequestException;
 import com.weiho.scaffold.common.util.message.I18nMessagesUtils;
 import com.weiho.scaffold.tools.mail.enums.EmailTypeEnum;
@@ -14,7 +15,7 @@ import java.util.stream.Collectors;
  * @since 2022/10/24
  */
 @UtilityClass
-public class MailUtils {
+public class MailUtils extends MailUtil {
     /**
      * 检查邮箱是否符合系统的枚举类
      *

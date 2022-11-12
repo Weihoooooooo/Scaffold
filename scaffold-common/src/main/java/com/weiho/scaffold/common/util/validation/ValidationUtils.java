@@ -1,9 +1,11 @@
 package com.weiho.scaffold.common.util.validation;
 
+import cn.hutool.core.convert.Convert;
 import cn.hutool.core.util.ObjectUtil;
+import cn.hutool.crypto.SecureUtil;
+import cn.hutool.crypto.symmetric.SymmetricAlgorithm;
 import com.weiho.scaffold.common.exception.BadRequestException;
 import lombok.experimental.UtilityClass;
-import org.hibernate.validator.internal.constraintvalidators.hv.EmailValidator;
 
 /**
  * @author Weiho
@@ -21,10 +23,10 @@ public class ValidationUtils {
         }
     }
 
-    /**
-     * 验证是否为邮箱
-     */
-    public boolean isEmail(String email) {
-        return new EmailValidator().isValid(email, null);
+    public static void main(String[] args) {
+        byte[] key = SecureUtil.generateKey(SymmetricAlgorithm.DES.getValue()).getEncoded();
+        String str = SecureUtil.des(key).encryptHex(Convert.toStr(1L));
+        System.err.println(str);
+        System.err.println(SecureUtil.des(key).decryptStr(str));
     }
 }

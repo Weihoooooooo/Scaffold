@@ -1,7 +1,7 @@
 package com.weiho.scaffold.system.security.token.filter;
 
+import cn.hutool.extra.spring.SpringUtil;
 import com.weiho.scaffold.common.config.system.ScaffoldSystemProperties;
-import com.weiho.scaffold.common.util.spring.SpringContextHolder;
 import com.weiho.scaffold.common.util.string.StringUtils;
 import com.weiho.scaffold.system.security.service.OnlineUserService;
 import com.weiho.scaffold.system.security.service.impl.OnlineUserServiceImpl;
@@ -55,8 +55,8 @@ public class TokenFilter extends GenericFilterBean {
         //判断是否存在Token
         try {
             //获取Spring容器中的对象(由于过滤器在Spring容器外，通过工具类获取)
-            ScaffoldSystemProperties properties = SpringContextHolder.getBean(ScaffoldSystemProperties.class);
-            OnlineUserService onlineUserService = SpringContextHolder.getBean(OnlineUserServiceImpl.class);
+            ScaffoldSystemProperties properties = SpringUtil.getBean(ScaffoldSystemProperties.class);
+            OnlineUserService onlineUserService = SpringUtil.getBean(OnlineUserServiceImpl.class);
 
             //获取请求头中的token
             authToken = tokenUtils.getTokenFromRequest(httpServletRequest);

@@ -13,7 +13,7 @@ import java.io.Serializable;
  * @author Weiho
  * @since 2022/9/22
  */
-@ApiModel("头像实体VO")
+@ApiModel("头像VO")
 @Getter
 @Setter
 @ToString(callSuper = true)

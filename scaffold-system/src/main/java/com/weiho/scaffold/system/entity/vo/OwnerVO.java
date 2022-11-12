@@ -24,7 +24,7 @@ import java.io.Serializable;
 @Getter
 @Setter
 @ToString
-@ApiModel("业主前端显示实体")
+@ApiModel("业主VO")
 public class OwnerVO extends CommonEntity implements Serializable {
     @ApiModelProperty("主键ID")
     private Long id;

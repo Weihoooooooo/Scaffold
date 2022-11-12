@@ -54,6 +54,8 @@ public class BuildingServiceImpl extends CommonServiceImpl<BuildingMapper, Build
             map.put("建筑层数", building.getFloor());
             map.put("一梯几户", building.getFloorNum());
             map.put("总户数", building.getNumber());
+            map.put("创建时间", building.getCreateTime());
+            map.put("修改时间", building.getUpdateTime());
             list.add(map);
         }
         FileUtils.downloadExcel(list, response);
@@ -66,13 +68,15 @@ public class BuildingServiceImpl extends CommonServiceImpl<BuildingMapper, Build
         building.setBuildingNum(resources.getBuildingNum());
         building.setFloor(resources.getFloor());
         building.setFloorNum(resources.getFloorNum());
-        building.setNumber(resources.getNumber());
+        building.setNumber(resources.getFloor() * resources.getFloorNum());
         return this.saveOrUpdate(building);
     }
 
     @Override
     @Transactional(rollbackFor = Exception.class)
     public boolean addBuilding(Building resources) {
+        // 后台计算总户数
+        resources.setNumber(resources.getFloor() * resources.getFloorNum());
         return this.save(resources);
     }
 

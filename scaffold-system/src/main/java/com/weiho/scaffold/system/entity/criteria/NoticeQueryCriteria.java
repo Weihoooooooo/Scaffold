@@ -17,7 +17,7 @@ import lombok.ToString;
 @Getter
 @Setter
 @ToString(callSuper = true)
-@ApiModel("通知查询实体")
+@ApiModel("通知查询条件")
 public class NoticeQueryCriteria extends BaseQueryCriteria {
     @Query(blurry = "title,content")
     @ApiModelProperty("模糊查询字段")

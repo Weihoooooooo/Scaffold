@@ -15,7 +15,7 @@ import lombok.ToString;
 @Getter
 @Setter
 @ToString(callSuper = true)
-@ApiModel("业主查询实体")
+@ApiModel("业主查询条件")
 public class OwnerQueryCriteria extends BaseQueryCriteria {
     @Query(blurry = "phone,name")
     @ApiModelProperty("手机号码后四位，姓名模糊查询")
