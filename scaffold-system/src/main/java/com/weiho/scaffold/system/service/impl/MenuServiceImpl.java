@@ -16,6 +16,7 @@ import com.weiho.scaffold.system.entity.convert.MenuDTOConvert;
 import com.weiho.scaffold.system.entity.criteria.MenuQueryCriteria;
 import com.weiho.scaffold.system.entity.dto.MenuDTO;
 import com.weiho.scaffold.system.entity.vo.MenuMetaVO;
+import com.weiho.scaffold.system.entity.vo.MenuTreeVO;
 import com.weiho.scaffold.system.entity.vo.MenuVO;
 import com.weiho.scaffold.system.mapper.MenuMapper;
 import com.weiho.scaffold.system.service.MenuService;
@@ -145,21 +146,20 @@ public class MenuServiceImpl extends CommonServiceImpl<MenuMapper, Menu> impleme
     }
 
     @Override
-    @Cacheable(value = "Scaffold:System", key = "'MenuTree'")
-    public List<Map<String, Object>> getMenuTree(List<Menu> menus, HttpServletRequest request) {
+    public List<MenuTreeVO> getMenuTree(List<Menu> menus, HttpServletRequest request) {
         String language = request.getHeader("Accept-Language") == null ? "zh-CN" : request.getHeader("Accept-Language");
-        List<Map<String, Object>> list = new LinkedList<>();
+        List<MenuTreeVO> list = new LinkedList<>();
         menus.forEach(menu -> {
             if (menu != null) {
                 // 获取子菜单
                 List<Menu> menuList = this.findByParentId(menu.getId());
-                Map<String, Object> map = new HashMap<>(16);
-                map.put("id", menu.getId());
-                map.put("label", getMenuNameForLanguage(menu, language));
+                MenuTreeVO menuTreeVO = new MenuTreeVO();
+                menuTreeVO.setId(menu.getId());
+                menuTreeVO.setLabel(getMenuNameForLanguage(menu, language));
                 if (menuList != null && menuList.size() != 0) {
-                    map.put("children", getMenuTree(menuList, request));
+                    menuTreeVO.setChildren(getMenuTree(menuList, request));
                 }
-                list.add(map);
+                list.add(menuTreeVO);
             }
         });
         return list;

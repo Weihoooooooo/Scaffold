@@ -8,6 +8,7 @@ import com.weiho.scaffold.common.util.message.I18nMessagesUtils;
 import com.weiho.scaffold.common.util.result.Result;
 import com.weiho.scaffold.common.util.result.ResultUtils;
 import com.weiho.scaffold.common.util.rsa.RsaUtils;
+import com.weiho.scaffold.common.util.secure.IdSecureUtils;
 import com.weiho.scaffold.common.util.security.SecurityUtils;
 import com.weiho.scaffold.common.util.string.StringUtils;
 import com.weiho.scaffold.logging.annotation.Logging;
@@ -175,7 +176,8 @@ public class UserController {
     @ApiOperation("删除用户")
     @DeleteMapping
     @PreAuthorize("@el.check('User:delete')")
-    public Result deleteUser(@RequestBody Set<Long> ids) {
+    public Result deleteUser(@RequestBody Set<String> idStrings) {
+        Set<Long> ids = IdSecureUtils.des().decrypt(idStrings);
         for (Long id : ids) {
             // 当前操作用户的级别
             Integer currentLevel = Collections.min(roleMapper.findListByUserId(SecurityUtils.getUserId()).stream().map(Role::getLevel).collect(Collectors.toList()));

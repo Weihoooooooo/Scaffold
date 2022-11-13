@@ -1,8 +1,5 @@
 package com.weiho.scaffold.common.util.ip;
 
-import cn.hutool.http.HttpUtil;
-import cn.hutool.json.JSONObject;
-import cn.hutool.json.JSONUtil;
 import eu.bitwalker.useragentutils.Browser;
 import eu.bitwalker.useragentutils.UserAgent;
 import lombok.experimental.UtilityClass;
@@ -117,8 +114,9 @@ public class IpUtils {
      */
     public String getCityInfo(String ip) {
         String api = String.format(IP_REQUEST_URL, ip);
-        JSONObject object = JSONUtil.parseObj(HttpUtil.get(api));
-        return object.get("addr", String.class);
+//        JSONObject object = JSONUtil.parseObj(HttpUtil.get(api));
+//        return object.get("addr", String.class);
+        return "无网络"; // TODO 无网络环境
     }
 
     /**

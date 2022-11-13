@@ -42,30 +42,9 @@ public class AesUtils {
      * @return 加密后的字符串
      */
     public String encrypt(String data) {
-        return encrypt(data, KEY);
-    }
-
-    /**
-     * AES解密
-     *
-     * @param data 需要解密的内容
-     * @return 解密后字符串
-     */
-    public String decrypt(String data) {
-        return decrypt(data, KEY);
-    }
-
-    /**
-     * AES加密
-     *
-     * @param data 需要加密的内容
-     * @param key  密钥
-     * @return 加密后的字符串
-     */
-    public String encrypt(String data, String key) {
         try {
             Cipher cipher = Cipher.getInstance(CIPHER_ALGORITHM);
-            SecretKeySpec skeySpec = new SecretKeySpec(key.getBytes(StandardCharsets.US_ASCII), ALGORITHM);
+            SecretKeySpec skeySpec = new SecretKeySpec(KEY.getBytes(StandardCharsets.US_ASCII), ALGORITHM);
             IvParameterSpec iv = new IvParameterSpec(OFFSET.getBytes());//使用CBC模式，需要一个向量iv，可增加加密算法的强度
             cipher.init(Cipher.ENCRYPT_MODE, skeySpec, iv);
             byte[] encrypted = cipher.doFinal(data.getBytes(ENCODING));
@@ -80,13 +59,12 @@ public class AesUtils {
      * AES解密
      *
      * @param data 需要解密的内容
-     * @param key  密钥
      * @return 解密后字符串
      */
-    public String decrypt(String data, String key) {
+    public String decrypt(String data) {
         try {
             Cipher cipher = Cipher.getInstance(CIPHER_ALGORITHM);
-            SecretKeySpec skeySpec = new SecretKeySpec(key.getBytes(StandardCharsets.US_ASCII), ALGORITHM);
+            SecretKeySpec skeySpec = new SecretKeySpec(KEY.getBytes(StandardCharsets.US_ASCII), ALGORITHM);
             IvParameterSpec iv = new IvParameterSpec(OFFSET.getBytes());//使用CBC模式，需要一个向量iv，可增加加密算法的强度
             cipher.init(Cipher.DECRYPT_MODE, skeySpec, iv);
             byte[] buffer = Base64.decodeBase64(data);
@@ -97,6 +75,5 @@ public class AesUtils {
         }
         return null;
     }
-
 
 }

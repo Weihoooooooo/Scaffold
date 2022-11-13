@@ -1,6 +1,8 @@
 package com.weiho.scaffold.system.controller;
 
 
+import io.swagger.annotations.Api;
+import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -12,8 +14,10 @@ import org.springframework.web.bind.annotation.RestController;
  * @author Weiho
  * @since 2022-11-12
  */
+@Api(tags = "电梯管理")
 @RestController
-@RequestMapping("/elevator")
+@RequestMapping("/api/v1/elevators")
+@RequiredArgsConstructor
 public class ElevatorController {
 
 }

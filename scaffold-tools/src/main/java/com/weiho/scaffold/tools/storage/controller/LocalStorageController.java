@@ -1,9 +1,8 @@
 package com.weiho.scaffold.tools.storage.controller;
 
-import com.weiho.scaffold.common.util.message.I18nMessagesUtils;
 import com.weiho.scaffold.common.util.result.Result;
 import com.weiho.scaffold.common.util.result.ResultUtils;
-import com.weiho.scaffold.common.util.result.enums.ResultCodeEnum;
+import com.weiho.scaffold.common.util.secure.IdSecureUtils;
 import com.weiho.scaffold.logging.annotation.Logging;
 import com.weiho.scaffold.logging.enums.BusinessTypeEnum;
 import com.weiho.scaffold.tools.storage.entity.criteria.LocalStorageQueryCriteria;
@@ -23,8 +22,8 @@ import org.springframework.web.multipart.MultipartFile;
 import javax.servlet.http.HttpServletResponse;
 import java.io.File;
 import java.io.IOException;
-import java.io.Serializable;
 import java.util.Map;
+import java.util.Set;
 
 /**
  * <p>
@@ -73,8 +72,8 @@ public class LocalStorageController {
     @ApiOperation("下载文件")
     @PreAuthorize("@el.check('Storage:download')")
     @GetMapping("/download/{id}")
-    public void download(HttpServletResponse response, @PathVariable Serializable id) throws IOException {
-        localStorageService.download(id, response);
+    public void download(HttpServletResponse response, @PathVariable String id) throws IOException {
+        localStorageService.download(IdSecureUtils.des().decrypt(id), response);
     }
 
 
@@ -90,15 +89,7 @@ public class LocalStorageController {
     @ApiOperation("删除文件")
     @PreAuthorize("@el.check('Storage:delete')")
     @DeleteMapping
-    public Result deleteLocalStorage(@RequestBody Long[] ids) {
-        if (ids != null && ids.length > 0) {
-            if (localStorageService.deleteByIds(ids)) {
-                return Result.success(I18nMessagesUtils.get("delete.success.tip"));
-            } else {
-                return Result.of(ResultCodeEnum.BAD_REQUEST_ERROR, I18nMessagesUtils.get("delete.fail.tip"));
-            }
-        } else {
-            return Result.of(ResultCodeEnum.BAD_REQUEST_ERROR, I18nMessagesUtils.get("delete.fail.tip"));
-        }
+    public Result deleteLocalStorage(@RequestBody Set<String> ids) {
+        return ResultUtils.deleteMessages(ids, localStorageService.deleteByIds(IdSecureUtils.des().decrypt(ids)));
     }
 }

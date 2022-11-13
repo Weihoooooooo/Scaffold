@@ -7,6 +7,8 @@ import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.weiho.scaffold.common.annotation.IdDecrypt;
+import com.weiho.scaffold.common.annotation.IdEncrypt;
 import com.weiho.scaffold.mp.entity.CommonEntity;
 import com.weiho.scaffold.system.entity.enums.FeedbackResultEnum;
 import com.weiho.scaffold.system.entity.enums.FeedbackTypeEnum;
@@ -31,6 +33,8 @@ import java.util.Date;
 @ApiModel(value = "Feedback对象", description = "反馈信息表")
 public class Feedback extends CommonEntity {
 
+    @IdEncrypt
+    @IdDecrypt
     @ApiModelProperty("主键ID")
     @TableId(value = "id", type = IdType.AUTO)
     private Long id;

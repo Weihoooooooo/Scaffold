@@ -4,6 +4,7 @@ import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
+import com.weiho.scaffold.common.annotation.IdEncrypt;
 import com.weiho.scaffold.mp.entity.CommonEntity;
 import com.weiho.scaffold.system.entity.enums.AuditEnum;
 import io.swagger.annotations.ApiModel;
@@ -27,6 +28,7 @@ import lombok.ToString;
 @ApiModel(value = "Avatar对象", description = "用户头像表")
 public class Avatar extends CommonEntity {
 
+    @IdEncrypt
     @ApiModelProperty("主键ID")
     @TableId(value = "id", type = IdType.AUTO)
     private Long id;

@@ -1,4 +1,4 @@
-package com.weiho.scaffold.common.sensitive;
+package com.weiho.scaffold.common.sensitive.id;
 
 import com.fasterxml.jackson.core.JsonGenerator;
 import com.fasterxml.jackson.databind.BeanProperty;
@@ -6,31 +6,29 @@ import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.JsonSerializer;
 import com.fasterxml.jackson.databind.SerializerProvider;
 import com.fasterxml.jackson.databind.ser.ContextualSerializer;
-import com.weiho.scaffold.common.annotation.Desensitize;
-import com.weiho.scaffold.common.sensitive.enums.SensitiveStrategy;
+import com.weiho.scaffold.common.annotation.IdEncrypt;
+import com.weiho.scaffold.common.sensitive.enums.IdEncryptStrategy;
 
 import java.io.IOException;
 import java.util.Objects;
 
 /**
- * 序列化注解自定义实现
- *
  * @author Weiho
- * @since 2022/8/24
+ * @since 2022/11/13
  */
-public class SensitiveJsonSerializer extends JsonSerializer<String> implements ContextualSerializer {
-    private SensitiveStrategy strategy;
+public class IdEncryptSerializer extends JsonSerializer<Long> implements ContextualSerializer {
+    private IdEncryptStrategy strategy;
 
     @Override
-    public void serialize(String value, JsonGenerator gen, SerializerProvider serializers) throws IOException {
+    public void serialize(Long value, JsonGenerator gen, SerializerProvider serializers) throws IOException {
         gen.writeString(strategy.desensitize().apply(value));
     }
 
     @Override
     public JsonSerializer<?> createContextual(SerializerProvider prov, BeanProperty property) throws JsonMappingException {
-        Desensitize annotation = property.getAnnotation(Desensitize.class);
-        if (Objects.nonNull(annotation) && Objects.equals(String.class, property.getType().getRawClass())) {
-            this.strategy = annotation.strategy();
+        IdEncrypt annotation = property.getAnnotation(IdEncrypt.class);
+        if (Objects.nonNull(annotation) && Objects.equals(Long.class, property.getType().getRawClass())) {
+            this.strategy = annotation.value();
             return this;
         }
         return prov.findValueSerializer(property.getType(), property);

@@ -3,6 +3,7 @@ package com.weiho.scaffold.system.controller;
 import com.weiho.scaffold.common.util.enums.EnumSelectVO;
 import com.weiho.scaffold.common.util.result.Result;
 import com.weiho.scaffold.common.util.result.ResultUtils;
+import com.weiho.scaffold.common.util.secure.IdSecureUtils;
 import com.weiho.scaffold.logging.annotation.Logging;
 import com.weiho.scaffold.logging.enums.BusinessTypeEnum;
 import com.weiho.scaffold.redis.limiter.annotation.RateLimiter;
@@ -74,8 +75,8 @@ public class NoticeController {
     @ApiOperation("删除通知信息")
     @DeleteMapping
     @PreAuthorize("@el.check('Notice:delete')")
-    public Result deleteNotice(@RequestBody Set<Long> ids) {
-        return ResultUtils.deleteMessage(ids, noticeService.deleteNotice(ids));
+    public Result deleteNotice(@RequestBody Set<String> ids) {
+        return ResultUtils.deleteMessages(ids, noticeService.deleteNotice(IdSecureUtils.des().decrypt(ids)));
     }
 
     @ApiOperation("获取通知发送范围列表")

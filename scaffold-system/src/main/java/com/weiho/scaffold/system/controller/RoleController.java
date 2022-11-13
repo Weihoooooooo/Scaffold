@@ -4,6 +4,7 @@ import com.weiho.scaffold.common.exception.BadRequestException;
 import com.weiho.scaffold.common.util.message.I18nMessagesUtils;
 import com.weiho.scaffold.common.util.result.Result;
 import com.weiho.scaffold.common.util.result.ResultUtils;
+import com.weiho.scaffold.common.util.secure.IdSecureUtils;
 import com.weiho.scaffold.logging.annotation.Logging;
 import com.weiho.scaffold.logging.enums.BusinessTypeEnum;
 import com.weiho.scaffold.redis.limiter.annotation.RateLimiter;
@@ -87,7 +88,8 @@ public class RoleController {
     @ApiOperation("删除角色信息")
     @DeleteMapping
     @PreAuthorize("@el.check('Role:delete')")
-    public Result delete(@RequestBody Set<Long> ids) {
+    public Result delete(@RequestBody Set<String> idStrings) {
+        Set<Long> ids = IdSecureUtils.des().decrypt(idStrings);
         for (Long id : ids) {
             roleService.checkLevel(roleService.getById(id).getLevel());
         }
@@ -97,8 +99,8 @@ public class RoleController {
     @ApiOperation("获取单个Role")
     @GetMapping("/{id}")
     @PreAuthorize("@el.check('Role:list')")
-    public RoleVO getRoleById(@PathVariable Long id) {
-        return roleService.findById(id);
+    public RoleVO getRoleById(@PathVariable String id) {
+        return roleService.findById(IdSecureUtils.des().decrypt(id));
     }
 
     @Logging(title = "修改角色菜单", businessType = BusinessTypeEnum.UPDATE)

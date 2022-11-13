@@ -6,6 +6,7 @@ import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.weiho.scaffold.common.annotation.IdEncrypt;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Getter;
@@ -29,6 +30,7 @@ import java.util.Date;
 @ApiModel(value = "LocalStorage对象")
 public class LocalStorage {
 
+    @IdEncrypt
     @ApiModelProperty("ID")
     @TableId(value = "id", type = IdType.AUTO)
     private Long id;

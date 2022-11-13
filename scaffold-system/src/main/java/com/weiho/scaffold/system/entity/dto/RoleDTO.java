@@ -1,5 +1,6 @@
 package com.weiho.scaffold.system.entity.dto;
 
+import com.weiho.scaffold.common.annotation.IdEncrypt;
 import com.weiho.scaffold.mp.entity.CommonEntity;
 import com.weiho.scaffold.system.entity.Menu;
 import io.swagger.annotations.ApiModel;
@@ -20,6 +21,8 @@ import java.util.Set;
 @ToString
 @ApiModel(value = "RoleDTO对象")
 public class RoleDTO extends CommonEntity implements Serializable {
+
+    @IdEncrypt
     @ApiModelProperty("主键ID")
     private Long id;
 

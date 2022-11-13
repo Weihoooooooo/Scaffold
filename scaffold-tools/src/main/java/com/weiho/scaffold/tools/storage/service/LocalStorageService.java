@@ -12,6 +12,7 @@ import java.io.IOException;
 import java.io.Serializable;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 /**
  * <p>
@@ -62,7 +63,7 @@ public interface LocalStorageService extends CommonService<LocalStorage> {
      * @param ids 图片的主键
      * @return boolean
      */
-    boolean deleteByIds(Long[] ids);
+    boolean deleteByIds(Set<Long> ids);
 
     /**
      * 修改文件名字

@@ -22,7 +22,7 @@ import java.io.Serializable;
 public class FeedbackVO extends Feedback implements Serializable {
 
     @ApiModelProperty("业主姓名")
-    @Desensitize(strategy = SensitiveStrategy.USERNAME)
+    @Desensitize(SensitiveStrategy.USERNAME)
     private String ownerName;
 
 }

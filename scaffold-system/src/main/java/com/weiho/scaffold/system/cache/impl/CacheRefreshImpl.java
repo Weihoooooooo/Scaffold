@@ -1,7 +1,6 @@
 package com.weiho.scaffold.system.cache.impl;
 
 import com.weiho.scaffold.system.cache.service.CacheRefresh;
-import com.weiho.scaffold.system.entity.Menu;
 import com.weiho.scaffold.system.entity.Role;
 import com.weiho.scaffold.system.entity.SysSetting;
 import com.weiho.scaffold.system.entity.User;
@@ -13,11 +12,8 @@ import org.springframework.cache.annotation.CachePut;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.stereotype.Service;
 
-import javax.servlet.http.HttpServletRequest;
 import java.util.Collection;
 import java.util.List;
-import java.util.Map;
-import java.util.stream.Collectors;
 
 /**
  * @author Weiho
@@ -54,12 +50,6 @@ public class CacheRefreshImpl implements CacheRefresh {
         user.setId(userId);
         user.setUsername(username);
         return menuService.findListByRoles(roleService.findListByUser(user), username);
-    }
-
-    @Override
-    @CachePut(value = "Scaffold:System", key = "'MenuTree'")
-    public List<Map<String, Object>> updateMenuTree(HttpServletRequest request) {
-        return menuService.getMenuTree(menuService.findByParentId(0L).stream().filter(Menu::isEnabled).collect(Collectors.toList()), request);
     }
 
     @Override

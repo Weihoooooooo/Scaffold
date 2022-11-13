@@ -29,10 +29,7 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.File;
 import java.io.IOException;
 import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.LinkedHashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * <p>
@@ -129,7 +126,7 @@ public class LocalStorageServiceImpl extends CommonServiceImpl<LocalStorageMappe
 
     @Override
     @Transactional(rollbackFor = Exception.class)
-    public boolean deleteByIds(Long[] ids) {
+    public boolean deleteByIds(Set<Long> ids) {
         for (Long id : ids) {
             LocalStorage localStorage = this.getById(id);
             if (localStorage != null && localStorage.getLocalUrl() != null) {

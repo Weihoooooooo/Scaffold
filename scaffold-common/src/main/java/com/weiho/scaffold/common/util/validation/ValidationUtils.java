@@ -1,10 +1,8 @@
 package com.weiho.scaffold.common.util.validation;
 
-import cn.hutool.core.convert.Convert;
 import cn.hutool.core.util.ObjectUtil;
-import cn.hutool.crypto.SecureUtil;
-import cn.hutool.crypto.symmetric.SymmetricAlgorithm;
 import com.weiho.scaffold.common.exception.BadRequestException;
+import com.weiho.scaffold.common.util.secure.IdSecureUtils;
 import lombok.experimental.UtilityClass;
 
 /**
@@ -24,9 +22,8 @@ public class ValidationUtils {
     }
 
     public static void main(String[] args) {
-        byte[] key = SecureUtil.generateKey(SymmetricAlgorithm.DES.getValue()).getEncoded();
-        String str = SecureUtil.des(key).encryptHex(Convert.toStr(1L));
+        String str = IdSecureUtils.des().encrypt(1L);
         System.err.println(str);
-        System.err.println(SecureUtil.des(key).decryptStr(str));
+        System.err.println(IdSecureUtils.des().decrypt(str));
     }
 }

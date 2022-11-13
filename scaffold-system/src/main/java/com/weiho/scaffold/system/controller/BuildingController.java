@@ -2,6 +2,7 @@ package com.weiho.scaffold.system.controller;
 
 import com.weiho.scaffold.common.util.result.Result;
 import com.weiho.scaffold.common.util.result.ResultUtils;
+import com.weiho.scaffold.common.util.secure.IdSecureUtils;
 import com.weiho.scaffold.logging.annotation.Logging;
 import com.weiho.scaffold.logging.enums.BusinessTypeEnum;
 import com.weiho.scaffold.system.entity.Building;
@@ -70,8 +71,8 @@ public class BuildingController {
     @ApiOperation("删除楼宇信息")
     @DeleteMapping
     @PreAuthorize("@el.check('Building:delete')")
-    public Result deleteBuilding(@RequestBody Set<Long> ids) {
-        return ResultUtils.deleteMessage(ids, buildingService.deleteBuilding(ids));
+    public Result deleteBuilding(@RequestBody Set<String> ids) {
+        return ResultUtils.deleteMessages(ids, buildingService.deleteBuilding(IdSecureUtils.des().decrypt(ids)));
     }
 
 }

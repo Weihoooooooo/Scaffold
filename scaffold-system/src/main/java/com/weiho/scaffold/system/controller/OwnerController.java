@@ -5,6 +5,7 @@ import com.weiho.scaffold.common.util.message.I18nMessagesUtils;
 import com.weiho.scaffold.common.util.result.Result;
 import com.weiho.scaffold.common.util.result.ResultUtils;
 import com.weiho.scaffold.common.util.result.enums.ResultCodeEnum;
+import com.weiho.scaffold.common.util.secure.IdSecureUtils;
 import com.weiho.scaffold.logging.annotation.Logging;
 import com.weiho.scaffold.logging.enums.BusinessTypeEnum;
 import com.weiho.scaffold.system.entity.convert.OwnerVOConvert;
@@ -80,7 +81,7 @@ public class OwnerController {
     @ApiImplicitParam(paramType = "query", name = "id", value = "业主主键", dataType = "Long", dataTypeClass = Long.class, required = true)
     public Result getOwnerForId(@ApiIgnore @RequestBody Map<String, Object> map) {
         if (map != null) {
-            Serializable id = (Serializable) map.get("id");
+            Serializable id = IdSecureUtils.des().decrypt((String) map.get("id"));
             if (id == null) {
                 throw new BadRequestException(I18nMessagesUtils.get("param.null"));
             }
@@ -97,11 +98,11 @@ public class OwnerController {
     @ApiImplicitParam(paramType = "query", name = "id", value = "业主主键", dataType = "Long", dataTypeClass = Long.class, required = true)
     public Result resetPass(@ApiIgnore @RequestBody Map<String, Object> map) {
         if (map != null) {
-            Serializable id = (Serializable) map.get("id");
+            Serializable id = IdSecureUtils.des().decrypt((String) map.get("id"));
             if (id == null) {
                 throw new BadRequestException(I18nMessagesUtils.get("param.null"));
             }
-            ownerService.resetPassword((Serializable) map.get("id"));
+            ownerService.resetPassword(id);
             return Result.success(I18nMessagesUtils.get("update.success.tip"));
         } else {
             return Result.of(ResultCodeEnum.BAD_REQUEST_ERROR, I18nMessagesUtils.get("param.error"));
@@ -112,7 +113,7 @@ public class OwnerController {
     @ApiOperation("删除业主")
     @DeleteMapping
     @PreAuthorize("@el.check('OwnerInfo:delete')")
-    public Result deleteOwner(@RequestBody Set<Long> ids) {
-        return ResultUtils.deleteMessage(ids, ownerService.deleteOwner(ids));
+    public Result deleteOwner(@RequestBody Set<String> ids) {
+        return ResultUtils.deleteMessages(ids, ownerService.deleteOwner(IdSecureUtils.des().decrypt(ids)));
     }
 }

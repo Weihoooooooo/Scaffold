@@ -1,6 +1,7 @@
 package com.weiho.scaffold.common.sensitive.enums;
 
 import cn.hutool.core.util.DesensitizedUtil;
+import lombok.RequiredArgsConstructor;
 
 import java.util.function.Function;
 
@@ -10,6 +11,7 @@ import java.util.function.Function;
  * @author Weiho
  * @since 2022/8/24
  */
+@RequiredArgsConstructor
 public enum SensitiveStrategy {
     /**
      * 用户名
@@ -42,10 +44,6 @@ public enum SensitiveStrategy {
     CARD(DesensitizedUtil::carLicense);
 
     private final Function<String, String> desensitize;
-
-    SensitiveStrategy(Function<String, String> desensitize) {
-        this.desensitize = desensitize;
-    }
 
     public Function<String, String> desensitize() {
         return desensitize;

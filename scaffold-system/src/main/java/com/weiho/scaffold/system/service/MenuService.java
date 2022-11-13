@@ -5,6 +5,7 @@ import com.weiho.scaffold.system.entity.Menu;
 import com.weiho.scaffold.system.entity.Role;
 import com.weiho.scaffold.system.entity.criteria.MenuQueryCriteria;
 import com.weiho.scaffold.system.entity.dto.MenuDTO;
+import com.weiho.scaffold.system.entity.vo.MenuTreeVO;
 import com.weiho.scaffold.system.entity.vo.MenuVO;
 
 import javax.servlet.http.HttpServletRequest;
@@ -54,7 +55,7 @@ public interface MenuService extends CommonService<Menu> {
      * @param request 请求对象
      * @return /
      */
-    List<Map<String, Object>> getMenuTree(List<Menu> menus, HttpServletRequest request);
+    List<MenuTreeVO> getMenuTree(List<Menu> menus, HttpServletRequest request);
 
     /**
      * 根据上级ID查找菜单列表

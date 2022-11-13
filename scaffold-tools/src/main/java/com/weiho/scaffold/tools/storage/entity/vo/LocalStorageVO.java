@@ -1,5 +1,6 @@
 package com.weiho.scaffold.tools.storage.entity.vo;
 
+import com.weiho.scaffold.common.annotation.IdDecrypt;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
@@ -16,6 +17,8 @@ import java.io.Serializable;
 @ToString
 @ApiModel("修改本地存储VO")
 public class LocalStorageVO implements Serializable {
+
+    @IdDecrypt
     @ApiModelProperty("主键ID")
     private Long id;
 

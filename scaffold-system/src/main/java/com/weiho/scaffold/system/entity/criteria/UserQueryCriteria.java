@@ -18,10 +18,6 @@ import lombok.ToString;
 @ToString(callSuper = true)
 @ApiModel("用户查询条件")
 public class UserQueryCriteria extends BaseQueryCriteria {
-    @Query
-    @ApiModelProperty("主键")
-    private Long id;
-
     @Query(blurry = "username")
     @ApiModelProperty("模糊查询字段")
     private String blurry;

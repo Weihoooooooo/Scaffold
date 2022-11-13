@@ -3,6 +3,8 @@ package com.weiho.scaffold.system.entity.vo;
 import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
+import com.weiho.scaffold.common.annotation.IdDecrypt;
+import com.weiho.scaffold.common.annotation.IdEncrypt;
 import com.weiho.scaffold.mp.handler.EncryptHandler;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
@@ -20,6 +22,8 @@ import javax.validation.constraints.Pattern;
 @Data
 @ApiModel("系统参数VO")
 public class SysSettingVO {
+    @IdEncrypt
+    @IdDecrypt
     @ApiModelProperty("主键ID")
     @TableId(value = "id", type = IdType.AUTO)
     private Long id;

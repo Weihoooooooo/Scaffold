@@ -2,6 +2,8 @@ package com.weiho.scaffold.system.entity.vo;
 
 import com.alibaba.fastjson2.annotation.JSONField;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.weiho.scaffold.common.annotation.IdDecrypt;
+import com.weiho.scaffold.common.annotation.IdEncrypt;
 import com.weiho.scaffold.mp.entity.CommonEntity;
 import com.weiho.scaffold.system.entity.Avatar;
 import com.weiho.scaffold.system.entity.Role;
@@ -30,6 +32,9 @@ import java.util.Set;
 @ApiModel("用户VO")
 @NoArgsConstructor
 public class UserVO extends CommonEntity implements Serializable {
+
+    @IdEncrypt
+    @IdDecrypt
     @ApiModelProperty("主键ID")
     private Long id;
 

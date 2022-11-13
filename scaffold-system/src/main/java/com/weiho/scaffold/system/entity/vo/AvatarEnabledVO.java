@@ -1,5 +1,6 @@
 package com.weiho.scaffold.system.entity.vo;
 
+import com.weiho.scaffold.common.annotation.IdDecrypt;
 import com.weiho.scaffold.system.entity.enums.AuditEnum;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
@@ -16,6 +17,8 @@ import java.io.Serializable;
 @ToString
 @ApiModel("修改用户头像状态VO")
 public class AvatarEnabledVO implements Serializable {
+
+    @IdDecrypt
     @ApiModelProperty("头像主键")
     private Long id;
 

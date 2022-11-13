@@ -3,6 +3,7 @@ package com.weiho.scaffold.system.security.vo;
 import com.alibaba.fastjson2.annotation.JSONField;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.weiho.scaffold.common.annotation.IdEncrypt;
 import com.weiho.scaffold.system.entity.Avatar;
 import com.weiho.scaffold.system.entity.enums.SexEnum;
 import io.swagger.annotations.ApiModel;
@@ -29,6 +30,8 @@ import java.util.stream.Collectors;
 @ToString
 @ApiModel("登录授权后用户实体")
 public class JwtUserVO implements UserDetails {
+
+    @IdEncrypt
     @ApiModelProperty("主键ID")
     private Long id;
 

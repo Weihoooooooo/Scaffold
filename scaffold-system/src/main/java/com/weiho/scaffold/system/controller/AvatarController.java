@@ -4,6 +4,7 @@ import com.weiho.scaffold.common.exception.BadRequestException;
 import com.weiho.scaffold.common.util.message.I18nMessagesUtils;
 import com.weiho.scaffold.common.util.result.Result;
 import com.weiho.scaffold.common.util.result.enums.ResultCodeEnum;
+import com.weiho.scaffold.common.util.secure.IdSecureUtils;
 import com.weiho.scaffold.logging.annotation.Logging;
 import com.weiho.scaffold.logging.enums.BusinessTypeEnum;
 import com.weiho.scaffold.system.entity.criteria.AvatarQueryCriteria;
@@ -58,9 +59,10 @@ public class AvatarController {
     @Logging(title = "删除头像信息", businessType = BusinessTypeEnum.DELETE)
     @ApiOperation("删除头像信息")
     @PreAuthorize("@el.check('Avatar:delete')")
-    public Result deleteAvatar(@RequestBody Set<Long> ids) {
+    public Result deleteAvatar(@RequestBody Set<String> idStrings) {
         // 过滤空值
-        ids = ids.stream().filter(Objects::nonNull).collect(Collectors.toSet());
+        idStrings = idStrings.stream().filter(Objects::nonNull).collect(Collectors.toSet());
+        Set<Long> ids = IdSecureUtils.des().decrypt(idStrings);
         // 部分用户不存在头像则抛出异常
         if (ids.size() == 0) {
             throw new BadRequestException(I18nMessagesUtils.get("avatar.error.tip"));

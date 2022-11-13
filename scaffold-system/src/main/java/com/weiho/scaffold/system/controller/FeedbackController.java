@@ -3,6 +3,7 @@ package com.weiho.scaffold.system.controller;
 import com.weiho.scaffold.common.util.enums.EnumSelectVO;
 import com.weiho.scaffold.common.util.result.Result;
 import com.weiho.scaffold.common.util.result.ResultUtils;
+import com.weiho.scaffold.common.util.secure.IdSecureUtils;
 import com.weiho.scaffold.logging.annotation.Logging;
 import com.weiho.scaffold.logging.enums.BusinessTypeEnum;
 import com.weiho.scaffold.redis.limiter.annotation.RateLimiter;
@@ -59,8 +60,8 @@ public class FeedbackController {
     @ApiOperation("删除反馈")
     @DeleteMapping
     @PreAuthorize("@el.check('Feedback:delete')")
-    public Result deleteFeedback(@RequestBody Set<Long> ids) {
-        return ResultUtils.deleteMessage(ids, feedbackService.deleteFeedback(ids));
+    public Result deleteFeedback(@RequestBody Set<String> ids) {
+        return ResultUtils.deleteMessages(ids, feedbackService.deleteFeedback(IdSecureUtils.des().decrypt(ids)));
     }
 
     @Logging(title = "导出反馈信息")
