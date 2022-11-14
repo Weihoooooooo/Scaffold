@@ -22,6 +22,6 @@ class NoticeServiceTest {
 
     @Test
     void test() {
-        System.err.println(noticeService.getDistinctUser());
+        System.err.println(noticeService.getDistinctUserSelect());
     }
 }

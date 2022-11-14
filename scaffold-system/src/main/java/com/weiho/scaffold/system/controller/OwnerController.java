@@ -114,6 +114,6 @@ public class OwnerController {
     @DeleteMapping
     @PreAuthorize("@el.check('OwnerInfo:delete')")
     public Result deleteOwner(@RequestBody Set<String> ids) {
-        return ResultUtils.deleteMessages(ids, ownerService.deleteOwner(IdSecureUtils.des().decrypt(ids)));
+        return ResultUtils.deleteMessage(ids, ownerService.deleteOwner(IdSecureUtils.des().decrypt(ids)));
     }
 }

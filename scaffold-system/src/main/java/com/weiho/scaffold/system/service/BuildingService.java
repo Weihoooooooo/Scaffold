@@ -1,5 +1,6 @@
 package com.weiho.scaffold.system.service;
 
+import com.weiho.scaffold.common.vo.VueSelectVO;
 import com.weiho.scaffold.mp.service.CommonService;
 import com.weiho.scaffold.system.entity.Building;
 import com.weiho.scaffold.system.entity.criteria.BuildingQueryCriteria;
@@ -68,4 +69,11 @@ public interface BuildingService extends CommonService<Building> {
      * @return /
      */
     boolean deleteBuilding(Set<Long> ids);
+
+    /**
+     * 获取所有的建筑列表
+     *
+     * @return /
+     */
+    List<VueSelectVO> getDistinctBuildingSelect();
 }

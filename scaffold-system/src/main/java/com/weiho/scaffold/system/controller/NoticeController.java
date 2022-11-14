@@ -4,6 +4,7 @@ import com.weiho.scaffold.common.util.enums.EnumSelectVO;
 import com.weiho.scaffold.common.util.result.Result;
 import com.weiho.scaffold.common.util.result.ResultUtils;
 import com.weiho.scaffold.common.util.secure.IdSecureUtils;
+import com.weiho.scaffold.common.vo.VueSelectVO;
 import com.weiho.scaffold.logging.annotation.Logging;
 import com.weiho.scaffold.logging.enums.BusinessTypeEnum;
 import com.weiho.scaffold.redis.limiter.annotation.RateLimiter;
@@ -44,6 +45,7 @@ public class NoticeController {
     @GetMapping
     @PreAuthorize("@el.check('Notice:use')")
     public Map<String, Object> getNoticeList(@Validated NoticeQueryCriteria criteria, Pageable pageable) {
+        System.err.println(criteria.getUserId());
         return noticeService.getNoticeList(criteria, pageable);
     }
 
@@ -76,7 +78,7 @@ public class NoticeController {
     @DeleteMapping
     @PreAuthorize("@el.check('Notice:delete')")
     public Result deleteNotice(@RequestBody Set<String> ids) {
-        return ResultUtils.deleteMessages(ids, noticeService.deleteNotice(IdSecureUtils.des().decrypt(ids)));
+        return ResultUtils.deleteMessage(ids, noticeService.deleteNotice(IdSecureUtils.des().decrypt(ids)));
     }
 
     @ApiOperation("获取通知发送范围列表")
@@ -99,7 +101,7 @@ public class NoticeController {
     @GetMapping("/distinctUser")
     @PreAuthorize("@el.check('Notice:use')")
     @RateLimiter(limitType = LimitType.IP)
-    public List<Map<String, Object>> getDistinctUser() {
-        return noticeService.getDistinctUser();
+    public List<VueSelectVO> getDistinctUser() {
+        return noticeService.getDistinctUserSelect();
     }
 }

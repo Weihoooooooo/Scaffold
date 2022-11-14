@@ -61,7 +61,7 @@ public class FeedbackController {
     @DeleteMapping
     @PreAuthorize("@el.check('Feedback:delete')")
     public Result deleteFeedback(@RequestBody Set<String> ids) {
-        return ResultUtils.deleteMessages(ids, feedbackService.deleteFeedback(IdSecureUtils.des().decrypt(ids)));
+        return ResultUtils.deleteMessage(ids, feedbackService.deleteFeedback(IdSecureUtils.des().decrypt(ids)));
     }
 
     @Logging(title = "导出反馈信息")

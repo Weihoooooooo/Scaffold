@@ -1,8 +1,10 @@
 package com.weiho.scaffold.system.service.impl;
 
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.github.pagehelper.PageInfo;
 import com.weiho.scaffold.common.util.file.FileUtils;
 import com.weiho.scaffold.common.util.page.PageUtils;
+import com.weiho.scaffold.common.vo.VueSelectVO;
 import com.weiho.scaffold.mp.core.QueryHelper;
 import com.weiho.scaffold.mp.service.impl.CommonServiceImpl;
 import com.weiho.scaffold.system.entity.Building;
@@ -84,5 +86,17 @@ public class BuildingServiceImpl extends CommonServiceImpl<BuildingMapper, Build
     @Transactional(rollbackFor = Exception.class)
     public boolean deleteBuilding(Set<Long> ids) {
         return this.removeByIds(ids);
+    }
+
+    @Override
+    public List<VueSelectVO> getDistinctBuildingSelect() {
+        List<VueSelectVO> list = new ArrayList<>();
+        QueryWrapper<Building> queryWrapper = new QueryWrapper<>();
+        queryWrapper.select("id, building_num");
+        List<Building> buildings = this.getBaseMapper().selectList(queryWrapper);
+        for (Building building : buildings) {
+            list.add(new VueSelectVO(building.getId(), building.getBuildingNum()));
+        }
+        return list;
     }
 }

@@ -190,7 +190,7 @@ public class UserServiceImpl extends CommonServiceImpl<UserMapper, User> impleme
     @Transactional(rollbackFor = Exception.class)
     public boolean updateUser(UserVO resource) {
         // 根据ID查找用户
-        User user = this.getOne(new LambdaQueryWrapper<User>().eq(User::getId, resource.getId()));
+        User user = this.getById(resource.getId());
         // 保存旧的用户名
         String oldUsername = user.getUsername();
         // 为了考虑在线用户的缓存，暂时还不能修改用户名

@@ -4,9 +4,12 @@ import com.weiho.scaffold.mp.service.CommonService;
 import com.weiho.scaffold.system.entity.Elevator;
 import com.weiho.scaffold.system.entity.criteria.ElevatorQueryCriteria;
 import com.weiho.scaffold.system.entity.vo.ElevatorVO;
+import org.springframework.data.domain.Pageable;
 
 import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
 import java.util.List;
+import java.util.Map;
 
 /**
  * <p>
@@ -39,5 +42,22 @@ public interface ElevatorService extends CommonService<Elevator> {
      * @param all      导出的数据
      * @param response 响应参数
      */
-    void download(List<ElevatorVO> all, HttpServletResponse response);
+    void download(List<ElevatorVO> all, HttpServletResponse response) throws IOException;
+
+    /**
+     * 查找符合条件的电梯，分页
+     *
+     * @param criteria 查询条件
+     * @param pageable 分页参数
+     * @return /
+     */
+    Map<String, Object> getElevatorList(ElevatorQueryCriteria criteria, Pageable pageable);
+
+    /**
+     * 修改电梯信息
+     *
+     * @param resources 电梯信息
+     * @return /
+     */
+    boolean updateElevator(ElevatorVO resources);
 }

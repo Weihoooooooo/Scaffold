@@ -90,6 +90,6 @@ public class LocalStorageController {
     @PreAuthorize("@el.check('Storage:delete')")
     @DeleteMapping
     public Result deleteLocalStorage(@RequestBody Set<String> ids) {
-        return ResultUtils.deleteMessages(ids, localStorageService.deleteByIds(IdSecureUtils.des().decrypt(ids)));
+        return ResultUtils.deleteMessage(ids, localStorageService.deleteByIds(IdSecureUtils.des().decrypt(ids)));
     }
 }

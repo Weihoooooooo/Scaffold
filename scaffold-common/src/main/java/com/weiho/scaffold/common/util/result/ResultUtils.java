@@ -61,26 +61,7 @@ public class ResultUtils {
      * @param flag 布尔
      * @return /
      */
-    public Result deleteMessage(Set<Long> ids, boolean flag) {
-        if (ids != null && ids.size() > 0) {
-            if (flag) {
-                return Result.success(I18nMessagesUtils.get("delete.success.tip"));
-            } else {
-                return Result.of(ResultCodeEnum.BAD_REQUEST_ERROR, I18nMessagesUtils.get("delete.fail.tip"));
-            }
-        } else {
-            return Result.of(ResultCodeEnum.BAD_REQUEST_ERROR, I18nMessagesUtils.get("delete.fail.tip"));
-        }
-    }
-
-    /**
-     * 删除信息的时候返回
-     *
-     * @param ids  传入的主键集合(非空判断)
-     * @param flag 布尔
-     * @return /
-     */
-    public Result deleteMessages(Set<String> ids, boolean flag) {
+    public Result deleteMessage(Set<String> ids, boolean flag) {
         if (ids != null && ids.size() > 0) {
             if (flag) {
                 return Result.success(I18nMessagesUtils.get("delete.success.tip"));

@@ -10,6 +10,7 @@ import com.weiho.scaffold.common.util.file.FileUtils;
 import com.weiho.scaffold.common.util.message.I18nMessagesUtils;
 import com.weiho.scaffold.common.util.page.PageUtils;
 import com.weiho.scaffold.common.util.security.SecurityUtils;
+import com.weiho.scaffold.common.vo.VueSelectVO;
 import com.weiho.scaffold.mp.core.QueryHelper;
 import com.weiho.scaffold.mp.enums.SortTypeEnum;
 import com.weiho.scaffold.mp.service.impl.CommonServiceImpl;
@@ -121,16 +122,13 @@ public class NoticeServiceImpl extends CommonServiceImpl<NoticeMapper, Notice> i
     }
 
     @Override
-    public List<Map<String, Object>> getDistinctUser() {
-        List<Map<String, Object>> list = new ArrayList<>();
+    public List<VueSelectVO> getDistinctUserSelect() {
+        List<VueSelectVO> list = new ArrayList<>();
         QueryWrapper<Notice> queryWrapper = new QueryWrapper<>();
         queryWrapper.select("distinct user_id");
         List<Long> userIds = this.getBaseMapper().selectList(queryWrapper).stream().map(Notice::getUserId).collect(Collectors.toList());
         for (Long userId : userIds) {
-            Map<String, Object> map = new HashMap<>();
-            map.put("value", userId);
-            map.put("label", userService.getById(userId).getUsername());
-            list.add(map);
+            list.add(new VueSelectVO(userId, userService.getById(userId).getUsername()));
         }
         return list;
     }

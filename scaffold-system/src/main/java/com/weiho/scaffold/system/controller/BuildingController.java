@@ -3,8 +3,11 @@ package com.weiho.scaffold.system.controller;
 import com.weiho.scaffold.common.util.result.Result;
 import com.weiho.scaffold.common.util.result.ResultUtils;
 import com.weiho.scaffold.common.util.secure.IdSecureUtils;
+import com.weiho.scaffold.common.vo.VueSelectVO;
 import com.weiho.scaffold.logging.annotation.Logging;
 import com.weiho.scaffold.logging.enums.BusinessTypeEnum;
+import com.weiho.scaffold.redis.limiter.annotation.RateLimiter;
+import com.weiho.scaffold.redis.limiter.enums.LimitType;
 import com.weiho.scaffold.system.entity.Building;
 import com.weiho.scaffold.system.entity.criteria.BuildingQueryCriteria;
 import com.weiho.scaffold.system.service.BuildingService;
@@ -18,6 +21,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
@@ -72,7 +76,15 @@ public class BuildingController {
     @DeleteMapping
     @PreAuthorize("@el.check('Building:delete')")
     public Result deleteBuilding(@RequestBody Set<String> ids) {
-        return ResultUtils.deleteMessages(ids, buildingService.deleteBuilding(IdSecureUtils.des().decrypt(ids)));
+        return ResultUtils.deleteMessage(ids, buildingService.deleteBuilding(IdSecureUtils.des().decrypt(ids)));
+    }
+
+    @ApiOperation("获取楼宇下拉选择框")
+    @GetMapping("/buildingNums")
+    @PreAuthorize("@el.check('Building:list')")
+    @RateLimiter(limitType = LimitType.IP)
+    public List<VueSelectVO> getDistinctBuildingSelect() {
+        return buildingService.getDistinctBuildingSelect();
     }
 
 }
