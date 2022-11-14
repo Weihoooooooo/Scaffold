@@ -15,7 +15,11 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
+import javax.servlet.http.HttpServletResponse;
+import java.util.ArrayList;
+import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * <p>
@@ -44,5 +48,14 @@ public class ElevatorServiceImpl extends CommonServiceImpl<ElevatorMapper, Eleva
             elevatorVO.setBuildingNum(buildingService.getById(elevatorVO.getBuildingId()).getBuildingNum());
         }
         return elevatorVOS;
+    }
+
+    @Override
+    public void download(List<ElevatorVO> all, HttpServletResponse response) {
+        List<Map<String, Object>> list = new ArrayList<>();
+        for (ElevatorVO elevatorVO : all) {
+            Map<String, Object> map = new LinkedHashMap<>();
+
+        }
     }
 }

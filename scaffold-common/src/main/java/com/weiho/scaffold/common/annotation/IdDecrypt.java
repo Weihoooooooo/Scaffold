@@ -11,6 +11,8 @@ import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
 /**
+ * 主键解密注解
+ *
  * @author Weiho
  * @since 2022/11/13
  */

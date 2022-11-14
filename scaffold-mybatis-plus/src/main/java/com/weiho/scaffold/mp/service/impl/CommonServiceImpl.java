@@ -20,7 +20,6 @@ import java.util.Map;
  * @param <E> 实体类
  */
 @Slf4j
-@SuppressWarnings("all")
 public abstract class CommonServiceImpl<M extends BaseMapper<E>, E> extends ServiceImpl<M, E> implements CommonService<E> {
     /**
      * 通用分页方法
@@ -73,7 +72,7 @@ public abstract class CommonServiceImpl<M extends BaseMapper<E>, E> extends Serv
      * @return /
      */
     protected <T> Map<String, Object> toPageContainer(List<T> list) {
-        PageInfo<T> pageInfo = new PageInfo<T>(list);
+        PageInfo<T> pageInfo = new PageInfo<>(list);
         return PageUtils.toPageContainer(pageInfo.getList(), pageInfo.getTotal());
     }
 }

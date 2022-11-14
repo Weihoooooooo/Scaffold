@@ -5,6 +5,7 @@ import com.weiho.scaffold.system.entity.Elevator;
 import com.weiho.scaffold.system.entity.criteria.ElevatorQueryCriteria;
 import com.weiho.scaffold.system.entity.vo.ElevatorVO;
 
+import javax.servlet.http.HttpServletResponse;
 import java.util.List;
 
 /**
@@ -38,5 +39,5 @@ public interface ElevatorService extends CommonService<Elevator> {
      * @param all      导出的数据
      * @param response 响应参数
      */
-//    void download(List<ElevatorVO> all, HttpServletResponse response);
+    void download(List<ElevatorVO> all, HttpServletResponse response);
 }

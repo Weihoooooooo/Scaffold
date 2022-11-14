@@ -63,7 +63,7 @@ spring:
         url-pattern: /druid/*
         reset-enable: false
         login-username: druid
-        login-password: druid
+        login-password: 970049938
         allow: ""
       web-stat-filter:
         url-pattern: /*
@@ -110,7 +110,7 @@ mybatis-plus:
     banner: false # 关闭控制台banner输出
   configuration:
     default-enum-type-handler: org.apache.ibatis.type.EnumOrdinalTypeHandler # 处理枚举类
-  type-aliases-package: com.weiho.scaffold.system.entity # 别名注解扫描路径
+  type-aliases-package: com.weiho.scaffold.**.entity # 别名注解扫描路径
 
 # PageHelper 分页插件
 pagehelper:
