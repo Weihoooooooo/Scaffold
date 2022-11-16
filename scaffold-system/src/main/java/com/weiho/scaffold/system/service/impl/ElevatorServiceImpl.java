@@ -13,6 +13,7 @@ import com.weiho.scaffold.mp.service.impl.CommonServiceImpl;
 import com.weiho.scaffold.system.entity.Elevator;
 import com.weiho.scaffold.system.entity.convert.ElevatorVOConvert;
 import com.weiho.scaffold.system.entity.criteria.ElevatorQueryCriteria;
+import com.weiho.scaffold.system.entity.vo.ElevatorMaintainVO;
 import com.weiho.scaffold.system.entity.vo.ElevatorVO;
 import com.weiho.scaffold.system.mapper.ElevatorMapper;
 import com.weiho.scaffold.system.service.BuildingService;
@@ -26,10 +27,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.LinkedHashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * <p>
@@ -103,7 +101,40 @@ public class ElevatorServiceImpl extends CommonServiceImpl<ElevatorMapper, Eleva
         elevator.setNumberOfPeople(resources.getNumberOfPeople());
         elevator.setNumberOfWeight(resources.getNumberOfWeight());
         elevator.setEnabled(resources.isEnabled());
+        elevator.setDay(resources.getDay());
 
         return this.saveOrUpdate(elevator);
+    }
+
+    @Override
+    @Transactional(rollbackFor = Exception.class)
+    public boolean addElevator(ElevatorVO resources) {
+        // 根据电梯的唯一编号查找
+        Elevator elevatorIdentityId = this.getOne(new LambdaQueryWrapper<Elevator>().eq(Elevator::getIdentityId, resources.getIdentityId()));
+        if (elevatorIdentityId != null) {
+            throw new BadRequestException(I18nMessagesUtils.get("elevator.exist.error"));
+        }
+
+        resources.setLastMaintainTime(DateUtils.getNowDate());
+        resources.setNextMaintainTime(DateUtils.getDateScope(DateUtils.getNowDate(), resources.getDay()));
+
+        return this.save(elevatorVOConvert.toEntity(resources));
+    }
+
+    @Override
+    @Transactional(rollbackFor = Exception.class)
+    public boolean maintainElevator(ElevatorMaintainVO resources) {
+        Elevator elevator = this.getById(resources.getId());
+        return this.lambdaUpdate().set(Elevator::getMaintainPeople, resources.getMaintainPeople())
+                .set(Elevator::getMaintainPeoplePhone, resources.getMaintainPeoplePhone())
+                .set(Elevator::getLastMaintainTime, DateUtils.getNowDate())
+                .set(Elevator::getNextMaintainTime, DateUtils.getDateScope(elevator.getLastMaintainTime(), elevator.getDay()))
+                .eq(Elevator::getId, resources.getId()).update();
+    }
+
+    @Override
+    @Transactional(rollbackFor = Exception.class)
+    public boolean deleteElevator(Set<Long> ids) {
+        return this.removeByIds(ids);
     }
 }

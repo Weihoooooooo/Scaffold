@@ -1,10 +1,26 @@
 package com.weiho.scaffold.system.controller;
 
-
+import com.weiho.scaffold.common.util.result.Result;
+import com.weiho.scaffold.common.util.result.ResultUtils;
+import com.weiho.scaffold.common.util.secure.IdSecureUtils;
+import com.weiho.scaffold.logging.annotation.Logging;
+import com.weiho.scaffold.logging.enums.BusinessTypeEnum;
+import com.weiho.scaffold.system.entity.criteria.ElevatorQueryCriteria;
+import com.weiho.scaffold.system.entity.vo.ElevatorMaintainVO;
+import com.weiho.scaffold.system.entity.vo.ElevatorVO;
+import com.weiho.scaffold.system.service.ElevatorService;
 import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.data.domain.Pageable;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.validation.annotation.Validated;
+import org.springframework.web.bind.annotation.*;
+
+import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
+import java.util.Map;
+import java.util.Set;
 
 /**
  * <p>
@@ -19,5 +35,52 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/api/v1/elevators")
 @RequiredArgsConstructor
 public class ElevatorController {
+    private final ElevatorService elevatorService;
 
+    @ApiOperation("查询电梯列表")
+    @GetMapping
+    @PreAuthorize("@el.check('Elevator:list')")
+    public Map<String, Object> getElevatorList(@Validated ElevatorQueryCriteria criteria, Pageable pageable) {
+        return elevatorService.getElevatorList(criteria, pageable);
+    }
+
+    @Logging(title = "导出电梯信息")
+    @ApiOperation("导出电梯信息")
+    @GetMapping("/download")
+    @PreAuthorize("@el.check('Elevator:list')")
+    public void download(HttpServletResponse response, @Validated ElevatorQueryCriteria criteria) throws IOException {
+        elevatorService.download(elevatorService.convertToVO(elevatorService.findAll(criteria)), response);
+    }
+
+    @Logging(title = "添加电梯信息", businessType = BusinessTypeEnum.INSERT)
+    @ApiOperation("添加电梯信息")
+    @PostMapping
+    @PreAuthorize("@el.check('Elevator:add')")
+    public Result addElevator(@Validated @RequestBody ElevatorVO resources) {
+        return ResultUtils.addMessage(elevatorService.addElevator(resources));
+    }
+
+    @Logging(title = "修改电梯信息", businessType = BusinessTypeEnum.UPDATE)
+    @ApiOperation("修改电梯信息")
+    @PutMapping
+    @PreAuthorize("@el.check('Elevator:update')")
+    public Result updateElevator(@Validated @RequestBody ElevatorVO resources) {
+        return ResultUtils.updateMessage(elevatorService.updateElevator(resources));
+    }
+
+    @Logging(title = "删除电梯信息", businessType = BusinessTypeEnum.DELETE)
+    @ApiOperation("删除电梯信息")
+    @DeleteMapping
+    @PreAuthorize("@el.check('Elevator:delete')")
+    public Result deleteElevator(@RequestBody Set<String> ids) {
+        return ResultUtils.deleteMessage(ids, elevatorService.deleteElevator(IdSecureUtils.des().decrypt(ids)));
+    }
+
+    @Logging(title = "维护电梯", businessType = BusinessTypeEnum.UPDATE)
+    @ApiOperation("维护电梯")
+    @PutMapping("/maintain")
+    @PreAuthorize("@el.check('Elevator:list')")
+    public Result maintainElevator(@Validated @RequestBody ElevatorMaintainVO resources) {
+        return ResultUtils.operateMessage(elevatorService.maintainElevator(resources));
+    }
 }

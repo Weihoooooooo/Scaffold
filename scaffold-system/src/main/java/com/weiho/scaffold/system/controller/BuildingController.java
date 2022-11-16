@@ -43,7 +43,7 @@ public class BuildingController {
     @ApiOperation("查询楼宇列表")
     @GetMapping
     @PreAuthorize("@el.check('Building:list')")
-    public Map<String, Object> getBuildingList(BuildingQueryCriteria criteria, Pageable pageable) {
+    public Map<String, Object> getBuildingList(@Validated BuildingQueryCriteria criteria, Pageable pageable) {
         return buildingService.getBuildingList(criteria, pageable);
     }
 
