@@ -79,7 +79,7 @@ public class MenuController {
     @GetMapping("/tree")
     @PreAuthorize("@el.check('Role:list','Menu:list')")
     public List<Map<String, Object>> getMenuTree(HttpServletRequest request) {
-        return menuService.getMenuTree(menuService.findByParentId(0L).stream().filter(Menu::isEnabled).collect(Collectors.toList()), request);
+        return menuService.getMenuTree(menuService.findByParentId(0L).stream().collect(Collectors.toList()), request);
     }
 
     @ApiOperation("查询菜单列表")
