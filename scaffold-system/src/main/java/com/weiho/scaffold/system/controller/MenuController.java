@@ -17,6 +17,7 @@ import com.weiho.scaffold.system.entity.User;
 import com.weiho.scaffold.system.entity.convert.MenuDTOConvert;
 import com.weiho.scaffold.system.entity.criteria.MenuQueryCriteria;
 import com.weiho.scaffold.system.entity.dto.MenuDTO;
+import com.weiho.scaffold.system.entity.vo.MenuTreeVO;
 import com.weiho.scaffold.system.entity.vo.MenuVO;
 import com.weiho.scaffold.system.service.MenuService;
 import com.weiho.scaffold.system.service.RoleService;
@@ -78,8 +79,8 @@ public class MenuController {
     @ApiOperation("获取菜单树")
     @GetMapping("/tree")
     @PreAuthorize("@el.check('Role:list','Menu:list')")
-    public List<Map<String, Object>> getMenuTree(HttpServletRequest request) {
-        return menuService.getMenuTree(menuService.findByParentId(0L).stream().collect(Collectors.toList()), request);
+    public List<MenuTreeVO> getMenuTree(HttpServletRequest request) {
+        return menuService.getMenuTree(menuService.findByParentId(0L), request);
     }
 
     @ApiOperation("查询菜单列表")
@@ -162,10 +163,6 @@ public class MenuController {
                 // 调用更新缓存
                 cacheRefresh.updateRolesCacheForGrantedAuthorities(userId, username);
                 cacheRefresh.updateMenuCache(userId, username);
-            }
-            if (redisUtils.hasKey(keyMenuTree)) {
-                redisUtils.del(keyMenuTree);
-                cacheRefresh.updateMenuTree(request);
             }
         }
     }

@@ -24,19 +24,24 @@ import java.util.List;
 public class ElevatorQueryCriteria extends BaseQueryCriteria {
 
     @Query(blurry = "identityId,numberOfPeople,numberOfWeight,maintainPeople,maintainPeoplePhone")
+    @ApiModelProperty("模糊查询")
     private String blurry;
+
+    @Query
+    @ApiModelProperty("建筑栋号")
+    private Long buildingId;
 
     @Query
     @ApiModelProperty("菜单是否启用")
     private Boolean enabled;
 
     @Query(type = QueryTypeEnum.BETWEEN)
-    @ApiModelProperty("创建时间范围")
+    @ApiModelProperty("上一次报修时间范围")
     @Size(max = 2, message = "时间范围必须是两个！")
     private List<Timestamp> lastMaintainTime;
 
     @Query(type = QueryTypeEnum.BETWEEN)
-    @ApiModelProperty("创建时间范围")
+    @ApiModelProperty("下一次报修时间范围")
     @Size(max = 2, message = "时间范围必须是两个！")
     private List<Timestamp> nextMaintainTime;
 }
