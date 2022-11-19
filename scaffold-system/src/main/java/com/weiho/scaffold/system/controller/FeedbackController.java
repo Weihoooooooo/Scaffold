@@ -2,12 +2,12 @@ package com.weiho.scaffold.system.controller;
 
 import com.weiho.scaffold.common.util.enums.EnumSelectVO;
 import com.weiho.scaffold.common.util.result.Result;
-import com.weiho.scaffold.common.util.result.ResultUtils;
-import com.weiho.scaffold.common.util.secure.IdSecureUtils;
 import com.weiho.scaffold.logging.annotation.Logging;
 import com.weiho.scaffold.logging.enums.BusinessTypeEnum;
+import com.weiho.scaffold.mp.controller.CommonController;
 import com.weiho.scaffold.redis.limiter.annotation.RateLimiter;
 import com.weiho.scaffold.redis.limiter.enums.LimitType;
+import com.weiho.scaffold.system.entity.Feedback;
 import com.weiho.scaffold.system.entity.criteria.FeedbackQueryCriteria;
 import com.weiho.scaffold.system.entity.vo.FeedbackVO;
 import com.weiho.scaffold.system.service.FeedbackService;
@@ -37,14 +37,12 @@ import java.util.Set;
 @RestController
 @RequestMapping("/api/v1/feedbacks")
 @RequiredArgsConstructor
-public class FeedbackController {
-    private final FeedbackService feedbackService;
-
+public class FeedbackController extends CommonController<FeedbackService, Feedback> {
     @ApiOperation("查询所有的反馈列表")
     @GetMapping
     @PreAuthorize("@el.check('Feedback:list')")
     public Map<String, Object> getFeedbackList(@Validated FeedbackQueryCriteria criteria, Pageable pageable) {
-        return feedbackService.findAll(criteria, pageable);
+        return this.getBaseService().findAll(criteria, pageable);
     }
 
     @Logging(title = "解决反馈", businessType = BusinessTypeEnum.UPDATE)
@@ -53,7 +51,7 @@ public class FeedbackController {
     @RateLimiter(limitType = LimitType.IP)
     @PreAuthorize("@el.check('Feedback:update')")
     public Result answerFeedback(@Validated @RequestBody FeedbackVO resources) {
-        return ResultUtils.operateMessage(feedbackService.answerFeedback(resources));
+        return resultMessage(Operate.OPERATE, this.getBaseService().answerFeedback(resources));
     }
 
     @Logging(title = "删除反馈", businessType = BusinessTypeEnum.DELETE)
@@ -61,7 +59,7 @@ public class FeedbackController {
     @DeleteMapping
     @PreAuthorize("@el.check('Feedback:delete')")
     public Result deleteFeedback(@RequestBody Set<String> ids) {
-        return ResultUtils.deleteMessage(ids, feedbackService.deleteFeedback(IdSecureUtils.des().decrypt(ids)));
+        return resultMessage(Operate.DELETE, this.getBaseService().deleteFeedback(filterCollNullAndDecrypt(ids)));
     }
 
     @Logging(title = "导出反馈信息")
@@ -69,7 +67,7 @@ public class FeedbackController {
     @GetMapping("/download")
     @PreAuthorize("@el.check('Feedback:list')")
     public void download(@Validated FeedbackQueryCriteria criteria, HttpServletResponse response) throws IOException {
-        feedbackService.download(feedbackService.convertToVO(feedbackService.findAll(criteria)), response);
+        this.getBaseService().download(this.getBaseService().convertToVO(this.getBaseService().findAll(criteria)), response);
     }
 
     @ApiOperation("获取反馈处理结果枚举列表")
@@ -77,7 +75,7 @@ public class FeedbackController {
     @PreAuthorize("@el.check('Feedback:list')")
     @RateLimiter(limitType = LimitType.IP)
     public List<EnumSelectVO> getFeedbackResultSelectList() {
-        return feedbackService.getFeedbackResultSelect();
+        return this.getBaseService().getFeedbackResultSelect();
     }
 
     @ApiOperation("获取反馈类型枚举列表")
@@ -85,7 +83,7 @@ public class FeedbackController {
     @PreAuthorize("@el.check('Feedback:list')")
     @RateLimiter(limitType = LimitType.IP)
     public List<EnumSelectVO> getFeedbackTypeSelectList() {
-        return feedbackService.getFeedbackTypeSelect();
+        return this.getBaseService().getFeedbackTypeSelect();
     }
 
 }

@@ -4,10 +4,11 @@ import cn.hutool.core.util.ObjectUtil;
 import cn.hutool.core.util.StrUtil;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.weiho.scaffold.common.exception.BadRequestException;
-import com.weiho.scaffold.common.util.file.FileUtils;
-import com.weiho.scaffold.common.util.message.I18nMessagesUtils;
-import com.weiho.scaffold.common.util.page.PageUtils;
-import com.weiho.scaffold.common.util.string.StringUtils;
+import com.weiho.scaffold.common.util.FileUtils;
+import com.weiho.scaffold.common.util.I18nMessagesUtils;
+import com.weiho.scaffold.common.util.PageUtils;
+import com.weiho.scaffold.common.util.StringUtils;
+import com.weiho.scaffold.common.util.secure.IdSecureUtils;
 import com.weiho.scaffold.mp.core.QueryHelper;
 import com.weiho.scaffold.mp.service.impl.CommonServiceImpl;
 import com.weiho.scaffold.system.entity.Menu;
@@ -210,6 +211,7 @@ public class MenuServiceImpl extends CommonServiceImpl<MenuMapper, Menu> impleme
 
     @Override
     public boolean createMenu(Menu resources) {
+        IdSecureUtils.verifyIdNull(resources.getId());
         if (this.getOne(new LambdaQueryWrapper<Menu>().eq(Menu::getName, resources.getName())) != null) {
             throw new BadRequestException(I18nMessagesUtils.get("menu.name.tip"));
         }
@@ -220,6 +222,7 @@ public class MenuServiceImpl extends CommonServiceImpl<MenuMapper, Menu> impleme
     @Override
     @Transactional(rollbackFor = Exception.class)
     public boolean updateMenu(Menu resources) {
+        IdSecureUtils.verifyIdNotNull(resources.getId());
         // 验证上级不能为自己
         if (resources.getId().equals(resources.getParentId())) {
             throw new BadRequestException(I18nMessagesUtils.get("menu.parentId.error"));

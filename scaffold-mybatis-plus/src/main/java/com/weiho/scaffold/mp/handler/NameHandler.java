@@ -1,6 +1,6 @@
 package com.weiho.scaffold.mp.handler;
 
-import com.weiho.scaffold.common.util.cipher.LikeCipher;
+import com.weiho.scaffold.common.util.LikeCipher;
 import org.apache.ibatis.type.BaseTypeHandler;
 import org.apache.ibatis.type.JdbcType;
 

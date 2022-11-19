@@ -3,13 +3,7 @@ package com.weiho.scaffold.system.security.service.impl;
 import com.alibaba.fastjson2.JSON;
 import com.weiho.scaffold.common.config.system.ScaffoldSystemProperties;
 import com.weiho.scaffold.common.exception.ResponsePackException;
-import com.weiho.scaffold.common.util.date.DateUtils;
-import com.weiho.scaffold.common.util.date.FormatEnum;
-import com.weiho.scaffold.common.util.des.DesUtils;
-import com.weiho.scaffold.common.util.file.FileUtils;
-import com.weiho.scaffold.common.util.ip.IpUtils;
-import com.weiho.scaffold.common.util.page.PageUtils;
-import com.weiho.scaffold.common.util.string.StringUtils;
+import com.weiho.scaffold.common.util.*;
 import com.weiho.scaffold.redis.util.RedisUtils;
 import com.weiho.scaffold.system.security.service.OnlineUserService;
 import com.weiho.scaffold.system.security.token.utils.TokenUtils;
@@ -53,7 +47,7 @@ public class OnlineUserServiceImpl implements OnlineUserService {
             //构造实体
             onlineUser = new OnlineUserVO(jwtUser.getUsername(),
                     browser, ip, address, DesUtils.desEncrypt(token),
-                    DateUtils.getNowDateFormat(FormatEnum.YYYY_MM_DD_HH_MM_SS));
+                    DateUtils.getNowDateFormat(DateUtils.FormatEnum.YYYY_MM_DD_HH_MM_SS));
             //存入Redis
             redisUtils.set(properties.getJwtProperties().getOnlineKey() + token,
                     onlineUser, properties.getJwtProperties().getTokenValidityInSeconds() / 1000);

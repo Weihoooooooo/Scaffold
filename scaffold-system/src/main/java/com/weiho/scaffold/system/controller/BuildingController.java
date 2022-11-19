@@ -1,11 +1,10 @@
 package com.weiho.scaffold.system.controller;
 
 import com.weiho.scaffold.common.util.result.Result;
-import com.weiho.scaffold.common.util.result.ResultUtils;
-import com.weiho.scaffold.common.util.secure.IdSecureUtils;
-import com.weiho.scaffold.common.vo.VueSelectVO;
+import com.weiho.scaffold.common.util.result.VueSelectVO;
 import com.weiho.scaffold.logging.annotation.Logging;
 import com.weiho.scaffold.logging.enums.BusinessTypeEnum;
+import com.weiho.scaffold.mp.controller.CommonController;
 import com.weiho.scaffold.redis.limiter.annotation.RateLimiter;
 import com.weiho.scaffold.redis.limiter.enums.LimitType;
 import com.weiho.scaffold.system.entity.Building;
@@ -37,14 +36,12 @@ import java.util.Set;
 @RestController
 @RequestMapping("/api/v1/buildings")
 @RequiredArgsConstructor
-public class BuildingController {
-    private final BuildingService buildingService;
-
+public class BuildingController extends CommonController<BuildingService, Building> {
     @ApiOperation("查询楼宇列表")
     @GetMapping
     @PreAuthorize("@el.check('Building:list')")
     public Map<String, Object> getBuildingList(@Validated BuildingQueryCriteria criteria, Pageable pageable) {
-        return buildingService.getBuildingList(criteria, pageable);
+        return this.getBaseService().getBuildingList(criteria, pageable);
     }
 
     @Logging(title = "导出楼宇信息")
@@ -52,7 +49,7 @@ public class BuildingController {
     @GetMapping("/download")
     @PreAuthorize("@el.check('Building:list')")
     public void download(HttpServletResponse response, @Validated BuildingQueryCriteria criteria) throws IOException {
-        buildingService.download(response, buildingService.findAll(criteria));
+        this.getBaseService().download(response, this.getBaseService().findAll(criteria));
     }
 
     @Logging(title = "添加楼宇信息", businessType = BusinessTypeEnum.INSERT)
@@ -60,7 +57,7 @@ public class BuildingController {
     @PostMapping
     @PreAuthorize("@el.check('Building:add')")
     public Result addBuilding(@Validated @RequestBody Building resources) {
-        return ResultUtils.addMessage(buildingService.addBuilding(resources));
+        return resultMessage(Operate.ADD, this.getBaseService().addBuilding(resources));
     }
 
     @Logging(title = "修改楼宇信息", businessType = BusinessTypeEnum.UPDATE)
@@ -68,7 +65,7 @@ public class BuildingController {
     @PutMapping
     @PreAuthorize("@el.check('Building:update')")
     public Result updateBuilding(@Validated @RequestBody Building resources) {
-        return ResultUtils.updateMessage(buildingService.updateBuilding(resources));
+        return resultMessage(Operate.UPDATE, this.getBaseService().updateBuilding(resources));
     }
 
     @Logging(title = "删除楼宇信息", businessType = BusinessTypeEnum.DELETE)
@@ -76,7 +73,7 @@ public class BuildingController {
     @DeleteMapping
     @PreAuthorize("@el.check('Building:delete')")
     public Result deleteBuilding(@RequestBody Set<String> ids) {
-        return ResultUtils.deleteMessage(ids, buildingService.deleteBuilding(IdSecureUtils.des().decrypt(ids)));
+        return resultMessage(Operate.DELETE, this.getBaseService().deleteBuilding(filterCollNullAndDecrypt(ids)));
     }
 
     @ApiOperation("获取楼宇下拉选择框")
@@ -84,7 +81,7 @@ public class BuildingController {
     @PreAuthorize("@el.check('Building:list')")
     @RateLimiter(limitType = LimitType.IP)
     public List<VueSelectVO> getDistinctBuildingSelect() {
-        return buildingService.getDistinctBuildingSelect();
+        return this.getBaseService().getDistinctBuildingSelect();
     }
 
 }

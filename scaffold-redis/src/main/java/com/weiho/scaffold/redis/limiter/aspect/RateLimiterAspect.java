@@ -2,8 +2,8 @@ package com.weiho.scaffold.redis.limiter.aspect;
 
 import com.weiho.scaffold.common.config.system.ScaffoldSystemProperties;
 import com.weiho.scaffold.common.exception.RateLimitException;
-import com.weiho.scaffold.common.util.ip.IpUtils;
-import com.weiho.scaffold.common.util.message.I18nMessagesUtils;
+import com.weiho.scaffold.common.util.I18nMessagesUtils;
+import com.weiho.scaffold.common.util.IpUtils;
 import com.weiho.scaffold.redis.limiter.annotation.RateLimiter;
 import com.weiho.scaffold.redis.limiter.enums.LimitType;
 import lombok.RequiredArgsConstructor;

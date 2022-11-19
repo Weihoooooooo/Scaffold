@@ -4,13 +4,14 @@ import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.github.pagehelper.PageInfo;
 import com.weiho.scaffold.common.exception.BadRequestException;
+import com.weiho.scaffold.common.util.FileUtils;
+import com.weiho.scaffold.common.util.I18nMessagesUtils;
+import com.weiho.scaffold.common.util.PageUtils;
+import com.weiho.scaffold.common.util.SecurityUtils;
 import com.weiho.scaffold.common.util.enums.EnumSelectVO;
 import com.weiho.scaffold.common.util.enums.EnumUtils;
-import com.weiho.scaffold.common.util.file.FileUtils;
-import com.weiho.scaffold.common.util.message.I18nMessagesUtils;
-import com.weiho.scaffold.common.util.page.PageUtils;
-import com.weiho.scaffold.common.util.security.SecurityUtils;
-import com.weiho.scaffold.common.vo.VueSelectVO;
+import com.weiho.scaffold.common.util.result.VueSelectVO;
+import com.weiho.scaffold.common.util.secure.IdSecureUtils;
 import com.weiho.scaffold.mp.core.QueryHelper;
 import com.weiho.scaffold.mp.enums.SortTypeEnum;
 import com.weiho.scaffold.mp.service.impl.CommonServiceImpl;
@@ -92,6 +93,7 @@ public class NoticeServiceImpl extends CommonServiceImpl<NoticeMapper, Notice> i
     @Override
     @Transactional(rollbackFor = Exception.class)
     public boolean updateNotice(NoticeVO resources) {
+        IdSecureUtils.verifyIdNotNull(resources.getId());
         Notice notice = this.getById(resources.getId());
         // 通知人不能修改
         if (!userService.getById(notice.getUserId()).getUsername().equals(resources.getUsername())) {
@@ -108,6 +110,7 @@ public class NoticeServiceImpl extends CommonServiceImpl<NoticeMapper, Notice> i
     @Override
     @Transactional(rollbackFor = Exception.class)
     public boolean addNotice(NoticeVO resources) {
+        IdSecureUtils.verifyIdNull(resources.getId());
         // 构造实体
         Notice notice = new Notice();
 

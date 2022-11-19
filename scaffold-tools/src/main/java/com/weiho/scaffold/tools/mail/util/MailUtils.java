@@ -2,7 +2,7 @@ package com.weiho.scaffold.tools.mail.util;
 
 import cn.hutool.extra.mail.MailUtil;
 import com.weiho.scaffold.common.exception.BadRequestException;
-import com.weiho.scaffold.common.util.message.I18nMessagesUtils;
+import com.weiho.scaffold.common.util.I18nMessagesUtils;
 import com.weiho.scaffold.tools.mail.enums.EmailTypeEnum;
 import lombok.experimental.UtilityClass;
 

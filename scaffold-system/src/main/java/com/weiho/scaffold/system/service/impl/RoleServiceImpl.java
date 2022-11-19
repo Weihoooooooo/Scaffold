@@ -4,12 +4,9 @@ import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.github.pagehelper.PageInfo;
 import com.weiho.scaffold.common.exception.BadRequestException;
 import com.weiho.scaffold.common.exception.SecurityException;
-import com.weiho.scaffold.common.util.file.FileUtils;
-import com.weiho.scaffold.common.util.message.I18nMessagesUtils;
-import com.weiho.scaffold.common.util.page.PageUtils;
+import com.weiho.scaffold.common.util.*;
 import com.weiho.scaffold.common.util.result.enums.ResultCodeEnum;
-import com.weiho.scaffold.common.util.security.SecurityUtils;
-import com.weiho.scaffold.common.util.string.StringUtils;
+import com.weiho.scaffold.common.util.secure.IdSecureUtils;
 import com.weiho.scaffold.mp.core.QueryHelper;
 import com.weiho.scaffold.mp.enums.SortTypeEnum;
 import com.weiho.scaffold.mp.service.impl.CommonServiceImpl;
@@ -92,7 +89,7 @@ public class RoleServiceImpl extends CommonServiceImpl<RoleMapper, Role> impleme
         // 没角色则给最低权限
         if (roles.size() == 0) {
             // 获取所有角色中等级最低的
-            Integer minLevel = Collections.max(this.list().stream().map(Role::getLevel).collect(Collectors.toSet()));
+            Integer minLevel = CollUtils.max(this.list().stream().map(Role::getLevel).collect(Collectors.toSet()));
             // 将最低等级的角色实体放入
             roles.add(this.getOne(new LambdaQueryWrapper<Role>().eq(Role::getLevel, minLevel)));
         }
@@ -119,7 +116,7 @@ public class RoleServiceImpl extends CommonServiceImpl<RoleMapper, Role> impleme
         if (roles.size() == 0) {
             return 99;// 避免当用户还没角色时候报警告
         } else {
-            return Collections.min(roles.stream().map(Role::getLevel).collect(Collectors.toList()));
+            return CollUtils.min(roles.stream().map(Role::getLevel).collect(Collectors.toList()));
         }
     }
 
@@ -142,7 +139,7 @@ public class RoleServiceImpl extends CommonServiceImpl<RoleMapper, Role> impleme
             integers.add(this.getBaseMapper().selectById(id).getLevel());
         }
         Integer securityUserLevel = this.findHighLevel(SecurityUtils.getUserId());
-        Integer rolesUserLevel = Collections.min(integers);
+        Integer rolesUserLevel = CollUtils.min(integers);
         if (rolesUserLevel < securityUserLevel) {
             throw new SecurityException(ResultCodeEnum.FAILED, I18nMessagesUtils.get("permission.none.tip"));
         }
@@ -163,8 +160,8 @@ public class RoleServiceImpl extends CommonServiceImpl<RoleMapper, Role> impleme
     public Map<String, Integer> getLevelScope() {
         List<Role> roles = this.list();
         return new LinkedHashMap<String, Integer>(2) {{
-            put("max", Collections.max(roles.stream().map(Role::getLevel).collect(Collectors.toList())));
-            put("min", Collections.min(roles.stream().map(Role::getLevel).collect(Collectors.toList())));
+            put("max", CollUtils.max(roles.stream().map(Role::getLevel).collect(Collectors.toList())));
+            put("min", CollUtils.min(roles.stream().map(Role::getLevel).collect(Collectors.toList())));
         }};
     }
 
@@ -213,6 +210,7 @@ public class RoleServiceImpl extends CommonServiceImpl<RoleMapper, Role> impleme
     @Override
     @Transactional(rollbackFor = Exception.class)
     public boolean updateRole(Role resource) {
+        IdSecureUtils.verifyIdNotNull(resource.getId());
         Role role = this.getById(resource.getId());
 
         // 根据角色名查找
@@ -245,6 +243,7 @@ public class RoleServiceImpl extends CommonServiceImpl<RoleMapper, Role> impleme
 
     @Override
     public RoleVO findById(Long id) {
+        IdSecureUtils.verifyIdNotNull(id);
         Role role = this.getById(id);
         RoleVO roleVO = roleVOConvert.toPojo(role);
         roleVO.setMenus(menuService.findSetByRoleId(roleVO.getId()));
@@ -253,22 +252,26 @@ public class RoleServiceImpl extends CommonServiceImpl<RoleMapper, Role> impleme
 
     @Override
     @Transactional(rollbackFor = Exception.class)
-    public void updateMenu(RoleVO resource) {
-        if (resource.getMenus().size() > 0) {
-            List<RolesMenus> rolesMenusList = resource.getMenus().stream().map(i -> {
-                RolesMenus rolesMenus = new RolesMenus();
-                rolesMenus.setRoleId(resource.getId());
-                rolesMenus.setMenuId(i.getId());
-                return rolesMenus;
-            }).collect(Collectors.toList());
-            rolesMenusService.remove(new LambdaQueryWrapper<RolesMenus>().eq(RolesMenus::getRoleId, resource.getId()));
-            rolesMenusService.saveBatch(rolesMenusList);
+    public boolean updateMenu(RoleVO resource) {
+        IdSecureUtils.verifyIdNotNull(resource.getId());
+        if (CollUtils.isNotEmpty(resource.getMenus())) {
+            rolesMenusService.removeById(resource.getId());
+            return rolesMenusService.saveBatch(
+                    resource.getMenus().stream().map(i -> {
+                        RolesMenus rolesMenus = new RolesMenus();
+                        rolesMenus.setRoleId(resource.getId());
+                        rolesMenus.setMenuId(i.getId());
+                        return rolesMenus;
+                    }).collect(Collectors.toList())
+            );
         }
+        return false;
     }
 
     @Override
     @Transactional(rollbackFor = Exception.class)
     public boolean createRole(Role resource) {
+        IdSecureUtils.verifyIdNull(resource.getId());
         if (this.getOne(new LambdaQueryWrapper<Role>().eq(Role::getName, resource.getName())) != null) {
             throw new BadRequestException(I18nMessagesUtils.get("role.exist.error"));
         }

@@ -1,6 +1,6 @@
 package com.weiho.scaffold.mp.handler;
 
-import com.weiho.scaffold.common.util.aes.AesUtils;
+import com.weiho.scaffold.common.util.AesUtils;
 import org.apache.ibatis.type.BaseTypeHandler;
 import org.apache.ibatis.type.JdbcType;
 

@@ -3,11 +3,8 @@ package com.weiho.scaffold.system.service.impl;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.github.pagehelper.PageInfo;
 import com.weiho.scaffold.common.exception.BadRequestException;
-import com.weiho.scaffold.common.util.aes.AesUtils;
-import com.weiho.scaffold.common.util.cipher.LikeCipher;
-import com.weiho.scaffold.common.util.file.FileUtils;
-import com.weiho.scaffold.common.util.message.I18nMessagesUtils;
-import com.weiho.scaffold.common.util.page.PageUtils;
+import com.weiho.scaffold.common.util.*;
+import com.weiho.scaffold.common.util.secure.IdSecureUtils;
 import com.weiho.scaffold.mp.core.QueryHelper;
 import com.weiho.scaffold.mp.service.impl.CommonServiceImpl;
 import com.weiho.scaffold.system.entity.Owner;
@@ -73,6 +70,7 @@ public class OwnerServiceImpl extends CommonServiceImpl<OwnerMapper, Owner> impl
     @Override
     @Transactional(rollbackFor = Exception.class)
     public boolean createOwner(OwnerVO ownerVO) {
+        IdSecureUtils.verifyIdNull(ownerVO.getId());
         if (this.getOne(new LambdaQueryWrapper<Owner>().eq(Owner::getIdentityId, AesUtils.encrypt(ownerVO.getIdentityId()))) != null) {
             throw new BadRequestException(I18nMessagesUtils.get("identity.exist.tip"));
         }
@@ -93,6 +91,7 @@ public class OwnerServiceImpl extends CommonServiceImpl<OwnerMapper, Owner> impl
     @Override
     @Transactional(rollbackFor = Exception.class)
     public boolean updateOwner(OwnerVO ownerVO) {
+        IdSecureUtils.verifyIdNotNull(ownerVO.getId());
         // 根据ID查找
         Owner owner = this.getById(ownerVO.getId());
         // 验证邮箱类型
@@ -119,13 +118,16 @@ public class OwnerServiceImpl extends CommonServiceImpl<OwnerMapper, Owner> impl
     }
 
     @Override
-    public void resetPassword(Serializable id) {
+    @Transactional(rollbackFor = Exception.class)
+    public boolean resetPassword(Serializable id) {
+        IdSecureUtils.verifyIdNotNull((Long) id);
         Owner owner = this.getById(id);
         if (owner != null) {
             String initPass = owner.getIdentityId().substring(owner.getIdentityId().length() - 6);
-            this.lambdaUpdate().set(Owner::getPassword, initPass, "typeHandler=com.weiho.scaffold.mp.handler.EncryptHandler")
+            return this.lambdaUpdate().set(Owner::getPassword, initPass, "typeHandler=com.weiho.scaffold.mp.handler.EncryptHandler")
                     .eq(Owner::getId, id).eq(Owner::getIsDel, 0).update();
         }
+        return false;
     }
 
     @Override

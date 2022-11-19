@@ -1,10 +1,11 @@
 package com.weiho.scaffold.tools.storage.controller;
 
 import com.weiho.scaffold.common.util.result.Result;
-import com.weiho.scaffold.common.util.result.ResultUtils;
 import com.weiho.scaffold.common.util.secure.IdSecureUtils;
 import com.weiho.scaffold.logging.annotation.Logging;
 import com.weiho.scaffold.logging.enums.BusinessTypeEnum;
+import com.weiho.scaffold.mp.controller.CommonController;
+import com.weiho.scaffold.tools.storage.entity.LocalStorage;
 import com.weiho.scaffold.tools.storage.entity.criteria.LocalStorageQueryCriteria;
 import com.weiho.scaffold.tools.storage.entity.vo.LocalStorageVO;
 import com.weiho.scaffold.tools.storage.service.LocalStorageService;
@@ -37,14 +38,12 @@ import java.util.Set;
 @RestController
 @RequestMapping("/api/v1/localStorage")
 @RequiredArgsConstructor
-public class LocalStorageController {
-    private final LocalStorageService localStorageService;
-
+public class LocalStorageController extends CommonController<LocalStorageService, LocalStorage> {
     @ApiOperation("查询文件")
     @PreAuthorize("@el.check('Storage:list')")
     @GetMapping
     public Map<String, Object> getLocalStorage(@Validated LocalStorageQueryCriteria criteria, Pageable pageable) {
-        return localStorageService.findAll(criteria, pageable);
+        return this.getBaseService().findAll(criteria, pageable);
     }
 
     @Logging(title = "导出文件数据")
@@ -52,7 +51,7 @@ public class LocalStorageController {
     @GetMapping("/download")
     @PreAuthorize("@el.check('Storage:list')")
     public void download(HttpServletResponse response, @Validated LocalStorageQueryCriteria criteria) throws IOException {
-        localStorageService.download(localStorageService.findAll(criteria), response);
+        this.getBaseService().download(this.getBaseService().findAll(criteria), response);
     }
 
     @Logging(title = "上传文件", businessType = BusinessTypeEnum.INSERT)
@@ -65,7 +64,7 @@ public class LocalStorageController {
     })
     public Result uploadLocalStorage(@RequestPart("file") MultipartFile file,
                                      @RequestParam(value = "filename", required = false) String filename) {
-        return Result.success(localStorageService.upload(file, filename));
+        return Result.success(this.getBaseService().upload(file, filename));
     }
 
     @Logging(title = "下载文件")
@@ -73,7 +72,7 @@ public class LocalStorageController {
     @PreAuthorize("@el.check('Storage:download')")
     @GetMapping("/download/{id}")
     public void download(HttpServletResponse response, @PathVariable String id) throws IOException {
-        localStorageService.download(IdSecureUtils.des().decrypt(id), response);
+        this.getBaseService().download(IdSecureUtils.des().decrypt(id), response);
     }
 
 
@@ -82,7 +81,7 @@ public class LocalStorageController {
     @ApiOperation("修改文件名")
     @PreAuthorize("@el.check('Storage:update')")
     public Result updateLocalStorage(@Validated @RequestBody LocalStorageVO localStorageVO) {
-        return ResultUtils.updateMessage(localStorageService.updateFileName(localStorageVO));
+        return resultMessage(Operate.UPDATE, this.getBaseService().updateFileName(localStorageVO));
     }
 
     @Logging(title = "删除文件", businessType = BusinessTypeEnum.DELETE)
@@ -90,6 +89,6 @@ public class LocalStorageController {
     @PreAuthorize("@el.check('Storage:delete')")
     @DeleteMapping
     public Result deleteLocalStorage(@RequestBody Set<String> ids) {
-        return ResultUtils.deleteMessage(ids, localStorageService.deleteByIds(IdSecureUtils.des().decrypt(ids)));
+        return resultMessage(Operate.DELETE, this.getBaseService().deleteByIds(filterCollNullAndDecrypt(ids)));
     }
 }

@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.weiho.scaffold.system.mapper.ElevatorTypeMapper">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="com.weiho.scaffold.system.entity.ElevatorType">
+        <id column="id" property="id"/>
+        <result column="create_time" property="createTime"/>
+        <result column="update_time" property="updateTime"/>
+        <result column="is_del" property="isDel"/>
+        <result column="type" property="type"/>
+    </resultMap>
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+        et.create_time,
+        et.update_time,
+        et.is_del,
+        et.id, et.type
+    </sql>
+
+    <select id="findSetByElevatorId" resultType="com.weiho.scaffold.system.entity.ElevatorType">
+        SELECT
+        <include refid="Base_Column_List"/>
+        FROM elevator_type et
+        LEFT OUTER JOIN elevators_types ets ON et.id = ets.type_id
+        LEFT OUTER JOIN elevator e ON e.id = ets.elevator_id
+        WHERE et.is_del = 0
+        AND e.id = #{elevatorId}
+    </select>
+
+</mapper>

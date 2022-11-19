@@ -1,6 +1,6 @@
 package com.weiho.scaffold.system.service;
 
-import com.weiho.scaffold.common.vo.VueSelectVO;
+import com.weiho.scaffold.common.util.result.VueSelectVO;
 import com.weiho.scaffold.mp.service.CommonService;
 import com.weiho.scaffold.system.entity.Building;
 import com.weiho.scaffold.system.entity.criteria.BuildingQueryCriteria;

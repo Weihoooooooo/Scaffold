@@ -1,6 +1,7 @@
 package com.weiho.scaffold.system.service.impl;
 
-import com.weiho.scaffold.common.util.aes.AesUtils;
+import com.weiho.scaffold.common.util.AesUtils;
+import com.weiho.scaffold.common.util.secure.IdSecureUtils;
 import com.weiho.scaffold.mp.service.impl.CommonServiceImpl;
 import com.weiho.scaffold.system.cache.service.CacheRefresh;
 import com.weiho.scaffold.system.entity.SysSetting;
@@ -69,6 +70,7 @@ public class SysSettingServiceImpl extends CommonServiceImpl<SysSettingMapper, S
 
     @Override
     public boolean updateSysSettings(SysSettingVO resources) {
+        IdSecureUtils.verifyIdNotNull(resources.getId());
         SysSetting sysSetting = sysSettingVOConvert.toEntity(resources);
         sysSetting.setUserInitPassword(AesUtils.encrypt(sysSetting.getUserInitPassword()));
         boolean flag = this.saveOrUpdate(sysSetting);

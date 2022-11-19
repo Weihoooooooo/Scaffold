@@ -5,12 +5,9 @@ import com.weiho.scaffold.common.config.system.ScaffoldSystemProperties;
 import com.weiho.scaffold.common.exception.BadRequestException;
 import com.weiho.scaffold.common.exception.CaptchaException;
 import com.weiho.scaffold.common.exception.SecurityException;
-import com.weiho.scaffold.common.util.message.I18nMessagesUtils;
+import com.weiho.scaffold.common.util.*;
 import com.weiho.scaffold.common.util.result.Result;
 import com.weiho.scaffold.common.util.result.enums.ResultCodeEnum;
-import com.weiho.scaffold.common.util.rsa.RsaUtils;
-import com.weiho.scaffold.common.util.security.SecurityUtils;
-import com.weiho.scaffold.common.util.string.StringUtils;
 import com.weiho.scaffold.redis.util.RedisUtils;
 import com.weiho.scaffold.system.entity.Role;
 import com.weiho.scaffold.system.entity.User;
@@ -32,7 +29,6 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import javax.servlet.http.HttpServletRequest;
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -119,7 +115,7 @@ public class LoginServiceImpl implements LoginService {
             return new HashMap<String, Object>(3) {{
                 put("token", properties.getJwtProperties().getTokenStartWith() + token);
                 put("userInfo", jwtUserVO);
-                put("maxLevel", Collections.min(roles.stream().map(Role::getLevel).collect(Collectors.toList())));
+                put("maxLevel", CollUtils.min(roles.stream().map(Role::getLevel).collect(Collectors.toList())));
             }};
         } catch (IllegalStateException e) {
             throw new SecurityException(ResultCodeEnum.SYSTEM_FORBIDDEN, I18nMessagesUtils.get("login.error"));

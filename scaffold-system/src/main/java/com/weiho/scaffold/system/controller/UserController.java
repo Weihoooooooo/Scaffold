@@ -3,16 +3,11 @@ package com.weiho.scaffold.system.controller;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.weiho.scaffold.common.config.system.ScaffoldSystemProperties;
 import com.weiho.scaffold.common.exception.BadRequestException;
-import com.weiho.scaffold.common.util.aes.AesUtils;
-import com.weiho.scaffold.common.util.message.I18nMessagesUtils;
+import com.weiho.scaffold.common.util.*;
 import com.weiho.scaffold.common.util.result.Result;
-import com.weiho.scaffold.common.util.result.ResultUtils;
-import com.weiho.scaffold.common.util.rsa.RsaUtils;
-import com.weiho.scaffold.common.util.secure.IdSecureUtils;
-import com.weiho.scaffold.common.util.security.SecurityUtils;
-import com.weiho.scaffold.common.util.string.StringUtils;
 import com.weiho.scaffold.logging.annotation.Logging;
 import com.weiho.scaffold.logging.enums.BusinessTypeEnum;
+import com.weiho.scaffold.mp.controller.CommonController;
 import com.weiho.scaffold.redis.limiter.annotation.RateLimiter;
 import com.weiho.scaffold.redis.limiter.enums.LimitType;
 import com.weiho.scaffold.redis.util.RedisUtils;
@@ -42,7 +37,10 @@ import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.util.*;
+import java.util.LinkedHashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 /**
@@ -58,11 +56,10 @@ import java.util.stream.Collectors;
 @RequestMapping("/api/v1/users")
 @Api(tags = "系统用户接口")
 @RequiredArgsConstructor
-public class UserController {
+public class UserController extends CommonController<UserService, User> {
     private final UserDetailsService userDetailsService;
     private final ScaffoldSystemProperties properties;
     private final PasswordEncoder passwordEncoder;
-    private final UserService userService;
     private final CacheRefresh cacheRefresh;
     private final RoleService roleService;
     private final LoginService loginService;
@@ -74,10 +71,10 @@ public class UserController {
     @GetMapping("/info")
     @RateLimiter(limitType = LimitType.IP)
     public Map<String, Object> getUserInfo() {
-        List<Role> roles = roleService.findListByUser(userService.findByUsername(SecurityUtils.getUsername()));
+        List<Role> roles = roleService.findListByUser(this.getBaseService().findByUsername(SecurityUtils.getUsername()));
         return new LinkedHashMap<String, Object>(2) {{
             put("userInfo", userDetailsService.loadUserByUsername(SecurityUtils.getUsername()));
-            put("maxLevel", Collections.min(roles.stream().map(Role::getLevel).collect(Collectors.toList())));
+            put("maxLevel", CollUtils.min(roles.stream().map(Role::getLevel).collect(Collectors.toList())));
         }};
     }
 
@@ -85,7 +82,7 @@ public class UserController {
     @PreAuthorize("@el.check('User:list')")
     @GetMapping
     public Map<String, Object> getUserList(@Validated UserQueryCriteria criteria, Pageable pageable) {
-        return userService.getUserList(criteria, pageable);
+        return this.getBaseService().getUserList(criteria, pageable);
     }
 
     @ApiOperation("修改密码")
@@ -95,14 +92,14 @@ public class UserController {
         // 密码解密
         String oldPass = RsaUtils.decryptByPrivateKey(properties.getRsaProperties().getPrivateKey(), passVO.getOldPassword());
         String newPass = RsaUtils.decryptByPrivateKey(properties.getRsaProperties().getPrivateKey(), passVO.getNewPassword());
-        User user = userService.findByUsername(SecurityUtils.getUsername());
+        User user = this.getBaseService().findByUsername(SecurityUtils.getUsername());
         if (!passwordEncoder.matches(oldPass, user.getPassword())) {
             throw new BadRequestException(I18nMessagesUtils.get("user.update.oldPassError"));
         }
         if (passwordEncoder.matches(newPass, user.getPassword())) {
             throw new BadRequestException(I18nMessagesUtils.get("user.update.tip"));
         }
-        userService.updatePass(user.getUsername(), passwordEncoder.encode(newPass));
+        this.getBaseService().updatePass(user.getUsername(), passwordEncoder.encode(newPass));
         user.setPassword(passwordEncoder.encode(newPass));
         cacheRefresh.updateUserCache(user);
         return Result.success(I18nMessagesUtils.get("update.success.tip"));
@@ -114,7 +111,7 @@ public class UserController {
     public Result updateEmail(@Validated @RequestBody VerificationVO verificationVO) throws Exception {
         String newEmail = verificationVO.getNewEmail() + verificationVO.getSuffix().getDisplay();
         // 根据传入的新邮箱去查找数据库
-        List<User> usersForNewEmail = userService.list(new LambdaQueryWrapper<User>().eq(User::getEmail, AesUtils.encrypt(newEmail)));
+        List<User> usersForNewEmail = this.getBaseService().list(new LambdaQueryWrapper<User>().eq(User::getEmail, AesUtils.encrypt(newEmail)));
         // 如果存在结果
         if (usersForNewEmail.size() != 0) {
             throw new BadRequestException(I18nMessagesUtils.get("mail.change.error"));
@@ -131,11 +128,11 @@ public class UserController {
             }
             // 验证密码
             String password = RsaUtils.decryptByPrivateKey(properties.getRsaProperties().getPrivateKey(), verificationVO.getPassword());
-            User user = userService.findByUsername(SecurityUtils.getUsername());
+            User user = this.getBaseService().findByUsername(SecurityUtils.getUsername());
             if (!passwordEncoder.matches(password, user.getPassword())) {
                 throw new BadRequestException(I18nMessagesUtils.get("mail.change.pass.error"));
             }
-            userService.updateEmail(user.getUsername(), newEmail);
+            this.getBaseService().updateEmail(user.getUsername(), newEmail);
             // 更新缓存
             user.setEmail(newEmail);
             cacheRefresh.updateUserCache(user);
@@ -148,7 +145,7 @@ public class UserController {
     @ApiOperation("修改头像")
     @PostMapping("/avatar")
     public Result updateAvatar(@RequestParam MultipartFile file) {
-        userService.updateAvatar(file);
+        this.getBaseService().updateAvatar(file);
         // 更新缓存
         tokenUtils.putUserDetails(userDetailsService.loadUserByUsername(SecurityUtils.getUsername()));
         return Result.success(I18nMessagesUtils.get("update.success.tip"));
@@ -160,7 +157,7 @@ public class UserController {
     @PreAuthorize("@el.check('User:update')")
     public Result updateUser(@Validated @RequestBody UserVO resources) {
         roleService.checkLevel(resources.getId());
-        return ResultUtils.updateMessage(userService.updateUser(resources));
+        return resultMessage(Operate.UPDATE, this.getBaseService().updateUser(resources));
     }
 
     @Logging(title = "新增用户", businessType = BusinessTypeEnum.INSERT)
@@ -169,7 +166,7 @@ public class UserController {
     @PreAuthorize("@el.check('User:add')")
     public Result createUser(@Validated @RequestBody UserVO resources) {
         roleService.checkLevel(resources.getRoles());
-        return ResultUtils.addMessage(userService.createUser(resources));
+        return resultMessage(Operate.ADD, this.getBaseService().createUser(resources));
     }
 
     @Logging(title = "删除用户", businessType = BusinessTypeEnum.DELETE)
@@ -177,22 +174,22 @@ public class UserController {
     @DeleteMapping
     @PreAuthorize("@el.check('User:delete')")
     public Result deleteUser(@RequestBody Set<String> idStrings) {
-        Set<Long> ids = IdSecureUtils.des().decrypt(idStrings);
+        Set<Long> ids = filterCollNullAndDecrypt(idStrings);
         for (Long id : ids) {
             // 当前操作用户的级别
-            Integer currentLevel = Collections.min(roleMapper.findListByUserId(SecurityUtils.getUserId()).stream().map(Role::getLevel).collect(Collectors.toList()));
+            Integer currentLevel = CollUtils.min(roleMapper.findListByUserId(SecurityUtils.getUserId()).stream().map(Role::getLevel).collect(Collectors.toList()));
             Integer optLevel;
             List<Role> roles = roleMapper.findListByUserId(id);
             if (roles != null && roles.size() > 0) {
-                optLevel = Collections.min(roles.stream().map(Role::getLevel).collect(Collectors.toList()));
+                optLevel = CollUtils.min(roles.stream().map(Role::getLevel).collect(Collectors.toList()));
             } else {
                 optLevel = 999;
             }
             if (currentLevel > optLevel) {
-                throw new BadRequestException(I18nMessagesUtils.get("delete.error.tip") + ":[" + userService.getById(id).getUsername() + "]");
+                throw new BadRequestException(I18nMessagesUtils.get("delete.error.tip") + ":[" + this.getBaseService().getById(id).getUsername() + "]");
             }
         }
-        return ResultUtils.deleteMessage(userService.deleteUser(ids));
+        return resultMessage(Operate.DELETE, this.getBaseService().deleteUser(ids));
     }
 
     @Logging(title = "导出用户数据")
@@ -200,12 +197,13 @@ public class UserController {
     @GetMapping("/download")
     @PreAuthorize("@el.check('User:list')")
     public void download(HttpServletResponse response, @Validated UserQueryCriteria criteria) throws IOException {
-        userService.download(userService.convertToVO(userService.getAll(criteria)), response);
+        this.getBaseService().download(this.getBaseService().convertToVO(this.getBaseService().getAll(criteria)), response);
     }
 
     @ApiOperation("验证当前登录用户的密码")
     @PostMapping("/verifyAccount")
     public Result verifyAccount(@RequestBody Map<String, Object> map) throws Exception {
+        filterMapNull(map, I18nMessagesUtils.get("param.error"));
         return loginService.verifyAccount((String) map.get("password"));
     }
 

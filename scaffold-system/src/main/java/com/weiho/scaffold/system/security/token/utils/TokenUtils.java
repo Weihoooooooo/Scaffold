@@ -2,7 +2,7 @@ package com.weiho.scaffold.system.security.token.utils;
 
 import com.alibaba.fastjson2.JSON;
 import com.weiho.scaffold.common.config.system.ScaffoldSystemProperties;
-import com.weiho.scaffold.common.util.string.StringUtils;
+import com.weiho.scaffold.common.util.StringUtils;
 import com.weiho.scaffold.redis.util.RedisUtils;
 import com.weiho.scaffold.system.security.vo.JwtUserVO;
 import com.weiho.scaffold.system.service.RoleService;

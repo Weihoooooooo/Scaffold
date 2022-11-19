@@ -2,8 +2,8 @@ package com.weiho.scaffold.system.security.controller;
 
 import com.alibaba.fastjson2.JSON;
 import com.weiho.scaffold.common.config.system.ScaffoldSystemProperties;
-import com.weiho.scaffold.common.util.des.DesUtils;
-import com.weiho.scaffold.common.util.message.I18nMessagesUtils;
+import com.weiho.scaffold.common.util.DesUtils;
+import com.weiho.scaffold.common.util.I18nMessagesUtils;
 import com.weiho.scaffold.common.util.result.Result;
 import com.weiho.scaffold.logging.annotation.Logging;
 import com.weiho.scaffold.logging.enums.BusinessTypeEnum;

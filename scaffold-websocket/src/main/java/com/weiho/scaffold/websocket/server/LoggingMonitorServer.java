@@ -2,8 +2,7 @@ package com.weiho.scaffold.websocket.server;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.weiho.scaffold.common.config.system.ScaffoldSystemProperties;
-import com.weiho.scaffold.common.util.date.DateUtils;
-import com.weiho.scaffold.common.util.date.FormatEnum;
+import com.weiho.scaffold.common.util.DateUtils;
 import com.weiho.scaffold.websocket.config.MyEndpointConfigure;
 import com.weiho.scaffold.websocket.entity.WebSocketResult;
 import com.weiho.scaffold.websocket.util.WebSocketErrorUtils;
@@ -74,7 +73,7 @@ public class LoggingMonitorServer {
                 while (sessionMap.get(session.getId()) != null) {
                     try {
                         //日志文件，获取最新的
-                        fileReader = new FileReader(System.getProperty("user.dir") + "/logs/" + DateUtils.getNowDateFormat(FormatEnum.YYYYMMDD) + "/" + applicationName + ".log");
+                        fileReader = new FileReader(System.getProperty("user.dir") + "/logs/" + DateUtils.getNowDateFormat(DateUtils.FormatEnum.YYYYMMDD) + "/" + applicationName + ".log");
 
                         //字符流
                         reader = new BufferedReader(fileReader);

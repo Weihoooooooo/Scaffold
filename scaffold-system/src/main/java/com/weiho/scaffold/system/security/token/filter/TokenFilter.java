@@ -2,7 +2,7 @@ package com.weiho.scaffold.system.security.token.filter;
 
 import cn.hutool.extra.spring.SpringUtil;
 import com.weiho.scaffold.common.config.system.ScaffoldSystemProperties;
-import com.weiho.scaffold.common.util.string.StringUtils;
+import com.weiho.scaffold.common.util.StringUtils;
 import com.weiho.scaffold.system.security.service.OnlineUserService;
 import com.weiho.scaffold.system.security.service.impl.OnlineUserServiceImpl;
 import com.weiho.scaffold.system.security.token.utils.TokenUtils;

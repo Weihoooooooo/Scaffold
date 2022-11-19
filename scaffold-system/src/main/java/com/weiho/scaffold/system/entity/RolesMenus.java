@@ -1,6 +1,7 @@
 package com.weiho.scaffold.system.entity;
 
 import com.baomidou.mybatisplus.annotation.IdType;
+import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
 import io.swagger.annotations.ApiModel;
@@ -17,6 +18,7 @@ import java.io.Serializable;
 @ApiModel("角色菜单中间表")
 @TableName("roles_menus")
 public class RolesMenus implements Serializable {
+    @TableField("menu_id")
     @ApiModelProperty("菜单主键ID")
     private Long menuId;
 

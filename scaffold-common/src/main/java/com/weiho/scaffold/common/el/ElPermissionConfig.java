@@ -1,6 +1,6 @@
 package com.weiho.scaffold.common.el;
 
-import com.weiho.scaffold.common.util.security.SecurityUtils;
+import com.weiho.scaffold.common.util.SecurityUtils;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.stereotype.Service;
 

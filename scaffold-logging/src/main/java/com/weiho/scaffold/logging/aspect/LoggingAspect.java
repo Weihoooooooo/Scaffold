@@ -1,7 +1,7 @@
 package com.weiho.scaffold.logging.aspect;
 
-import com.weiho.scaffold.common.util.ip.IpUtils;
-import com.weiho.scaffold.common.util.security.SecurityUtils;
+import com.weiho.scaffold.common.util.IpUtils;
+import com.weiho.scaffold.common.util.SecurityUtils;
 import com.weiho.scaffold.logging.annotation.Logging;
 import com.weiho.scaffold.logging.entity.Log;
 import com.weiho.scaffold.logging.enums.LogTypeEnum;

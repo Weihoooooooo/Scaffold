@@ -1,6 +1,7 @@
 package com.weiho.scaffold.system.service.impl;
 
-import com.weiho.scaffold.common.util.file.FileUtils;
+import com.weiho.scaffold.common.util.FileUtils;
+import com.weiho.scaffold.common.util.secure.IdSecureUtils;
 import com.weiho.scaffold.mp.service.impl.CommonServiceImpl;
 import com.weiho.scaffold.system.entity.Avatar;
 import com.weiho.scaffold.system.entity.criteria.AvatarQueryCriteria;
@@ -92,8 +93,9 @@ public class AvatarServiceImpl extends CommonServiceImpl<AvatarMapper, Avatar> i
 
     @Override
     @Transactional(rollbackFor = Exception.class)
-    public void updateEnabled(AvatarEnabledVO avatarEnabledVO) {
-        this.lambdaUpdate().set(Avatar::getEnabled, avatarEnabledVO.getEnabled()).eq(Avatar::getId, avatarEnabledVO.getId())
+    public boolean updateEnabled(AvatarEnabledVO avatarEnabledVO) {
+        IdSecureUtils.verifyIdNotNull(avatarEnabledVO.getId());
+        return this.lambdaUpdate().set(Avatar::getEnabled, avatarEnabledVO.getEnabled()).eq(Avatar::getId, avatarEnabledVO.getId())
                 .eq(Avatar::getIsDel, 0).update();
     }
 }

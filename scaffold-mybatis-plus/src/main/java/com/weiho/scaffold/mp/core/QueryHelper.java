@@ -3,7 +3,7 @@ package com.weiho.scaffold.mp.core;
 import cn.hutool.core.collection.CollUtil;
 import cn.hutool.core.util.ObjectUtil;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
-import com.weiho.scaffold.common.util.string.StringUtils;
+import com.weiho.scaffold.common.util.StringUtils;
 import com.weiho.scaffold.mp.annotation.Query;
 import lombok.extern.slf4j.Slf4j;
 

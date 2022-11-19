@@ -7,6 +7,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
+ * 枚举类工具类
+ *
  * @author Weiho
  * @since 2022/11/3
  */

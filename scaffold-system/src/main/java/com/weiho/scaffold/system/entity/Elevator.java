@@ -10,6 +10,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.weiho.scaffold.common.annotation.IdDecrypt;
 import com.weiho.scaffold.common.annotation.IdEncrypt;
 import com.weiho.scaffold.mp.entity.CommonEntity;
+import com.weiho.scaffold.system.entity.enums.ElevatorComputerRoomEnum;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Getter;
@@ -51,16 +52,46 @@ public class Elevator extends CommonEntity {
     @NotBlank(message = "电梯独立编号不能为空！")
     private String identityId;
 
+    @ApiModelProperty("电梯类型")
+    @TableField("type")
+    @JsonIgnore
+    @JSONField(serialize = false)
+    private Long type;
+
     @ApiModelProperty("核载人数")
     @TableField("number_of_people")
     @Min(value = 1, message = "核载人数至少为1！")
     private Integer numberOfPeople;
 
-    @ApiModelProperty("核载重量")
+    @ApiModelProperty("核载重量(kg)")
     @TableField("number_of_weight")
     @DecimalMin(value = "0.01", message = "核载重量至少0.01！")
-    @Digits(message = "该项目必须为数字！", integer = 8, fraction = 2)
+    @Digits(message = "该项必须为数字！", integer = 8, fraction = 2)
     private Double numberOfWeight;
+
+    @ApiModelProperty("有无机房(0 - 无机房,1 - 有机房)")
+    @TableField("is_computer_room")
+    private ElevatorComputerRoomEnum isComputerRoom;
+
+    @ApiModelProperty("井道尺寸(长 * 宽)(mm)")
+    @TableField("hoistway_size")
+    private String hoistwaySize;
+
+    @ApiModelProperty("基坑深度(m)")
+    @TableField("depth_of_foundation_pit")
+    @DecimalMin(value = "0.1", message = "基坑深度至少0.1!")
+    @Digits(message = "该项必须为数字！", integer = 8, fraction = 2)
+    private Double depthOfFoundationPit;
+
+    @ApiModelProperty("门洞预留尺寸(长 * 宽)(mm)")
+    @TableField("reserved_size_of_door_opening")
+    private String reservedSizeOfDoorOpening;
+
+    @ApiModelProperty("提升高度(m)")
+    @TableField("lifting_height")
+    @DecimalMin(value = "0.1", message = "基坑深度至少0.1!")
+    @Digits(message = "该项必须为数字！", integer = 8, fraction = 2)
+    private Double liftingHeight;
 
     @ApiModelProperty("上一次维护时间")
     @TableField("last_maintain_time")

@@ -4,12 +4,8 @@ import cn.hutool.core.lang.Dict;
 import cn.hutool.core.util.ObjectUtil;
 import com.alibaba.fastjson2.JSON;
 import com.github.pagehelper.PageInfo;
-import com.weiho.scaffold.common.util.file.FileUtils;
-import com.weiho.scaffold.common.util.page.PageUtils;
-import com.weiho.scaffold.common.util.security.SecurityUtils;
-import com.weiho.scaffold.common.util.string.StringUtils;
-import com.weiho.scaffold.common.util.throwable.ThrowableUtils;
-import com.weiho.scaffold.common.util.validation.ValidationUtils;
+import com.weiho.scaffold.common.util.*;
+import com.weiho.scaffold.common.util.secure.IdSecureUtils;
 import com.weiho.scaffold.logging.annotation.Logging;
 import com.weiho.scaffold.logging.entity.Log;
 import com.weiho.scaffold.logging.entity.convert.LogErrorUserVOConvert;
@@ -142,7 +138,7 @@ public class LogServiceImpl extends CommonServiceImpl<LogMapper, Log> implements
     @Override
     public Object findByErrorDetail(Long id) {
         Log log = this.getById(id);
-        ValidationUtils.isNull(log.getId(), "Log", "id", id);
+        IdSecureUtils.verifyIdNotNull(log.getId());
         byte[] details = log.getExceptionDetail().getBytes();
         return Dict.create().set("exception", new String(ObjectUtil.isNotNull(details) ? details : "".getBytes()));
     }

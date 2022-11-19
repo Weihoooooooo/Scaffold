@@ -1,9 +1,8 @@
 package com.weiho.scaffold.system.mapper;
 
+import com.weiho.scaffold.mp.mapper.CommonMapper;
 import com.weiho.scaffold.system.entity.UsersRoles;
-import org.apache.ibatis.annotations.Delete;
 import org.apache.ibatis.annotations.Mapper;
-import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Repository;
 
 /**
@@ -16,19 +15,5 @@ import org.springframework.stereotype.Repository;
  */
 @Mapper
 @Repository
-public interface UsersRolesMapper {
-    /**
-     * 根据用户名删除所有的角色
-     *
-     * @param userId 用户ID
-     */
-    @Delete("DELETE FROM users_roles WHERE user_id = #{userId}")
-    void deleteRolesByUserId(@Param("userId") Long userId);
-
-    /**
-     * 为用户添加角色
-     *
-     * @param usersRoles 实体
-     */
-    void save(UsersRoles usersRoles);
+public interface UsersRolesMapper extends CommonMapper<UsersRoles> {
 }

@@ -2,10 +2,10 @@ package com.weiho.scaffold.common.handler.exception;
 
 import com.weiho.scaffold.common.exception.SecurityException;
 import com.weiho.scaffold.common.exception.*;
-import com.weiho.scaffold.common.util.message.I18nMessagesUtils;
+import com.weiho.scaffold.common.util.I18nMessagesUtils;
+import com.weiho.scaffold.common.util.ThrowableUtils;
 import com.weiho.scaffold.common.util.result.Result;
 import com.weiho.scaffold.common.util.result.enums.ResultCodeEnum;
-import com.weiho.scaffold.common.util.throwable.ThrowableUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.validation.BindException;

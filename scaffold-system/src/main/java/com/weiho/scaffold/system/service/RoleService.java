@@ -159,7 +159,7 @@ public interface RoleService extends CommonService<Role> {
      *
      * @param resource 新的关系
      */
-    void updateMenu(RoleVO resource);
+    boolean updateMenu(RoleVO resource);
 
     /**
      * 新增角色

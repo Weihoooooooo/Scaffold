@@ -4,12 +4,7 @@ import cn.hutool.core.util.ObjectUtil;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.weiho.scaffold.common.config.system.ScaffoldSystemProperties;
 import com.weiho.scaffold.common.exception.BadRequestException;
-import com.weiho.scaffold.common.util.date.DateUtils;
-import com.weiho.scaffold.common.util.date.FormatEnum;
-import com.weiho.scaffold.common.util.file.FileUtils;
-import com.weiho.scaffold.common.util.message.I18nMessagesUtils;
-import com.weiho.scaffold.common.util.security.SecurityUtils;
-import com.weiho.scaffold.common.util.string.StringUtils;
+import com.weiho.scaffold.common.util.*;
 import com.weiho.scaffold.mp.core.QueryHelper;
 import com.weiho.scaffold.mp.service.impl.CommonServiceImpl;
 import com.weiho.scaffold.tools.storage.entity.LocalStorage;
@@ -118,7 +113,7 @@ public class LocalStorageServiceImpl extends CommonServiceImpl<LocalStorageMappe
             map.put("文件服务器地址", localStorage.getServerUrl());
             map.put("文件本地地址", localStorage.getLocalUrl());
             map.put("图片的MD5值", localStorage.getMd5Code());
-            map.put("上传时间", DateUtils.parseDateToStr(FormatEnum.YYYY_MM_DD_HH_MM_SS, localStorage.getCreateTime()));
+            map.put("上传时间", DateUtils.parseDateToStr(DateUtils.FormatEnum.YYYY_MM_DD_HH_MM_SS, localStorage.getCreateTime()));
             list.add(map);
         }
         FileUtils.downloadExcel(list, response);

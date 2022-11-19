@@ -1,6 +1,6 @@
 package com.weiho.scaffold.common.util.enums;
 
-import com.weiho.scaffold.common.vo.VueSelectVO;
+import com.weiho.scaffold.common.util.result.VueSelectVO;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Getter;

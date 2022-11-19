@@ -1,12 +1,11 @@
 package com.weiho.scaffold.system.controller;
 
-import com.weiho.scaffold.common.exception.BadRequestException;
-import com.weiho.scaffold.common.util.message.I18nMessagesUtils;
+import com.weiho.scaffold.common.util.I18nMessagesUtils;
 import com.weiho.scaffold.common.util.result.Result;
-import com.weiho.scaffold.common.util.result.enums.ResultCodeEnum;
-import com.weiho.scaffold.common.util.secure.IdSecureUtils;
 import com.weiho.scaffold.logging.annotation.Logging;
 import com.weiho.scaffold.logging.enums.BusinessTypeEnum;
+import com.weiho.scaffold.mp.controller.CommonController;
+import com.weiho.scaffold.system.entity.Avatar;
 import com.weiho.scaffold.system.entity.criteria.AvatarQueryCriteria;
 import com.weiho.scaffold.system.entity.vo.AvatarEnabledVO;
 import com.weiho.scaffold.system.service.AvatarService;
@@ -21,9 +20,7 @@ import org.springframework.web.bind.annotation.*;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.Map;
-import java.util.Objects;
 import java.util.Set;
-import java.util.stream.Collectors;
 
 /**
  * <p>
@@ -37,14 +34,12 @@ import java.util.stream.Collectors;
 @RestController
 @RequestMapping("/api/v1/avatars")
 @RequiredArgsConstructor
-public class AvatarController {
-    private final AvatarService avatarService;
-
+public class AvatarController extends CommonController<AvatarService, Avatar> {
     @ApiOperation("查询头像列表")
     @GetMapping
     @PreAuthorize("@el.check('Avatar:list')")
     public Map<String, Object> getAvatarList(@Validated AvatarQueryCriteria criteria, Pageable pageable) {
-        return avatarService.selectAvatarList(criteria, pageable);
+        return this.getBaseService().selectAvatarList(criteria, pageable);
     }
 
     @Logging(title = "导出头像信息")
@@ -52,7 +47,7 @@ public class AvatarController {
     @ApiOperation("导出头像信息")
     @PreAuthorize("@el.check('Avatar:list')")
     public void download(HttpServletResponse response, @Validated AvatarQueryCriteria criteria) throws IOException {
-        avatarService.download(avatarService.getAll(criteria), response);
+        this.getBaseService().download(this.getBaseService().getAll(criteria), response);
     }
 
     @DeleteMapping
@@ -60,18 +55,8 @@ public class AvatarController {
     @ApiOperation("删除头像信息")
     @PreAuthorize("@el.check('Avatar:delete')")
     public Result deleteAvatar(@RequestBody Set<String> idStrings) {
-        // 过滤空值
-        idStrings = idStrings.stream().filter(Objects::nonNull).collect(Collectors.toSet());
-        Set<Long> ids = IdSecureUtils.des().decrypt(idStrings);
-        // 部分用户不存在头像则抛出异常
-        if (ids.size() == 0) {
-            throw new BadRequestException(I18nMessagesUtils.get("avatar.error.tip"));
-        }
-        if (avatarService.deleteAvatar(ids)) {
-            return Result.success(I18nMessagesUtils.get("delete.success.tip"));
-        } else {
-            return Result.of(ResultCodeEnum.BAD_REQUEST_ERROR, I18nMessagesUtils.get("delete.fail.tip"));
-        }
+        Set<Long> ids = filterCollNullAndDecrypt(idStrings, I18nMessagesUtils.get("avatar.error.tip"));
+        return resultMessage(Operate.DELETE, this.getBaseService().deleteAvatar(ids));
     }
 
     @PutMapping
@@ -79,7 +64,6 @@ public class AvatarController {
     @ApiOperation("审核用户头像")
     @PreAuthorize("@el.check('Avatar:update')")
     public Result updateEnabled(@RequestBody AvatarEnabledVO avatarEnabledVO) {
-        avatarService.updateEnabled(avatarEnabledVO);
-        return Result.success(I18nMessagesUtils.get("update.success.tip"));
+        return resultMessage(Operate.OPERATE, this.getBaseService().updateEnabled(avatarEnabledVO));
     }
 }

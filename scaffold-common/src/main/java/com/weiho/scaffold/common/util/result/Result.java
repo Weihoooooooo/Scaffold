@@ -2,7 +2,7 @@ package com.weiho.scaffold.common.util.result;
 
 import com.alibaba.fastjson2.annotation.JSONField;
 import com.fasterxml.jackson.annotation.JsonFormat;
-import com.weiho.scaffold.common.util.message.I18nMessagesUtils;
+import com.weiho.scaffold.common.util.I18nMessagesUtils;
 import com.weiho.scaffold.common.util.result.code.StatusCode;
 import com.weiho.scaffold.common.util.result.enums.ResultCodeEnum;
 import io.swagger.annotations.ApiModel;

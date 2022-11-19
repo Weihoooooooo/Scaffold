@@ -1,10 +1,10 @@
 package com.weiho.scaffold.system.controller;
 
 import com.weiho.scaffold.common.util.result.Result;
-import com.weiho.scaffold.common.util.result.ResultUtils;
-import com.weiho.scaffold.common.util.secure.IdSecureUtils;
 import com.weiho.scaffold.logging.annotation.Logging;
 import com.weiho.scaffold.logging.enums.BusinessTypeEnum;
+import com.weiho.scaffold.mp.controller.CommonController;
+import com.weiho.scaffold.system.entity.Elevator;
 import com.weiho.scaffold.system.entity.criteria.ElevatorQueryCriteria;
 import com.weiho.scaffold.system.entity.vo.ElevatorMaintainVO;
 import com.weiho.scaffold.system.entity.vo.ElevatorVO;
@@ -34,14 +34,12 @@ import java.util.Set;
 @RestController
 @RequestMapping("/api/v1/elevators")
 @RequiredArgsConstructor
-public class ElevatorController {
-    private final ElevatorService elevatorService;
-
+public class ElevatorController extends CommonController<ElevatorService, Elevator> {
     @ApiOperation("查询电梯列表")
     @GetMapping
     @PreAuthorize("@el.check('Elevator:list')")
     public Map<String, Object> getElevatorList(@Validated ElevatorQueryCriteria criteria, Pageable pageable) {
-        return elevatorService.getElevatorList(criteria, pageable);
+        return this.getBaseService().getElevatorList(criteria, pageable);
     }
 
     @Logging(title = "导出电梯信息")
@@ -49,7 +47,7 @@ public class ElevatorController {
     @GetMapping("/download")
     @PreAuthorize("@el.check('Elevator:list')")
     public void download(HttpServletResponse response, @Validated ElevatorQueryCriteria criteria) throws IOException {
-        elevatorService.download(elevatorService.convertToVO(elevatorService.findAll(criteria)), response);
+        this.getBaseService().download(this.getBaseService().convertToVO(this.getBaseService().findAll(criteria)), response);
     }
 
     @Logging(title = "添加电梯信息", businessType = BusinessTypeEnum.INSERT)
@@ -57,7 +55,7 @@ public class ElevatorController {
     @PostMapping
     @PreAuthorize("@el.check('Elevator:add')")
     public Result addElevator(@Validated @RequestBody ElevatorVO resources) {
-        return ResultUtils.addMessage(elevatorService.addElevator(resources));
+        return resultMessage(Operate.ADD, this.getBaseService().addElevator(resources));
     }
 
     @Logging(title = "修改电梯信息", businessType = BusinessTypeEnum.UPDATE)
@@ -65,7 +63,7 @@ public class ElevatorController {
     @PutMapping
     @PreAuthorize("@el.check('Elevator:update')")
     public Result updateElevator(@Validated @RequestBody ElevatorVO resources) {
-        return ResultUtils.updateMessage(elevatorService.updateElevator(resources));
+        return resultMessage(Operate.UPDATE, this.getBaseService().updateElevator(resources));
     }
 
     @Logging(title = "删除电梯信息", businessType = BusinessTypeEnum.DELETE)
@@ -73,7 +71,7 @@ public class ElevatorController {
     @DeleteMapping
     @PreAuthorize("@el.check('Elevator:delete')")
     public Result deleteElevator(@RequestBody Set<String> ids) {
-        return ResultUtils.deleteMessage(ids, elevatorService.deleteElevator(IdSecureUtils.des().decrypt(ids)));
+        return resultMessage(Operate.DELETE, this.getBaseService().deleteElevator(filterCollNullAndDecrypt(ids)));
     }
 
     @Logging(title = "维护电梯", businessType = BusinessTypeEnum.UPDATE)
@@ -81,6 +79,6 @@ public class ElevatorController {
     @PutMapping("/maintain")
     @PreAuthorize("@el.check('Elevator:list')")
     public Result maintainElevator(@Validated @RequestBody ElevatorMaintainVO resources) {
-        return ResultUtils.operateMessage(elevatorService.maintainElevator(resources));
+        return resultMessage(Operate.OPERATE, this.getBaseService().maintainElevator(resources));
     }
 }

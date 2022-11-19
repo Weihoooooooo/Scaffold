@@ -1,15 +1,14 @@
 package com.weiho.scaffold.system.controller;
 
-import com.weiho.scaffold.common.exception.BadRequestException;
 import com.weiho.scaffold.common.exception.SecurityException;
-import com.weiho.scaffold.common.util.message.I18nMessagesUtils;
-import com.weiho.scaffold.common.util.page.PageUtils;
+import com.weiho.scaffold.common.util.I18nMessagesUtils;
+import com.weiho.scaffold.common.util.PageUtils;
+import com.weiho.scaffold.common.util.SecurityUtils;
 import com.weiho.scaffold.common.util.result.Result;
-import com.weiho.scaffold.common.util.result.ResultUtils;
 import com.weiho.scaffold.common.util.result.enums.ResultCodeEnum;
-import com.weiho.scaffold.common.util.security.SecurityUtils;
 import com.weiho.scaffold.logging.annotation.Logging;
 import com.weiho.scaffold.logging.enums.BusinessTypeEnum;
+import com.weiho.scaffold.mp.controller.CommonController;
 import com.weiho.scaffold.redis.util.RedisUtils;
 import com.weiho.scaffold.system.cache.service.CacheRefresh;
 import com.weiho.scaffold.system.entity.Menu;
@@ -50,9 +49,8 @@ import java.util.stream.Collectors;
 @RestController
 @RequestMapping("/api/v1/menus")
 @RequiredArgsConstructor
-public class MenuController {
+public class MenuController extends CommonController<MenuService, Menu> {
     private final MenuDTOConvert menuDTOConvert;
-    private final MenuService menuService;
     private final RoleService roleService;
     private final UserService userService;
     private final CacheRefresh cacheRefresh;
@@ -66,11 +64,11 @@ public class MenuController {
             //获取当前登录的用户的ID
             User user = userService.findByUsername(username);
             //获取能访问的菜单列表
-            List<MenuDTO> menuDTOList = menuService.findListByRoles(roleService.findListByUser(user), username);
+            List<MenuDTO> menuDTOList = this.getBaseService().findListByRoles(roleService.findListByUser(user), username);
             //构建菜单树
-            List<MenuDTO> menuDTOTree = menuService.buildTree(menuDTOList);
+            List<MenuDTO> menuDTOTree = this.getBaseService().buildTree(menuDTOList);
             //递归转成前端所需的结构,返回
-            return menuService.buildMenuList(menuDTOTree, request);
+            return this.getBaseService().buildMenuList(menuDTOTree, request);
         } catch (Exception e) {
             throw new SecurityException(ResultCodeEnum.FAILED, I18nMessagesUtils.get("menu.error.tip"));
         }
@@ -80,16 +78,16 @@ public class MenuController {
     @GetMapping("/tree")
     @PreAuthorize("@el.check('Role:list','Menu:list')")
     public List<MenuTreeVO> getMenuTree(HttpServletRequest request) {
-        return menuService.getMenuTree(menuService.findByParentId(0L), request);
+        return this.getBaseService().getMenuTree(this.getBaseService().findByParentId(0L), request);
     }
 
     @ApiOperation("查询菜单列表")
     @GetMapping
     @PreAuthorize("@el.check('Menu:list')")
     public Map<String, Object> getMenuList(@Validated MenuQueryCriteria criteria) {
-        List<MenuDTO> menuDTOS = menuDTOConvert.toPojo(menuService.getAll(criteria));
+        List<MenuDTO> menuDTOS = menuDTOConvert.toPojo(this.getBaseService().getAll(criteria));
         if (criteria.getEnabled() == null || criteria.getEnabled()) {
-            return menuService.buildTreeForList(menuDTOS);
+            return this.getBaseService().buildTreeForList(menuDTOS);
         } else {
             return PageUtils.toPageContainer(menuDTOS, menuDTOS.size());
         }
@@ -100,7 +98,7 @@ public class MenuController {
     @GetMapping("/download")
     @PreAuthorize("@el.check('Menu:list')")
     public void download(HttpServletResponse response, @Validated MenuQueryCriteria criteria) throws IOException {
-        menuService.download(menuDTOConvert.toPojo(menuService.getAll(criteria)), response);
+        this.getBaseService().download(menuDTOConvert.toPojo(this.getBaseService().getAll(criteria)), response);
     }
 
     @Logging(title = "新增菜单", businessType = BusinessTypeEnum.INSERT)
@@ -108,10 +106,7 @@ public class MenuController {
     @PostMapping
     @PreAuthorize("@el.check('Menu:add')")
     public Result addMenu(@Validated @RequestBody Menu resources) {
-        if (resources.getId() != null) {
-            throw new BadRequestException("新增的菜单不能拥有ID");
-        }
-        return ResultUtils.addMessage(menuService.createMenu(resources));
+        return resultMessage(Operate.ADD, this.getBaseService().createMenu(resources));
     }
 
     @Logging(title = "修改菜单", businessType = BusinessTypeEnum.UPDATE)
@@ -120,7 +115,7 @@ public class MenuController {
     @PreAuthorize("@el.check('Menu:update')")
     public Result updateMenu(@Validated @RequestBody Menu resources, HttpServletRequest request) {
         // 刷新缓存
-        this.refreshMenuCache(menuService.updateMenu(resources), request);
+        this.refreshMenuCache(this.getBaseService().updateMenu(resources), request);
         return Result.success(I18nMessagesUtils.get("update.success.tip"));
     }
 
@@ -132,13 +127,13 @@ public class MenuController {
         Set<Menu> menuSet = new HashSet<>();
         for (Long id : ids) {
             // 查找子菜单
-            List<Menu> menuChildren = menuService.findByParentId(id);
-            menuSet.add(menuService.getById(id));
-            menuSet = menuService.getLowerMenus(menuChildren, menuSet);
+            List<Menu> menuChildren = this.getBaseService().findByParentId(id);
+            menuSet.add(this.getBaseService().getById(id));
+            menuSet = this.getBaseService().getLowerMenus(menuChildren, menuSet);
         }
         Set<Long> deleteIds = menuSet.stream().map(Menu::getId).collect(Collectors.toSet());
         // 执行删除并且更新缓存
-        this.refreshMenuCache(menuService.deleteMenu(deleteIds), request);
+        this.refreshMenuCache(this.getBaseService().deleteMenu(deleteIds), request);
         return Result.success(I18nMessagesUtils.get("delete.success.tip"));
     }
 
@@ -154,7 +149,6 @@ public class MenuController {
 
         String keyPermission = redisUtils.getRedisCommonsKey("Permission", username);
         String keyMenu = redisUtils.getRedisCommonsKey("Menus", username);
-        String keyMenuTree = "Scaffold:System::MenuTree";
 
         if (flag) {
             if (redisUtils.hasKey(keyPermission) && redisUtils.hasKey(keyMenu)) {

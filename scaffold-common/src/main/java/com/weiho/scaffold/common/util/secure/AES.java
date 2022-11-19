@@ -1,7 +1,7 @@
 package com.weiho.scaffold.common.util.secure;
 
 import cn.hutool.core.convert.Convert;
-import com.weiho.scaffold.common.util.aes.AesUtils;
+import com.weiho.scaffold.common.util.AesUtils;
 import lombok.NoArgsConstructor;
 
 import java.util.Set;
@@ -12,7 +12,7 @@ import java.util.stream.Collectors;
  * @since 2022/11/13
  */
 @NoArgsConstructor
-public class AES {
+public class AES implements SecureType {
     /**
      * 基于 Hutool 和 AES 封装的主键加密方法
      *

@@ -1,13 +1,13 @@
 package com.weiho.scaffold.system.service.impl;
 
 import com.github.pagehelper.PageInfo;
-import com.weiho.scaffold.common.util.date.DateUtils;
-import com.weiho.scaffold.common.util.date.FormatEnum;
+import com.weiho.scaffold.common.util.DateUtils;
+import com.weiho.scaffold.common.util.FileUtils;
+import com.weiho.scaffold.common.util.PageUtils;
+import com.weiho.scaffold.common.util.SecurityUtils;
 import com.weiho.scaffold.common.util.enums.EnumSelectVO;
 import com.weiho.scaffold.common.util.enums.EnumUtils;
-import com.weiho.scaffold.common.util.file.FileUtils;
-import com.weiho.scaffold.common.util.page.PageUtils;
-import com.weiho.scaffold.common.util.security.SecurityUtils;
+import com.weiho.scaffold.common.util.secure.IdSecureUtils;
 import com.weiho.scaffold.mp.core.QueryHelper;
 import com.weiho.scaffold.mp.service.impl.CommonServiceImpl;
 import com.weiho.scaffold.system.entity.Feedback;
@@ -80,6 +80,7 @@ public class FeedbackServiceImpl extends CommonServiceImpl<FeedbackMapper, Feedb
     @Override
     @Transactional(rollbackFor = Exception.class)
     public boolean answerFeedback(FeedbackVO resource) {
+        IdSecureUtils.verifyIdNotNull(resource.getId());
         Feedback feedback = this.getById(resource.getId());
 
         feedback.setUsername(SecurityUtils.getUsername());
@@ -108,10 +109,10 @@ public class FeedbackServiceImpl extends CommonServiceImpl<FeedbackMapper, Feedb
             map.put("反馈标题", feedbackVO.getTitle());
             map.put("反馈内容", feedbackVO.getContent());
             map.put("反馈回复", feedbackVO.getAnswer());
-            map.put("回复时间", DateUtils.parseDateToStr(FormatEnum.YYYY_MM_DD_HH_MM_SS, feedbackVO.getAnswerTime()));
+            map.put("回复时间", DateUtils.parseDateToStr(DateUtils.FormatEnum.YYYY_MM_DD_HH_MM_SS, feedbackVO.getAnswerTime()));
             map.put("反馈结果", feedbackVO.getResult().getDisplay());
             map.put("备注", feedbackVO.getRemarks());
-            map.put("反馈时间", DateUtils.parseDateToStr(FormatEnum.YYYY_MM_DD_HH_MM_SS, feedbackVO.getCreateTime()));
+            map.put("反馈时间", DateUtils.parseDateToStr(DateUtils.FormatEnum.YYYY_MM_DD_HH_MM_SS, feedbackVO.getCreateTime()));
             list.add(map);
         }
         FileUtils.downloadExcel(list, response);

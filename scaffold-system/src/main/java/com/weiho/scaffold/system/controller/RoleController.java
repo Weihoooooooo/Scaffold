@@ -1,12 +1,12 @@
 package com.weiho.scaffold.system.controller;
 
 import com.weiho.scaffold.common.exception.BadRequestException;
-import com.weiho.scaffold.common.util.message.I18nMessagesUtils;
+import com.weiho.scaffold.common.util.I18nMessagesUtils;
 import com.weiho.scaffold.common.util.result.Result;
-import com.weiho.scaffold.common.util.result.ResultUtils;
 import com.weiho.scaffold.common.util.secure.IdSecureUtils;
 import com.weiho.scaffold.logging.annotation.Logging;
 import com.weiho.scaffold.logging.enums.BusinessTypeEnum;
+import com.weiho.scaffold.mp.controller.CommonController;
 import com.weiho.scaffold.redis.limiter.annotation.RateLimiter;
 import com.weiho.scaffold.redis.limiter.enums.LimitType;
 import com.weiho.scaffold.system.entity.Role;
@@ -41,15 +41,13 @@ import java.util.Set;
 @RestController
 @RequestMapping("/api/v1/roles")
 @RequiredArgsConstructor
-public class RoleController {
-    private final RoleService roleService;
-
+public class RoleController extends CommonController<RoleService, Role> {
     @GetMapping("/select")
     @ApiOperation("获取所有角色列表(带国际化)")
     @PreAuthorize("@el.check('Role:list')")
     public Map<String, Object> getAllRoles(@Validated RoleQueryCriteria criteria, HttpServletRequest request,
                                            @PageableDefault(value = 2000, sort = {"level"}, direction = Sort.Direction.ASC) Pageable pageable) {
-        return roleService.findAll(criteria, pageable, request);
+        return this.getBaseService().findAll(criteria, pageable, request);
     }
 
     @GetMapping
@@ -57,14 +55,14 @@ public class RoleController {
     @PreAuthorize("@el.check('Role:list')")
     public Map<String, Object> getAll(@Validated RoleQueryCriteria criteria,
                                       @PageableDefault(value = 2000, sort = {"level"}, direction = Sort.Direction.ASC) Pageable pageable) {
-        return roleService.findAll(criteria, pageable);
+        return this.getBaseService().findAll(criteria, pageable);
     }
 
     @GetMapping("/levelScope")
     @ApiOperation("获取角色权限等级范围")
     @RateLimiter(limitType = LimitType.IP)
     public Map<String, Integer> getLevelScope() {
-        return roleService.getLevelScope();
+        return this.getBaseService().getLevelScope();
     }
 
     @Logging(title = "导出角色数据")
@@ -72,7 +70,7 @@ public class RoleController {
     @GetMapping("/download")
     @PreAuthorize("@el.check('Role:list')")
     public void download(@Validated RoleQueryCriteria criteria, HttpServletRequest request, HttpServletResponse response) throws IOException {
-        roleService.download(roleService.convertToDTOForLanguage(roleService.findAll(criteria), request), response);
+        this.getBaseService().download(this.getBaseService().convertToDTOForLanguage(this.getBaseService().findAll(criteria), request), response);
     }
 
     @Logging(title = "修改角色信息", businessType = BusinessTypeEnum.UPDATE)
@@ -80,8 +78,8 @@ public class RoleController {
     @PutMapping
     @PreAuthorize("@el.check('Role:update')")
     public Result update(@Validated @RequestBody Role resource) {
-        roleService.checkLevel(resource.getLevel());
-        return ResultUtils.updateMessage(roleService.updateRole(resource));
+        this.getBaseService().checkLevel(resource.getLevel());
+        return resultMessage(Operate.UPDATE, this.getBaseService().updateRole(resource));
     }
 
     @Logging(title = "删除角色信息", businessType = BusinessTypeEnum.DELETE)
@@ -89,18 +87,18 @@ public class RoleController {
     @DeleteMapping
     @PreAuthorize("@el.check('Role:delete')")
     public Result delete(@RequestBody Set<String> idStrings) {
-        Set<Long> ids = IdSecureUtils.des().decrypt(idStrings);
+        Set<Long> ids = filterCollNullAndDecrypt(idStrings);
         for (Long id : ids) {
-            roleService.checkLevel(roleService.getById(id).getLevel());
+            this.getBaseService().checkLevel(this.getBaseService().getById(id).getLevel());
         }
-        return ResultUtils.deleteMessage(roleService.deleteRole(ids));
+        return resultMessage(Operate.DELETE, this.getBaseService().deleteRole(ids));
     }
 
     @ApiOperation("获取单个Role")
     @GetMapping("/{id}")
     @PreAuthorize("@el.check('Role:list')")
     public RoleVO getRoleById(@PathVariable String id) {
-        return roleService.findById(IdSecureUtils.des().decrypt(id));
+        return this.getBaseService().findById(IdSecureUtils.des().decrypt(id));
     }
 
     @Logging(title = "修改角色菜单", businessType = BusinessTypeEnum.UPDATE)
@@ -108,10 +106,9 @@ public class RoleController {
     @PutMapping("/menus")
     @PreAuthorize("@el.check('Role:update')")
     public Result updateMenus(@RequestBody RoleVO resource) {
-        RoleVO roleVO = roleService.findById(resource.getId());
-        roleService.checkLevel(roleVO.getLevel());
-        roleService.updateMenu(resource);
-        return Result.success(I18nMessagesUtils.get("update.success.tip"));
+        RoleVO roleVO = this.getBaseService().findById(resource.getId());
+        this.getBaseService().checkLevel(roleVO.getLevel());
+        return resultMessage(Operate.OPERATE, this.getBaseService().updateMenu(resource));
     }
 
     @Logging(title = "新增角色", businessType = BusinessTypeEnum.INSERT)
@@ -122,7 +119,7 @@ public class RoleController {
         if (resource.getId() != null) {
             throw new BadRequestException(I18nMessagesUtils.get("role.add.error"));
         }
-        roleService.checkLevel(resource.getLevel());
-        return ResultUtils.addMessage(roleService.createRole(resource));
+        this.getBaseService().checkLevel(resource.getLevel());
+        return resultMessage(Operate.ADD, this.getBaseService().createRole(resource));
     }
 }

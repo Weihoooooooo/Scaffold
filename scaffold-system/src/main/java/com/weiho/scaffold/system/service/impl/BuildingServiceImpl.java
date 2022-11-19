@@ -1,10 +1,14 @@
 package com.weiho.scaffold.system.service.impl;
 
+import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.github.pagehelper.PageInfo;
-import com.weiho.scaffold.common.util.file.FileUtils;
-import com.weiho.scaffold.common.util.page.PageUtils;
-import com.weiho.scaffold.common.vo.VueSelectVO;
+import com.weiho.scaffold.common.exception.BadRequestException;
+import com.weiho.scaffold.common.util.FileUtils;
+import com.weiho.scaffold.common.util.I18nMessagesUtils;
+import com.weiho.scaffold.common.util.PageUtils;
+import com.weiho.scaffold.common.util.result.VueSelectVO;
+import com.weiho.scaffold.common.util.secure.IdSecureUtils;
 import com.weiho.scaffold.mp.core.QueryHelper;
 import com.weiho.scaffold.mp.service.impl.CommonServiceImpl;
 import com.weiho.scaffold.system.entity.Building;
@@ -66,17 +70,30 @@ public class BuildingServiceImpl extends CommonServiceImpl<BuildingMapper, Build
     @Override
     @Transactional(rollbackFor = Exception.class)
     public boolean updateBuilding(Building resources) {
+        IdSecureUtils.verifyIdNotNull(resources.getId());
         Building building = this.getById(resources.getId());
+
+        Building buildingBuildingNum = this.getOne(new LambdaQueryWrapper<Building>().eq(Building::getBuildingNum, resources.getBuildingNum()));
+        if (buildingBuildingNum != null && !building.getId().equals(buildingBuildingNum.getId())) {
+            throw new BadRequestException(I18nMessagesUtils.get("buildingNum.exist.error"));
+        }
+
         building.setBuildingNum(resources.getBuildingNum());
         building.setFloor(resources.getFloor());
         building.setFloorNum(resources.getFloorNum());
         building.setNumber(resources.getFloor() * resources.getFloorNum());
+
         return this.saveOrUpdate(building);
     }
 
     @Override
     @Transactional(rollbackFor = Exception.class)
     public boolean addBuilding(Building resources) {
+        IdSecureUtils.verifyIdNull(resources.getId());
+        Building buildingBuildingNum = this.getOne(new LambdaQueryWrapper<Building>().eq(Building::getBuildingNum, resources.getBuildingNum()));
+        if (buildingBuildingNum != null) {
+            throw new BadRequestException(I18nMessagesUtils.get("buildingNum.exist.error"));
+        }
         // 后台计算总户数
         resources.setNumber(resources.getFloor() * resources.getFloorNum());
         return this.save(resources);

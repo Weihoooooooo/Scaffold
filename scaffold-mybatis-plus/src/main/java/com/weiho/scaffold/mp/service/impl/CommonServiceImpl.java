@@ -4,7 +4,7 @@ import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
-import com.weiho.scaffold.common.util.page.PageUtils;
+import com.weiho.scaffold.common.util.PageUtils;
 import com.weiho.scaffold.mp.enums.SortTypeEnum;
 import com.weiho.scaffold.mp.service.CommonService;
 import lombok.extern.slf4j.Slf4j;

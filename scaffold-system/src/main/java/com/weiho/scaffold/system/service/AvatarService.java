@@ -75,5 +75,5 @@ public interface AvatarService extends CommonService<Avatar> {
      *
      * @param avatarEnabledVO 实体
      */
-    void updateEnabled(AvatarEnabledVO avatarEnabledVO);
+    boolean updateEnabled(AvatarEnabledVO avatarEnabledVO);
 }

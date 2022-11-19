@@ -69,7 +69,7 @@ public interface OwnerService extends CommonService<Owner> {
      *
      * @param id 主键
      */
-    void resetPassword(Serializable id);
+    boolean resetPassword(Serializable id);
 
     /**
      * 删除业主

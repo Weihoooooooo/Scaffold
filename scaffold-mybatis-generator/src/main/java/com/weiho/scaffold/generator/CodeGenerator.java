@@ -8,6 +8,7 @@ import com.baomidou.mybatisplus.generator.config.querys.MySqlQuery;
 import com.baomidou.mybatisplus.generator.config.rules.DateType;
 import com.baomidou.mybatisplus.generator.config.rules.NamingStrategy;
 import com.baomidou.mybatisplus.generator.engine.FreemarkerTemplateEngine;
+import com.weiho.scaffold.mp.controller.CommonController;
 import com.weiho.scaffold.mp.entity.CommonEntity;
 import com.weiho.scaffold.mp.mapper.CommonMapper;
 import com.weiho.scaffold.mp.service.CommonService;
@@ -35,7 +36,7 @@ public class CodeGenerator {
         //父包名
         String parentPackageName = "com.weiho.scaffold.system";
         //要创建系列文件的表名
-        String[] tableNames = {"elevator"};
+        String[] tableNames = {"elevators_types"};
         //若要设置Entity、Service、ServiceImpl、Controller的父类滑动下去修改
 
 
@@ -75,7 +76,7 @@ public class CodeGenerator {
 
                     //controller策略
                     .controllerBuilder()
-//                    .superClass("XXX")//设置 controller 父类 (可以写类.class,也可以全包"com.abc.XX")
+                    .superClass(CommonController.class)//设置 controller 父类 (可以写类.class,也可以全包"com.abc.XX")
                     .enableHyphenStyle()//开启驼峰转连字符 默认是false
                     .enableRestStyle()//开启生成@RestController 控制器
                     .formatFileName("%sController")//格式化 controller 文件名称
