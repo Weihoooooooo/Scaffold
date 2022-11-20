@@ -1,7 +1,7 @@
 package com.weiho.scaffold.system.security.service.impl;
 
-import com.weiho.scaffold.common.util.I18nMessagesUtils;
 import com.weiho.scaffold.common.util.result.Result;
+import com.weiho.scaffold.i18n.I18nMessagesUtils;
 import com.weiho.scaffold.system.security.service.LogoutService;
 import com.weiho.scaffold.system.security.service.OnlineUserService;
 import com.weiho.scaffold.system.security.token.utils.TokenUtils;

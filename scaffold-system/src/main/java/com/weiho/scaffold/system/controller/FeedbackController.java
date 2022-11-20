@@ -1,6 +1,5 @@
 package com.weiho.scaffold.system.controller;
 
-import com.weiho.scaffold.common.util.enums.EnumSelectVO;
 import com.weiho.scaffold.common.util.result.Result;
 import com.weiho.scaffold.logging.annotation.Logging;
 import com.weiho.scaffold.logging.enums.BusinessTypeEnum;
@@ -21,7 +20,6 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
@@ -68,22 +66,6 @@ public class FeedbackController extends CommonController<FeedbackService, Feedba
     @PreAuthorize("@el.check('Feedback:list')")
     public void download(@Validated FeedbackQueryCriteria criteria, HttpServletResponse response) throws IOException {
         this.getBaseService().download(this.getBaseService().convertToVO(this.getBaseService().findAll(criteria)), response);
-    }
-
-    @ApiOperation("获取反馈处理结果枚举列表")
-    @GetMapping("/feedbackResult")
-    @PreAuthorize("@el.check('Feedback:list')")
-    @RateLimiter(limitType = LimitType.IP)
-    public List<EnumSelectVO> getFeedbackResultSelectList() {
-        return this.getBaseService().getFeedbackResultSelect();
-    }
-
-    @ApiOperation("获取反馈类型枚举列表")
-    @GetMapping("/feedbackTypes")
-    @PreAuthorize("@el.check('Feedback:list')")
-    @RateLimiter(limitType = LimitType.IP)
-    public List<EnumSelectVO> getFeedbackTypeSelectList() {
-        return this.getBaseService().getFeedbackTypeSelect();
     }
 
 }

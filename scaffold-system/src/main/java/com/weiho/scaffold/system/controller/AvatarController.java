@@ -1,7 +1,7 @@
 package com.weiho.scaffold.system.controller;
 
-import com.weiho.scaffold.common.util.I18nMessagesUtils;
 import com.weiho.scaffold.common.util.result.Result;
+import com.weiho.scaffold.i18n.I18nMessagesUtils;
 import com.weiho.scaffold.logging.annotation.Logging;
 import com.weiho.scaffold.logging.enums.BusinessTypeEnum;
 import com.weiho.scaffold.mp.controller.CommonController;

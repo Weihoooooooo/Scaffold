@@ -2,6 +2,7 @@ package com.weiho.scaffold.system.annotation;
 
 import com.weiho.scaffold.common.config.ScaffoldCommonConfiguration;
 import com.weiho.scaffold.logging.config.ScaffoldLoggingConfiguration;
+import com.weiho.scaffold.mp.config.ScaffoldMybatisPlusConfiguration;
 import com.weiho.scaffold.redis.config.ScaffoldRedisConfiguration;
 import com.weiho.scaffold.tools.config.ScaffoldToolsConfiguration;
 import com.weiho.scaffold.websocket.config.ScaffoldWebsocketConfiguration;
@@ -21,7 +22,8 @@ import java.lang.annotation.*;
         ScaffoldLoggingConfiguration.class,
         ScaffoldRedisConfiguration.class,
         ScaffoldToolsConfiguration.class,
-        ScaffoldWebsocketConfiguration.class
+        ScaffoldWebsocketConfiguration.class,
+        ScaffoldMybatisPlusConfiguration.class
 })
 public @interface EnableScaffold {
 }

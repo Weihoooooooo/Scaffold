@@ -1,7 +1,7 @@
 package com.weiho.scaffold.common.util.secure;
 
 import com.weiho.scaffold.common.exception.BadRequestException;
-import com.weiho.scaffold.common.util.I18nMessagesUtils;
+import com.weiho.scaffold.i18n.I18nMessagesUtils;
 import lombok.experimental.UtilityClass;
 
 /**

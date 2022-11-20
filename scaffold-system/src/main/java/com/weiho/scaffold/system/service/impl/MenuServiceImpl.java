@@ -5,10 +5,10 @@ import cn.hutool.core.util.StrUtil;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.weiho.scaffold.common.exception.BadRequestException;
 import com.weiho.scaffold.common.util.FileUtils;
-import com.weiho.scaffold.common.util.I18nMessagesUtils;
 import com.weiho.scaffold.common.util.PageUtils;
 import com.weiho.scaffold.common.util.StringUtils;
 import com.weiho.scaffold.common.util.secure.IdSecureUtils;
+import com.weiho.scaffold.i18n.I18nMessagesUtils;
 import com.weiho.scaffold.mp.core.QueryHelper;
 import com.weiho.scaffold.mp.service.impl.CommonServiceImpl;
 import com.weiho.scaffold.system.entity.Menu;
@@ -89,8 +89,6 @@ public class MenuServiceImpl extends CommonServiceImpl<MenuMapper, Menu> impleme
 
     @Override
     public List<MenuVO> buildMenuList(List<MenuDTO> menuDTOS, HttpServletRequest request) {
-        //获取语言环境
-        String language = request.getHeader("Accept-Language") == null ? "zh-CN" : request.getHeader("Accept-Language");
         //采用链表结构，提高add和remove有效率
         List<MenuVO> menuVOs = new LinkedList<>();
         menuDTOS.forEach(menuDTO -> {
@@ -100,7 +98,7 @@ public class MenuServiceImpl extends CommonServiceImpl<MenuMapper, Menu> impleme
                 //构造VO对象
                 MenuVO menuVO = new MenuVO();
                 //设置菜单名称 (如果组件名不为空则拿组件名，否则拿name)
-                menuVO.setName(ObjectUtil.isNotEmpty(menuDTO.getComponentName()) ? menuDTO.getComponentName() : getMenuNameForLanguage(menuDTO, language));
+                menuVO.setName(ObjectUtil.isNotEmpty(menuDTO.getComponentName()) ? menuDTO.getComponentName() : I18nMessagesUtils.getNameForI18n(request, menuDTO));
                 //一级目录的path需要加上'/'
                 menuVO.setPath(menuDTO.getParentId() == 0 ? "/" + menuDTO.getPath() : menuDTO.getPath());
                 menuVO.setHidden(menuDTO.getHidden());
@@ -113,7 +111,7 @@ public class MenuServiceImpl extends CommonServiceImpl<MenuMapper, Menu> impleme
                 }
 
                 //设置Meta对象
-                menuVO.setMeta(new MenuMetaVO(getMenuNameForLanguage(menuDTO, language), menuDTO.getIconCls()));
+                menuVO.setMeta(new MenuMetaVO(I18nMessagesUtils.getNameForI18n(request, menuDTO), menuDTO.getIconCls()));
 
                 //处理Children
                 if (menuDTOList != null && menuDTOList.size() != 0) {
@@ -126,7 +124,7 @@ public class MenuServiceImpl extends CommonServiceImpl<MenuMapper, Menu> impleme
                     MenuVO menuVO1 = new MenuVO();
                     menuVO1.setMeta(menuVO.getMeta());
                     menuVO1.setPath("index");
-                    menuVO1.setName(getMenuNameForLanguage(menuDTO, language));
+                    menuVO1.setName(I18nMessagesUtils.getNameForI18n(request, menuDTO));
                     menuVO1.setComponent(menuVO.getComponent());
                     menuVO1.setHidden(false);
 
@@ -148,7 +146,6 @@ public class MenuServiceImpl extends CommonServiceImpl<MenuMapper, Menu> impleme
 
     @Override
     public List<MenuTreeVO> getMenuTree(List<Menu> menus, HttpServletRequest request) {
-        String language = request.getHeader("Accept-Language") == null ? "zh-CN" : request.getHeader("Accept-Language");
         List<MenuTreeVO> list = new LinkedList<>();
         menus.forEach(menu -> {
             if (menu != null) {
@@ -156,7 +153,7 @@ public class MenuServiceImpl extends CommonServiceImpl<MenuMapper, Menu> impleme
                 List<Menu> menuList = this.findByParentId(menu.getId());
                 MenuTreeVO menuTreeVO = new MenuTreeVO();
                 menuTreeVO.setId(menu.getId());
-                menuTreeVO.setLabel(getMenuNameForLanguage(menu, language));
+                menuTreeVO.setLabel(I18nMessagesUtils.getNameForI18n(request, menu));
                 if (menuList != null && menuList.size() != 0) {
                     menuTreeVO.setChildren(getMenuTree(menuList, request));
                 }
@@ -191,19 +188,19 @@ public class MenuServiceImpl extends CommonServiceImpl<MenuMapper, Menu> impleme
         List<Map<String, Object>> list = new ArrayList<>();
         for (MenuDTO menuDTO : all) {
             Map<String, Object> map = new LinkedHashMap<>();
-            map.put("组件路径", menuDTO.getComponent());
-            map.put("组件名称", menuDTO.getComponentName());
-            map.put("前端使用的path", menuDTO.getPath());
-            map.put("菜单名称", menuDTO.getName());
-            map.put("图标名", menuDTO.getIconCls());
-            map.put("后端使用的url", menuDTO.getUrl());
-            map.put("权限", menuDTO.getPermission());
-            map.put("是否保持激活", menuDTO.getKeepAlive() ? "是" : "否");
-            map.put("是否隐藏", menuDTO.getHidden() ? "是" : "否");
-            map.put("是否启用", menuDTO.getEnabled() ? "启用" : "禁用");
-            map.put("菜单类型", menuDTO.getType().getDisplay());
-            map.put("排序", menuDTO.getSort());
-            map.put("创建时间", menuDTO.getCreateTime());
+            map.put(I18nMessagesUtils.get("download.menu.component"), menuDTO.getComponent());
+            map.put(I18nMessagesUtils.get("download.menu.component.name"), menuDTO.getComponentName());
+            map.put(I18nMessagesUtils.get("download.menu.path"), menuDTO.getPath());
+            map.put(I18nMessagesUtils.get("download.menu.name"), menuDTO.getName());
+            map.put(I18nMessagesUtils.get("download.menu.icon"), menuDTO.getIconCls());
+            map.put(I18nMessagesUtils.get("download.menu.url"), menuDTO.getUrl());
+            map.put(I18nMessagesUtils.get("download.menu.permission"), menuDTO.getPermission());
+            map.put(I18nMessagesUtils.get("download.menu.keep.live"), menuDTO.getKeepAlive() ? "是" : "否");
+            map.put(I18nMessagesUtils.get("download.menu.hidden"), menuDTO.getHidden() ? "是" : "否");
+            map.put(I18nMessagesUtils.get("download.menu.enabled"), menuDTO.getEnabled() ? "启用" : "禁用");
+            map.put(I18nMessagesUtils.get("download.menu.type"), menuDTO.getType().getDisplay());
+            map.put(I18nMessagesUtils.get("download.menu.sort"), menuDTO.getSort());
+            map.put(I18nMessagesUtils.get("download.createTime"), menuDTO.getCreateTime());
             list.add(map);
         }
         FileUtils.downloadExcel(list, response);
@@ -373,35 +370,6 @@ public class MenuServiceImpl extends CommonServiceImpl<MenuMapper, Menu> impleme
         if (StringUtils.isBlank(resources.getUrl())) {
             throw new BadRequestException(I18nMessagesUtils.get("menu.url.null.tip"));
         }
-    }
-
-    private String getMenuNameForLanguage(MenuDTO menuDTO, String language) {
-        switch (language) {
-            case "zh-CN":
-                return menuDTO.getNameZhCn();
-            case "zh-HK":
-                return menuDTO.getNameZhHk();
-            case "zh-TW":
-                return menuDTO.getNameZhTw();
-            case "en-US":
-                return menuDTO.getNameEnUs();
-            default:
-                return menuDTO.getName();
-        }
-    }
-
-    private String getMenuNameForLanguage(Menu menu, String language) {
-        switch (language) {
-            case "zh-CN":
-                return menu.getNameZhCn();
-            case "zh-HK":
-                return menu.getNameZhHk();
-            case "zh-TW":
-                return menu.getNameZhTw();
-            case "en-US":
-                return menu.getNameEnUs();
-        }
-        return menu.getName();
     }
 
     private void verifyResources(Menu resources) {

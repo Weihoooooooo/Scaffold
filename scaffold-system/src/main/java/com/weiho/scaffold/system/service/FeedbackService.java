@@ -1,6 +1,5 @@
 package com.weiho.scaffold.system.service;
 
-import com.weiho.scaffold.common.util.enums.EnumSelectVO;
 import com.weiho.scaffold.mp.service.CommonService;
 import com.weiho.scaffold.system.entity.Feedback;
 import com.weiho.scaffold.system.entity.criteria.FeedbackQueryCriteria;
@@ -54,20 +53,6 @@ public interface FeedbackService extends CommonService<Feedback> {
      * @param response 响应参数
      */
     void download(List<FeedbackVO> all, HttpServletResponse response) throws IOException;
-
-    /**
-     * 获取反馈处理结果枚举列表
-     *
-     * @return /
-     */
-    List<EnumSelectVO> getFeedbackResultSelect();
-
-    /**
-     * 获取反馈类型枚举列表
-     *
-     * @return /
-     */
-    List<EnumSelectVO> getFeedbackTypeSelect();
 
     /**
      * 解决反馈

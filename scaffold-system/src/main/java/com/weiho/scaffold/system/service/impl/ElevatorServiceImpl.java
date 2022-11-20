@@ -3,8 +3,12 @@ package com.weiho.scaffold.system.service.impl;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.github.pagehelper.PageInfo;
 import com.weiho.scaffold.common.exception.BadRequestException;
-import com.weiho.scaffold.common.util.*;
+import com.weiho.scaffold.common.util.CollUtils;
+import com.weiho.scaffold.common.util.DateUtils;
+import com.weiho.scaffold.common.util.FileUtils;
+import com.weiho.scaffold.common.util.PageUtils;
 import com.weiho.scaffold.common.util.secure.IdSecureUtils;
+import com.weiho.scaffold.i18n.I18nMessagesUtils;
 import com.weiho.scaffold.mp.core.QueryHelper;
 import com.weiho.scaffold.mp.service.impl.CommonServiceImpl;
 import com.weiho.scaffold.system.entity.Elevator;
@@ -26,6 +30,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.*;
@@ -64,20 +69,26 @@ public class ElevatorServiceImpl extends CommonServiceImpl<ElevatorMapper, Eleva
     }
 
     @Override
-    public void download(List<ElevatorVO> all, HttpServletResponse response) throws IOException {
+    public void download(List<ElevatorVO> all, HttpServletResponse response, HttpServletRequest request) throws IOException {
         List<Map<String, Object>> list = new ArrayList<>();
         for (ElevatorVO elevatorVO : all) {
             Map<String, Object> map = new LinkedHashMap<>();
-            map.put("建筑栋号", elevatorVO.getBuildingNum());
-            map.put("电梯独立编号", elevatorVO.getIdentityId());
-            map.put("核载人数", elevatorVO.getNumberOfPeople());
-            map.put("核载重量", elevatorVO.getNumberOfWeight());
-            map.put("上一次维护时间", DateUtils.parseDateToStr(DateUtils.FormatEnum.YYYY_MM_DD_HH_MM_SS, elevatorVO.getLastMaintainTime()));
-            map.put("下一次维护时间", DateUtils.parseDateToStr(DateUtils.FormatEnum.YYYY_MM_DD_HH_MM_SS, elevatorVO.getNextMaintainTime()));
-            map.put("相隔多少天维护一次", elevatorVO.getDay());
-            map.put("维护人姓名", elevatorVO.getMaintainPeople());
-            map.put("维护人电话号码", elevatorVO.getMaintainPeoplePhone());
-            map.put("是否启用", elevatorVO.isEnabled() ? "是" : "否");
+            map.put(I18nMessagesUtils.get("download.elevator.buildingNum"), elevatorVO.getBuildingNum());
+            map.put(I18nMessagesUtils.get("download.elevator.identity"), elevatorVO.getIdentityId());
+            map.put(I18nMessagesUtils.get("download.elevator.people.number"), elevatorVO.getNumberOfPeople());
+            map.put(I18nMessagesUtils.get("download.elevator.weight.number"), elevatorVO.getNumberOfWeight());
+            map.put(I18nMessagesUtils.get("download.elevator.computer.room"), elevatorVO.getIsComputerRoom().getDisplay());
+            map.put(I18nMessagesUtils.get("download.elevator.hoistway.size"), elevatorVO.getHoistwaySize());
+            map.put(I18nMessagesUtils.get("download.depth.foundation.pit"), elevatorVO.getDepthOfFoundationPit());
+            map.put(I18nMessagesUtils.get("download.elevator.door.size"), elevatorVO.getReservedSizeOfDoorOpening());
+            map.put(I18nMessagesUtils.get("download.lifting.height"), elevatorVO.getLiftingHeight());
+            map.put(I18nMessagesUtils.get("download.elevator.last.time"), DateUtils.parseDateToStr(DateUtils.FormatEnum.YYYY_MM_DD_HH_MM_SS, elevatorVO.getLastMaintainTime()));
+            map.put(I18nMessagesUtils.get("download.elevator.next"), DateUtils.parseDateToStr(DateUtils.FormatEnum.YYYY_MM_DD_HH_MM_SS, elevatorVO.getNextMaintainTime()));
+            map.put(I18nMessagesUtils.get("download.elevator.day"), elevatorVO.getDay());
+            map.put(I18nMessagesUtils.get("download.elevator.type"), elevatorVO.getElevatorTypes().stream().map(e -> I18nMessagesUtils.getNameForI18n(request, e)).collect(Collectors.toSet()));
+            map.put(I18nMessagesUtils.get("download.elevator.maintain.people"), elevatorVO.getMaintainPeople());
+            map.put(I18nMessagesUtils.get("download.elevator.maintain.phone"), elevatorVO.getMaintainPeoplePhone());
+            map.put(I18nMessagesUtils.get("download.elevator.enabled"), elevatorVO.isEnabled() ? "是" : "否");
             list.add(map);
         }
         FileUtils.downloadExcel(list, response);

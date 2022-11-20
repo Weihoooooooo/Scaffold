@@ -4,6 +4,7 @@ import cn.hutool.extra.spring.EnableSpringUtil;
 import com.weiho.scaffold.common.annotation.Anonymous;
 import com.weiho.scaffold.common.annotation.NotControllerResponseAdvice;
 import com.weiho.scaffold.common.config.system.ScaffoldSystemProperties;
+import com.weiho.scaffold.i18n.EnableI18n;
 import com.weiho.scaffold.system.annotation.EnableScaffold;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -23,6 +24,7 @@ import springfox.documentation.swagger2.annotations.EnableSwagger2;
 @EnableCaching
 @EnableAsync
 @EnableSwagger2
+@EnableI18n
 @EnableSpringUtil
 @EnableScaffold
 @EnableConfigurationProperties(ScaffoldSystemProperties.class)

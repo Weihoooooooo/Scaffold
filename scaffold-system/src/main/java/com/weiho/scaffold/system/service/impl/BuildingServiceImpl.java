@@ -5,10 +5,10 @@ import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.github.pagehelper.PageInfo;
 import com.weiho.scaffold.common.exception.BadRequestException;
 import com.weiho.scaffold.common.util.FileUtils;
-import com.weiho.scaffold.common.util.I18nMessagesUtils;
 import com.weiho.scaffold.common.util.PageUtils;
 import com.weiho.scaffold.common.util.result.VueSelectVO;
 import com.weiho.scaffold.common.util.secure.IdSecureUtils;
+import com.weiho.scaffold.i18n.I18nMessagesUtils;
 import com.weiho.scaffold.mp.core.QueryHelper;
 import com.weiho.scaffold.mp.service.impl.CommonServiceImpl;
 import com.weiho.scaffold.system.entity.Building;
@@ -56,12 +56,12 @@ public class BuildingServiceImpl extends CommonServiceImpl<BuildingMapper, Build
         List<Map<String, Object>> list = new ArrayList<>();
         for (Building building : all) {
             Map<String, Object> map = new LinkedHashMap<>();
-            map.put("楼宇栋号", building.getBuildingNum());
-            map.put("建筑层数", building.getFloor());
-            map.put("一梯几户", building.getFloorNum());
-            map.put("总户数", building.getNumber());
-            map.put("创建时间", building.getCreateTime());
-            map.put("修改时间", building.getUpdateTime());
+            map.put(I18nMessagesUtils.get("download.building.buildingNum"), building.getBuildingNum());
+            map.put(I18nMessagesUtils.get("download.building.floor"), building.getFloor());
+            map.put(I18nMessagesUtils.get("download.building.floorNum"), building.getFloorNum());
+            map.put(I18nMessagesUtils.get("download.building.num"), building.getNumber());
+            map.put(I18nMessagesUtils.get("download.createTime"), building.getCreateTime());
+            map.put(I18nMessagesUtils.get("download.updateTime"), building.getUpdateTime());
             list.add(map);
         }
         FileUtils.downloadExcel(list, response);

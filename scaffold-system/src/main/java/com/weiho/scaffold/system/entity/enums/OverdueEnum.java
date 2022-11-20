@@ -1,8 +1,12 @@
 package com.weiho.scaffold.system.entity.enums;
 
 import com.baomidou.mybatisplus.annotation.EnumValue;
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonValue;
-import com.weiho.scaffold.common.util.enums.EnumSelect;
+import com.weiho.scaffold.common.annotation.EnumConvertMethod;
+import com.weiho.scaffold.common.util.enums.Enum;
+import com.weiho.scaffold.common.util.enums.EnumUtils;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 
@@ -12,13 +16,20 @@ import lombok.RequiredArgsConstructor;
  */
 @Getter
 @RequiredArgsConstructor
-public enum OverdueEnum implements EnumSelect {
+@JsonFormat(shape = JsonFormat.Shape.OBJECT)
+public enum OverdueEnum implements Enum {
     OVERDUE(1, "已过期"),
     NO_OVERDUE(0, "未过期");
 
+    @JsonValue
     @EnumValue
     private final Integer key;
 
-    @JsonValue
     private final String display;
+
+    @EnumConvertMethod
+    @JsonCreator(mode = JsonCreator.Mode.DELEGATING)
+    public static OverdueEnum convert(Integer key) {
+        return EnumUtils.convertEnum(OverdueEnum.class, key);
+    }
 }

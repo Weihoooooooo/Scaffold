@@ -2,9 +2,9 @@ package com.weiho.scaffold.common.util.result;
 
 import com.alibaba.fastjson2.annotation.JSONField;
 import com.fasterxml.jackson.annotation.JsonFormat;
-import com.weiho.scaffold.common.util.I18nMessagesUtils;
 import com.weiho.scaffold.common.util.result.code.StatusCode;
 import com.weiho.scaffold.common.util.result.enums.ResultCodeEnum;
+import com.weiho.scaffold.i18n.I18nMessagesUtils;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;

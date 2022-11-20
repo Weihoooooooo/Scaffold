@@ -7,6 +7,7 @@ import com.weiho.scaffold.common.exception.SecurityException;
 import com.weiho.scaffold.common.util.*;
 import com.weiho.scaffold.common.util.result.enums.ResultCodeEnum;
 import com.weiho.scaffold.common.util.secure.IdSecureUtils;
+import com.weiho.scaffold.i18n.I18nMessagesUtils;
 import com.weiho.scaffold.mp.core.QueryHelper;
 import com.weiho.scaffold.mp.enums.SortTypeEnum;
 import com.weiho.scaffold.mp.service.impl.CommonServiceImpl;
@@ -170,11 +171,11 @@ public class RoleServiceImpl extends CommonServiceImpl<RoleMapper, Role> impleme
         List<Map<String, Object>> list = new ArrayList<>();
         for (RoleDTO roleDTO : all) {
             Map<String, Object> map = new LinkedHashMap<>();
-            map.put("角色名称", roleDTO.getName());
-            map.put("角色等级", roleDTO.getLevel());
-            map.put("功能权限", roleDTO.getPermission());
-            map.put("修改时间", roleDTO.getUpdateTime());
-            map.put("创建时间", roleDTO.getCreateTime());
+            map.put(I18nMessagesUtils.get("download.role.name"), roleDTO.getName());
+            map.put(I18nMessagesUtils.get("download.role.level"), roleDTO.getLevel());
+            map.put(I18nMessagesUtils.get("download.role.permission"), roleDTO.getPermission());
+            map.put(I18nMessagesUtils.get("download.updateTime"), roleDTO.getUpdateTime());
+            map.put(I18nMessagesUtils.get("download.createTime"), roleDTO.getCreateTime());
             list.add(map);
         }
         FileUtils.downloadExcel(list, response);
@@ -197,11 +198,10 @@ public class RoleServiceImpl extends CommonServiceImpl<RoleMapper, Role> impleme
 
     @Override
     public List<RoleDTO> convertToDTOForLanguage(List<Role> roles, HttpServletRequest request) {
-        String language = request.getHeader("Accept-Language") == null ? "zh-CN" : request.getHeader("Accept-Language");
         List<RoleDTO> roleDTOS = roleDTOConvert.toPojo(roles);
         for (int i = 0; i < roleDTOS.size(); i++) {
             for (int j = 0; j < roles.size(); j++) {
-                roleDTOS.get(i).setName(getRoleNameForLanguage(roles.get(i), language));
+                roleDTOS.get(i).setName(I18nMessagesUtils.getNameForI18n(request, roles.get(i)));
             }
         }
         return roleDTOS;
@@ -276,18 +276,5 @@ public class RoleServiceImpl extends CommonServiceImpl<RoleMapper, Role> impleme
             throw new BadRequestException(I18nMessagesUtils.get("role.exist.error"));
         }
         return this.save(resource);
-    }
-
-    public String getRoleNameForLanguage(Role role, String language) {
-        if ("zh-CN".equals(language)) {
-            return role.getNameZhCn();
-        } else if ("zh-HK".equals(language)) {
-            return role.getNameZhHk();
-        } else if ("zh-TW".equals(language)) {
-            return role.getNameZhTw();
-        } else if ("en-US".equals(language)) {
-            return role.getNameEnUs();
-        }
-        return role.getName();
     }
 }

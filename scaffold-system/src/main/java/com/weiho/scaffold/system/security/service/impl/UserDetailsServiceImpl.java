@@ -1,7 +1,7 @@
 package com.weiho.scaffold.system.security.service.impl;
 
 import com.weiho.scaffold.common.exception.BadRequestException;
-import com.weiho.scaffold.common.util.I18nMessagesUtils;
+import com.weiho.scaffold.i18n.I18nMessagesUtils;
 import com.weiho.scaffold.system.entity.User;
 import com.weiho.scaffold.system.security.vo.JwtUserVO;
 import com.weiho.scaffold.system.service.RoleService;

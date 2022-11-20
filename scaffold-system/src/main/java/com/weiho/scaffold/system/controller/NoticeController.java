@@ -1,6 +1,5 @@
 package com.weiho.scaffold.system.controller;
 
-import com.weiho.scaffold.common.util.enums.EnumSelectVO;
 import com.weiho.scaffold.common.util.result.Result;
 import com.weiho.scaffold.common.util.result.VueSelectVO;
 import com.weiho.scaffold.logging.annotation.Logging;
@@ -76,22 +75,6 @@ public class NoticeController extends CommonController<NoticeService, Notice> {
     @PreAuthorize("@el.check('Notice:delete')")
     public Result deleteNotice(@RequestBody Set<String> ids) {
         return resultMessage(Operate.DELETE, this.getBaseService().deleteNotice(filterCollNullAndDecrypt(ids)));
-    }
-
-    @ApiOperation("获取通知发送范围列表")
-    @GetMapping("/noticeScope")
-    @PreAuthorize("@el.check('Notice:use')")
-    @RateLimiter(limitType = LimitType.IP)
-    public List<EnumSelectVO> getNoticeTypeScope() {
-        return this.getBaseService().getNoticeToTypeSelect();
-    }
-
-    @ApiOperation("获取通知是否获取列表")
-    @GetMapping("/noticeOverdue")
-    @PreAuthorize("@el.check('Notice:use')")
-    @RateLimiter(limitType = LimitType.IP)
-    public List<EnumSelectVO> getNoticeOverdue() {
-        return this.getBaseService().getOverdueSelect();
     }
 
     @ApiOperation("获取发送人列表")

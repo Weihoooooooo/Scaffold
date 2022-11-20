@@ -1,7 +1,9 @@
 package com.weiho.scaffold.system.service.impl;
 
+import com.weiho.scaffold.common.util.CollUtils;
 import com.weiho.scaffold.common.util.FileUtils;
 import com.weiho.scaffold.common.util.secure.IdSecureUtils;
+import com.weiho.scaffold.i18n.I18nMessagesUtils;
 import com.weiho.scaffold.mp.service.impl.CommonServiceImpl;
 import com.weiho.scaffold.system.entity.Avatar;
 import com.weiho.scaffold.system.entity.criteria.AvatarQueryCriteria;
@@ -56,11 +58,12 @@ public class AvatarServiceImpl extends CommonServiceImpl<AvatarMapper, Avatar> i
         List<Map<String, Object>> list = new ArrayList<>();
         for (AvatarVO avatarVO : all) {
             Map<String, Object> map = new LinkedHashMap<>();
-            map.put("用户名", avatarVO.getUsername());
-            map.put("文件名", avatarVO.getRealName());
-            map.put("头像路径", avatarVO.getPath());
-            map.put("头像大小", avatarVO.getSize());
-            map.put("审核情况", avatarVO.getEnabled().getDisplay());
+            map.put(I18nMessagesUtils.get("download.avatar.username"), avatarVO.getUsername());
+            map.put(I18nMessagesUtils.get("download.avatar.filename"), avatarVO.getRealName());
+            map.put(I18nMessagesUtils.get("download.avatar.path"), avatarVO.getPath());
+            map.put(I18nMessagesUtils.get("download.avatar.size"), avatarVO.getSize());
+            map.put(I18nMessagesUtils.get("download.avatar.enabled"), avatarVO.getEnabled().getDisplay());
+            map.put(I18nMessagesUtils.get("download.createTime"), avatarVO.getCreateTime());
             list.add(map);
         }
         FileUtils.downloadExcel(list, response);
@@ -69,7 +72,7 @@ public class AvatarServiceImpl extends CommonServiceImpl<AvatarMapper, Avatar> i
     @Override
     public List<AvatarVO> getAll(AvatarQueryCriteria criteria) {
         List<AvatarVO> avatarVOS;
-        if (criteria.getCreateTime() != null && criteria.getCreateTime().size() > 0) {
+        if (CollUtils.isNotEmpty(criteria.getCreateTime())) {
             if (criteria.getEnabled() != null) {
                 avatarVOS = this.getBaseMapper().selectAvatarList(criteria.getBlurry(), criteria.getCreateTime().get(0), criteria.getCreateTime().get(1), criteria.getEnabled().getKey());
             } else {

@@ -17,6 +17,7 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.Map;
@@ -46,8 +47,8 @@ public class ElevatorController extends CommonController<ElevatorService, Elevat
     @ApiOperation("导出电梯信息")
     @GetMapping("/download")
     @PreAuthorize("@el.check('Elevator:list')")
-    public void download(HttpServletResponse response, @Validated ElevatorQueryCriteria criteria) throws IOException {
-        this.getBaseService().download(this.getBaseService().convertToVO(this.getBaseService().findAll(criteria)), response);
+    public void download(HttpServletResponse response, HttpServletRequest request, @Validated ElevatorQueryCriteria criteria) throws IOException {
+        this.getBaseService().download(this.getBaseService().convertToVO(this.getBaseService().findAll(criteria)), response, request);
     }
 
     @Logging(title = "添加电梯信息", businessType = BusinessTypeEnum.INSERT)

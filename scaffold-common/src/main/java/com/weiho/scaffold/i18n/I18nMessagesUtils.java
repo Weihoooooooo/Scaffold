@@ -1,8 +1,10 @@
-package com.weiho.scaffold.common.util;
+package com.weiho.scaffold.i18n;
 
 import org.springframework.context.MessageSource;
 import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.stereotype.Component;
+
+import javax.servlet.http.HttpServletRequest;
 
 /**
  * 国际化资源获取类
@@ -49,5 +51,26 @@ public class I18nMessagesUtils {
      */
     public static String get(String messageKey, String defaultMsg, Object... objects) {
         return messageSource.getMessage(messageKey, objects, defaultMsg, LocaleContextHolder.getLocale());
+    }
+
+    /**
+     * 根据请求头获取相应的资源
+     *
+     * @param request 请求参数
+     * @param i18n    资源实体
+     * @return 对应的资源实体
+     */
+    public static String getNameForI18n(HttpServletRequest request, I18n i18n) {
+        String language = request.getHeader("Accept-Language") == null ? "zh-CN" : request.getHeader("Accept-Language");
+        if ("zh-CN".equals(language)) {
+            return i18n.getNameZhCn();
+        } else if ("zh-HK".equals(language)) {
+            return i18n.getNameZhHk();
+        } else if ("zh-TW".equals(language)) {
+            return i18n.getNameZhTw();
+        } else if ("en-US".equals(language)) {
+            return i18n.getNameEnUs();
+        }
+        return i18n.getName();
     }
 }

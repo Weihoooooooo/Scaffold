@@ -5,13 +5,11 @@ import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.github.pagehelper.PageInfo;
 import com.weiho.scaffold.common.exception.BadRequestException;
 import com.weiho.scaffold.common.util.FileUtils;
-import com.weiho.scaffold.common.util.I18nMessagesUtils;
 import com.weiho.scaffold.common.util.PageUtils;
 import com.weiho.scaffold.common.util.SecurityUtils;
-import com.weiho.scaffold.common.util.enums.EnumSelectVO;
-import com.weiho.scaffold.common.util.enums.EnumUtils;
 import com.weiho.scaffold.common.util.result.VueSelectVO;
 import com.weiho.scaffold.common.util.secure.IdSecureUtils;
+import com.weiho.scaffold.i18n.I18nMessagesUtils;
 import com.weiho.scaffold.mp.core.QueryHelper;
 import com.weiho.scaffold.mp.enums.SortTypeEnum;
 import com.weiho.scaffold.mp.service.impl.CommonServiceImpl;
@@ -19,8 +17,6 @@ import com.weiho.scaffold.system.entity.Notice;
 import com.weiho.scaffold.system.entity.User;
 import com.weiho.scaffold.system.entity.convert.NoticeVOConvert;
 import com.weiho.scaffold.system.entity.criteria.NoticeQueryCriteria;
-import com.weiho.scaffold.system.entity.enums.NoticeToEnum;
-import com.weiho.scaffold.system.entity.enums.OverdueEnum;
 import com.weiho.scaffold.system.entity.vo.NoticeVO;
 import com.weiho.scaffold.system.mapper.NoticeMapper;
 import com.weiho.scaffold.system.service.NoticeService;
@@ -80,11 +76,11 @@ public class NoticeServiceImpl extends CommonServiceImpl<NoticeMapper, Notice> i
         List<Map<String, Object>> list = new ArrayList<>();
         for (NoticeVO noticeVO : all) {
             Map<String, Object> map = new LinkedHashMap<>();
-            map.put("通知范围", noticeVO.getType().getDisplay());
-            map.put("通知标题", noticeVO.getTitle());
-            map.put("通知内容", noticeVO.getContent());
-            map.put("通知人", noticeVO.getUsername());
-            map.put("创建时间", noticeVO.getCreateTime());
+            map.put(I18nMessagesUtils.get("download.notice.scope"), noticeVO.getType().getDisplay());
+            map.put(I18nMessagesUtils.get("download.notice.title"), noticeVO.getTitle());
+            map.put(I18nMessagesUtils.get("download.notice.content"), noticeVO.getContent());
+            map.put(I18nMessagesUtils.get("download.notice.username"), noticeVO.getUsername());
+            map.put(I18nMessagesUtils.get("download.createTime"), noticeVO.getCreateTime());
             list.add(map);
         }
         FileUtils.downloadExcel(list, response);
@@ -140,15 +136,5 @@ public class NoticeServiceImpl extends CommonServiceImpl<NoticeMapper, Notice> i
     @Transactional(rollbackFor = Exception.class)
     public boolean deleteNotice(Set<Long> ids) {
         return this.removeByIds(ids);
-    }
-
-    @Override
-    public List<EnumSelectVO> getNoticeToTypeSelect() {
-        return EnumUtils.getEnumSelect(NoticeToEnum.class);
-    }
-
-    @Override
-    public List<EnumSelectVO> getOverdueSelect() {
-        return EnumUtils.getEnumSelect(OverdueEnum.class);
     }
 }

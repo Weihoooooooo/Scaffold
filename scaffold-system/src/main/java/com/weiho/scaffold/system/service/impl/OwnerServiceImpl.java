@@ -3,8 +3,12 @@ package com.weiho.scaffold.system.service.impl;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.github.pagehelper.PageInfo;
 import com.weiho.scaffold.common.exception.BadRequestException;
-import com.weiho.scaffold.common.util.*;
+import com.weiho.scaffold.common.util.AesUtils;
+import com.weiho.scaffold.common.util.FileUtils;
+import com.weiho.scaffold.common.util.LikeCipher;
+import com.weiho.scaffold.common.util.PageUtils;
 import com.weiho.scaffold.common.util.secure.IdSecureUtils;
+import com.weiho.scaffold.i18n.I18nMessagesUtils;
 import com.weiho.scaffold.mp.core.QueryHelper;
 import com.weiho.scaffold.mp.service.impl.CommonServiceImpl;
 import com.weiho.scaffold.system.entity.Owner;
@@ -58,10 +62,10 @@ public class OwnerServiceImpl extends CommonServiceImpl<OwnerMapper, Owner> impl
         List<Map<String, Object>> list = new ArrayList<>();
         for (OwnerVO ownerVO : all) {
             Map<String, Object> map = new LinkedHashMap<>();
-            map.put("姓名", ownerVO.getName());
-            map.put("性别", ownerVO.getSex().getDisplay());
-            map.put("手机号码", ownerVO.getPhone());
-            map.put("邮箱", ownerVO.getEmail());
+            map.put(I18nMessagesUtils.get("download.owner.username"), ownerVO.getName());
+            map.put(I18nMessagesUtils.get("download.sex"), ownerVO.getSex().getDisplay());
+            map.put(I18nMessagesUtils.get("download.phone"), ownerVO.getPhone());
+            map.put(I18nMessagesUtils.get("download.email"), ownerVO.getEmail());
             list.add(map);
         }
         FileUtils.downloadExcel(list, response);

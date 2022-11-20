@@ -4,6 +4,7 @@ import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
+import com.weiho.scaffold.i18n.I18n;
 import com.weiho.scaffold.mp.entity.CommonEntity;
 import com.weiho.scaffold.system.entity.enums.MenuTypeEnum;
 import io.swagger.annotations.ApiModel;
@@ -27,7 +28,7 @@ import javax.validation.constraints.NotBlank;
 @ToString
 @ApiModel(value = "Menu对象", description = "系统菜单表")
 @TableName("menu")
-public class Menu extends CommonEntity {
+public class Menu extends CommonEntity implements I18n {
 
     @ApiModelProperty("主键ID")
     @TableId(value = "id", type = IdType.AUTO)

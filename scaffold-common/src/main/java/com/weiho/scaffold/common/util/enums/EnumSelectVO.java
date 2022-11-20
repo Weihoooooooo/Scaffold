@@ -20,7 +20,7 @@ public class EnumSelectVO extends VueSelectVO {
     @ApiModelProperty("枚举类的name")
     private String name;
 
-    public EnumSelectVO(Integer value, String label, String name) {
+    public EnumSelectVO(Object value, String label, String name) {
         super(value, label);
         this.name = name;
     }

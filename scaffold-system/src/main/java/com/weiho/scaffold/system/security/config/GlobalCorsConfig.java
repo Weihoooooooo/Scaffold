@@ -4,6 +4,7 @@ import com.weiho.scaffold.common.config.system.ScaffoldSystemProperties;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.format.FormatterRegistry;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 import org.springframework.web.filter.CorsFilter;
@@ -54,6 +55,22 @@ public class GlobalCorsConfig implements WebMvcConfigurer {
         registry.addResourceHandler("doc.html").addResourceLocations("classpath:/META-INF/resources/");
         registry.addResourceHandler("/webjars/**").addResourceLocations("classpath:/META-INF/resources/webjars/");
         registry.addResourceHandler("/monitor/**").addResourceLocations("classpath:/META-INF/resources/monitor/");
+    }
+
+    /**
+     * 将枚举类转换器声明
+     */
+    @Bean
+    public EnumMvcConverterFactory enumMvcConverterFactory() {
+        return new EnumMvcConverterFactory();
+    }
+
+    /**
+     * 将枚举类转换器注入
+     */
+    @Override
+    public void addFormatters(FormatterRegistry registry) {
+        registry.addConverterFactory(enumMvcConverterFactory());
     }
 }
 

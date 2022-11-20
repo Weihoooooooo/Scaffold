@@ -2,7 +2,7 @@ package com.weiho.scaffold.tools.mail.enums;
 
 import com.baomidou.mybatisplus.annotation.EnumValue;
 import com.fasterxml.jackson.annotation.JsonValue;
-import com.weiho.scaffold.common.util.enums.EnumSelect;
+import com.weiho.scaffold.common.util.enums.Enum;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 
@@ -12,7 +12,7 @@ import lombok.Getter;
  */
 @Getter
 @AllArgsConstructor
-public enum EmailTypeEnum implements EnumSelect {
+public enum EmailTypeEnum implements Enum {
     NET_EASE_163(0, "@163.com"),
     NET_EASE_126(1, "@126.com"),
     NET_EASE_YEAH(2, "@yeah.net"),

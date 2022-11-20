@@ -17,7 +17,7 @@ import java.io.Serializable;
  */
 @Getter
 @Setter
-@ToString
+@ToString(callSuper = true)
 @ApiModel(value = "反馈VO")
 public class FeedbackVO extends Feedback implements Serializable {
 

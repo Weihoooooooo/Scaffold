@@ -52,12 +52,6 @@ public class Elevator extends CommonEntity {
     @NotBlank(message = "电梯独立编号不能为空！")
     private String identityId;
 
-    @ApiModelProperty("电梯类型")
-    @TableField("type")
-    @JsonIgnore
-    @JSONField(serialize = false)
-    private Long type;
-
     @ApiModelProperty("核载人数")
     @TableField("number_of_people")
     @Min(value = 1, message = "核载人数至少为1！")

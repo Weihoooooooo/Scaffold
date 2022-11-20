@@ -7,6 +7,7 @@ import com.weiho.scaffold.system.entity.vo.ElevatorMaintainVO;
 import com.weiho.scaffold.system.entity.vo.ElevatorVO;
 import org.springframework.data.domain.Pageable;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.List;
@@ -44,7 +45,7 @@ public interface ElevatorService extends CommonService<Elevator> {
      * @param all      导出的数据
      * @param response 响应参数
      */
-    void download(List<ElevatorVO> all, HttpServletResponse response) throws IOException;
+    void download(List<ElevatorVO> all, HttpServletResponse response, HttpServletRequest request) throws IOException;
 
     /**
      * 查找符合条件的电梯，分页

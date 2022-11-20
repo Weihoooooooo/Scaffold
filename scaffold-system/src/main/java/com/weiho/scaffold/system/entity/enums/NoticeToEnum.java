@@ -1,8 +1,14 @@
 package com.weiho.scaffold.system.entity.enums;
 
 import com.baomidou.mybatisplus.annotation.EnumValue;
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonValue;
-import com.weiho.scaffold.common.util.enums.EnumSelect;
+import com.weiho.scaffold.common.annotation.EnumConvertMethod;
+import com.weiho.scaffold.common.util.enums.Enum;
+import com.weiho.scaffold.common.util.enums.EnumUtils;
+import com.weiho.scaffold.i18n.I18nKey;
+import com.weiho.scaffold.i18n.I18nMessagesUtils;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 
@@ -12,14 +18,27 @@ import lombok.RequiredArgsConstructor;
  */
 @Getter
 @RequiredArgsConstructor
-public enum NoticeToEnum implements EnumSelect {
-    ALL_OWNER(0, "全体业主"),
-    ALL_USER(1, "全体员工"),
-    ALL(2, "全体人员");
+@JsonFormat(shape = JsonFormat.Shape.OBJECT)
+public enum NoticeToEnum implements Enum, I18nKey {
+    ALL_OWNER(0, "全体业主", "enums.all.owner"),
+    ALL_USER(1, "全体员工", "enums.all.user"),
+    ALL(2, "全体人员", "enums.all");
 
+    @JsonValue
     @EnumValue
     private final Integer key;
 
-    @JsonValue
     private final String display;
+
+    private final String i18nKey;
+
+    @EnumConvertMethod
+    @JsonCreator(mode = JsonCreator.Mode.DELEGATING)
+    public static NoticeToEnum convert(Integer key) {
+        return EnumUtils.convertEnum(NoticeToEnum.class, key);
+    }
+
+    public String getDisplay() {
+        return I18nMessagesUtils.get(i18nKey);
+    }
 }

@@ -6,6 +6,7 @@ import com.weiho.scaffold.common.config.system.ScaffoldSystemProperties;
 import com.weiho.scaffold.common.exception.BadRequestException;
 import com.weiho.scaffold.common.util.*;
 import com.weiho.scaffold.common.util.secure.IdSecureUtils;
+import com.weiho.scaffold.i18n.I18nMessagesUtils;
 import com.weiho.scaffold.mp.core.QueryHelper;
 import com.weiho.scaffold.mp.service.impl.CommonServiceImpl;
 import com.weiho.scaffold.redis.util.RedisUtils;
@@ -260,15 +261,15 @@ public class UserServiceImpl extends CommonServiceImpl<UserMapper, User> impleme
         List<Map<String, Object>> list = new ArrayList<>();
         for (UserVO userVO : all) {
             Map<String, Object> map = new LinkedHashMap<>();
-            map.put("用户名", userVO.getUsername());
-            map.put("头像路径", userVO.getAvatar().getPath());
-            map.put("头像大小", userVO.getAvatar().getSize());
-            map.put("性别", userVO.getSex().getDisplay());
-            map.put("邮箱", userVO.getEmail());
-            map.put("手机号", userVO.getPhone());
-            map.put("状态", userVO.isEnabled() ? "启用" : "禁用");
-            map.put("最后修改密码时间", userVO.getLastPassResetTime());
-            map.put("注册时间", userVO.getCreateTime());
+            map.put(I18nMessagesUtils.get("download.user.username"), userVO.getUsername());
+            map.put(I18nMessagesUtils.get("download.avatar.path"), userVO.getAvatar().getPath());
+            map.put(I18nMessagesUtils.get("download.avatar.size"), userVO.getAvatar().getSize());
+            map.put(I18nMessagesUtils.get("download.sex"), userVO.getSex().getDisplay());
+            map.put(I18nMessagesUtils.get("download.email"), userVO.getEmail());
+            map.put(I18nMessagesUtils.get("download.phone"), userVO.getPhone());
+            map.put(I18nMessagesUtils.get("download.user.state"), userVO.isEnabled() ? "启用" : "禁用");
+            map.put(I18nMessagesUtils.get("download.user.lastPass"), userVO.getLastPassResetTime());
+            map.put(I18nMessagesUtils.get("download.user.add.time"), userVO.getCreateTime());
             list.add(map);
         }
         FileUtils.downloadExcel(list, response);

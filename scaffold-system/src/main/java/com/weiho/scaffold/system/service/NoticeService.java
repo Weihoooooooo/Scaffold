@@ -1,6 +1,5 @@
 package com.weiho.scaffold.system.service;
 
-import com.weiho.scaffold.common.util.enums.EnumSelectVO;
 import com.weiho.scaffold.common.util.result.VueSelectVO;
 import com.weiho.scaffold.mp.service.CommonService;
 import com.weiho.scaffold.system.entity.Notice;
@@ -86,18 +85,4 @@ public interface NoticeService extends CommonService<Notice> {
      * @return /
      */
     boolean deleteNotice(Set<Long> ids);
-
-    /**
-     * 获取通知发送类型列表
-     *
-     * @return /
-     */
-    List<EnumSelectVO> getNoticeToTypeSelect();
-
-    /**
-     * 获取通知是否过期列表
-     *
-     * @return /
-     */
-    List<EnumSelectVO> getOverdueSelect();
 }

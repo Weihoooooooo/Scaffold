@@ -4,7 +4,7 @@ import cn.hutool.extra.mail.Mail;
 import cn.hutool.extra.mail.MailAccount;
 import com.weiho.scaffold.common.exception.BadRequestException;
 import com.weiho.scaffold.common.util.DesUtils;
-import com.weiho.scaffold.common.util.I18nMessagesUtils;
+import com.weiho.scaffold.i18n.I18nMessagesUtils;
 import com.weiho.scaffold.mp.service.impl.CommonServiceImpl;
 import com.weiho.scaffold.tools.mail.entity.EmailConfig;
 import com.weiho.scaffold.tools.mail.entity.convert.EmailConfigVOConvert;

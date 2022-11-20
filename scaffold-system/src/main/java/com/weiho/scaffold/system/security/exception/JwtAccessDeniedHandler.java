@@ -1,7 +1,7 @@
 package com.weiho.scaffold.system.security.exception;
 
 import com.weiho.scaffold.common.util.ExceptionResponseUtils;
-import com.weiho.scaffold.common.util.I18nMessagesUtils;
+import com.weiho.scaffold.i18n.I18nMessagesUtils;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.web.access.AccessDeniedHandler;
 import org.springframework.stereotype.Component;

@@ -1,8 +1,8 @@
 package com.weiho.scaffold.common.exception;
 
-import com.weiho.scaffold.common.util.I18nMessagesUtils;
 import com.weiho.scaffold.common.util.result.code.StatusCode;
 import com.weiho.scaffold.common.util.result.enums.ResultCodeEnum;
+import com.weiho.scaffold.i18n.I18nMessagesUtils;
 import lombok.Getter;
 
 /**

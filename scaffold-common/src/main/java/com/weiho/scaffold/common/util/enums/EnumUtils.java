@@ -1,6 +1,7 @@
 package com.weiho.scaffold.common.util.enums;
 
 import cn.hutool.core.util.EnumUtil;
+import com.weiho.scaffold.common.exception.BadRequestException;
 import lombok.experimental.UtilityClass;
 
 import java.util.ArrayList;
@@ -22,11 +23,29 @@ public class EnumUtils extends EnumUtil {
      * @param <T>   泛型
      * @return /
      */
-    public <T extends Enum<?> & EnumSelect> List<EnumSelectVO> getEnumSelect(Class<T> clazz) {
+    public <T extends java.lang.Enum<?> & Enum> List<EnumSelectVO> getEnumSelect(Class<T> clazz) {
         List<EnumSelectVO> selects = new ArrayList<>();
         for (T o : clazz.getEnumConstants()) {
             selects.add(new EnumSelectVO(o.getKey(), o.getDisplay(), o.name()));
         }
         return selects;
+    }
+
+    /**
+     * 根据传入的key寻找合适的枚举类对象返回(用于MVC对枚举类的自定义转化)
+     * 必须实现Enum接口
+     *
+     * @param clazz 枚举类
+     * @param key   枚举类的Key
+     * @param <T>   泛型
+     * @return 符合条件的枚举类
+     */
+    public <T extends java.lang.Enum<?> & Enum> T convertEnum(Class<T> clazz, Integer key) {
+        for (T o : clazz.getEnumConstants()) {
+            if (o.getKey().equals(key)) {
+                return o;
+            }
+        }
+        throw new BadRequestException("找不到该Key对应的枚举类");
     }
 }

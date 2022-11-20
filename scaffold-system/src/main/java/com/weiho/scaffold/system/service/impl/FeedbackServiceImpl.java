@@ -5,16 +5,13 @@ import com.weiho.scaffold.common.util.DateUtils;
 import com.weiho.scaffold.common.util.FileUtils;
 import com.weiho.scaffold.common.util.PageUtils;
 import com.weiho.scaffold.common.util.SecurityUtils;
-import com.weiho.scaffold.common.util.enums.EnumSelectVO;
-import com.weiho.scaffold.common.util.enums.EnumUtils;
 import com.weiho.scaffold.common.util.secure.IdSecureUtils;
+import com.weiho.scaffold.i18n.I18nMessagesUtils;
 import com.weiho.scaffold.mp.core.QueryHelper;
 import com.weiho.scaffold.mp.service.impl.CommonServiceImpl;
 import com.weiho.scaffold.system.entity.Feedback;
 import com.weiho.scaffold.system.entity.convert.FeedbackVOConvert;
 import com.weiho.scaffold.system.entity.criteria.FeedbackQueryCriteria;
-import com.weiho.scaffold.system.entity.enums.FeedbackResultEnum;
-import com.weiho.scaffold.system.entity.enums.FeedbackTypeEnum;
 import com.weiho.scaffold.system.entity.vo.FeedbackVO;
 import com.weiho.scaffold.system.mapper.FeedbackMapper;
 import com.weiho.scaffold.system.service.FeedbackService;
@@ -68,16 +65,6 @@ public class FeedbackServiceImpl extends CommonServiceImpl<FeedbackMapper, Feedb
     }
 
     @Override
-    public List<EnumSelectVO> getFeedbackResultSelect() {
-        return EnumUtils.getEnumSelect(FeedbackResultEnum.class);
-    }
-
-    @Override
-    public List<EnumSelectVO> getFeedbackTypeSelect() {
-        return EnumUtils.getEnumSelect(FeedbackTypeEnum.class);
-    }
-
-    @Override
     @Transactional(rollbackFor = Exception.class)
     public boolean answerFeedback(FeedbackVO resource) {
         IdSecureUtils.verifyIdNotNull(resource.getId());
@@ -103,16 +90,16 @@ public class FeedbackServiceImpl extends CommonServiceImpl<FeedbackMapper, Feedb
         List<Map<String, Object>> list = new ArrayList<>();
         for (FeedbackVO feedbackVO : all) {
             Map<String, Object> map = new LinkedHashMap<>();
-            map.put("业主姓名", feedbackVO.getOwnerName());
-            map.put("处理人", feedbackVO.getUsername());
-            map.put("反馈类型", feedbackVO.getType().getDisplay());
-            map.put("反馈标题", feedbackVO.getTitle());
-            map.put("反馈内容", feedbackVO.getContent());
-            map.put("反馈回复", feedbackVO.getAnswer());
-            map.put("回复时间", DateUtils.parseDateToStr(DateUtils.FormatEnum.YYYY_MM_DD_HH_MM_SS, feedbackVO.getAnswerTime()));
-            map.put("反馈结果", feedbackVO.getResult().getDisplay());
-            map.put("备注", feedbackVO.getRemarks());
-            map.put("反馈时间", DateUtils.parseDateToStr(DateUtils.FormatEnum.YYYY_MM_DD_HH_MM_SS, feedbackVO.getCreateTime()));
+            map.put(I18nMessagesUtils.get("download.feedback.ownername"), feedbackVO.getOwnerName());
+            map.put(I18nMessagesUtils.get("download.feedback.username"), feedbackVO.getUsername());
+            map.put(I18nMessagesUtils.get("download.feedback.type"), feedbackVO.getType().getDisplay());
+            map.put(I18nMessagesUtils.get("download.feedback.title"), feedbackVO.getTitle());
+            map.put(I18nMessagesUtils.get("download.feedback.content"), feedbackVO.getContent());
+            map.put(I18nMessagesUtils.get("download.feedback.answer"), feedbackVO.getAnswer());
+            map.put(I18nMessagesUtils.get("download.feedback.answer.time"), DateUtils.parseDateToStr(DateUtils.FormatEnum.YYYY_MM_DD_HH_MM_SS, feedbackVO.getAnswerTime()));
+            map.put(I18nMessagesUtils.get("download.feedback.answer.result"), feedbackVO.getResult().getDisplay());
+            map.put(I18nMessagesUtils.get("download.feedback.remarks"), feedbackVO.getRemarks());
+            map.put(I18nMessagesUtils.get("download.feedback.time"), DateUtils.parseDateToStr(DateUtils.FormatEnum.YYYY_MM_DD_HH_MM_SS, feedbackVO.getCreateTime()));
             list.add(map);
         }
         FileUtils.downloadExcel(list, response);

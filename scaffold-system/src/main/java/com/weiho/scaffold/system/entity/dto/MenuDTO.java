@@ -2,6 +2,7 @@ package com.weiho.scaffold.system.entity.dto;
 
 import com.alibaba.fastjson2.annotation.JSONField;
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.weiho.scaffold.i18n.I18n;
 import com.weiho.scaffold.system.entity.enums.MenuTypeEnum;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
@@ -17,7 +18,7 @@ import java.util.List;
  */
 @Data
 @ApiModel(value = "menu的DTO对象")
-public class MenuDTO implements Serializable {
+public class MenuDTO implements Serializable, I18n {
     @ApiModelProperty("主键ID")
     private Long id;
 

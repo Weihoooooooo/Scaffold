@@ -10,6 +10,8 @@ import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
 
+import java.io.Serializable;
+
 /**
  * @author Weiho
  * @since 2022/11/4
@@ -18,7 +20,7 @@ import lombok.ToString;
 @Setter
 @ToString(callSuper = true)
 @ApiModel("反馈查询条件")
-public class FeedbackQueryCriteria extends BaseQueryCriteria {
+public class FeedbackQueryCriteria extends BaseQueryCriteria implements Serializable {
 
     @Query(blurry = "title,content,remarks")
     @ApiModelProperty("模糊查询")

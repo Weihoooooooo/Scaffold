@@ -5,6 +5,7 @@ import com.weiho.scaffold.common.config.system.ScaffoldSystemProperties;
 import com.weiho.scaffold.common.exception.BadRequestException;
 import com.weiho.scaffold.common.util.*;
 import com.weiho.scaffold.common.util.result.Result;
+import com.weiho.scaffold.i18n.I18nMessagesUtils;
 import com.weiho.scaffold.logging.annotation.Logging;
 import com.weiho.scaffold.logging.enums.BusinessTypeEnum;
 import com.weiho.scaffold.mp.controller.CommonController;
@@ -165,6 +166,7 @@ public class UserController extends CommonController<UserService, User> {
     @PostMapping
     @PreAuthorize("@el.check('User:add')")
     public Result createUser(@Validated @RequestBody UserVO resources) {
+        System.err.println(resources.toString());
         roleService.checkLevel(resources.getRoles());
         return resultMessage(Operate.ADD, this.getBaseService().createUser(resources));
     }

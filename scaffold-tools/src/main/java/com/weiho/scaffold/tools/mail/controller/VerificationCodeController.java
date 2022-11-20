@@ -1,10 +1,10 @@
 package com.weiho.scaffold.tools.mail.controller;
 
 import com.weiho.scaffold.common.exception.BadRequestException;
-import com.weiho.scaffold.common.util.I18nMessagesUtils;
 import com.weiho.scaffold.common.util.VerifyUtils;
 import com.weiho.scaffold.common.util.enums.EnumSelectVO;
 import com.weiho.scaffold.common.util.result.Result;
+import com.weiho.scaffold.i18n.I18nMessagesUtils;
 import com.weiho.scaffold.logging.annotation.Logging;
 import com.weiho.scaffold.redis.limiter.annotation.RateLimiter;
 import com.weiho.scaffold.redis.limiter.enums.LimitType;
