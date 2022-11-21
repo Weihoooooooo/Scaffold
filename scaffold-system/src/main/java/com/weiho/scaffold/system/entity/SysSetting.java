@@ -32,24 +32,24 @@ public class SysSetting extends CommonEntity {
     private Long id;
 
     @ApiModelProperty("系统名称")
-    @TableField("sys_name")
-    private String sysName;
+    @TableField("name")
+    private String name;
 
     @ApiModelProperty("系统名称中文")
-    @TableField("sys_name_zh_cn")
-    private String sysNameZhCn;
+    @TableField("name_zh_cn")
+    private String nameZhCn;
 
     @ApiModelProperty("系统名称中国香港")
-    @TableField("sys_name_zh_hk")
-    private String sysNameZhHk;
+    @TableField("name_zh_hk")
+    private String nameZhHk;
 
     @ApiModelProperty("系统名称中国台湾")
-    @TableField("sys_name_zh_tw")
-    private String sysNameZhTw;
+    @TableField("name_zh_tw")
+    private String nameZhTw;
 
     @ApiModelProperty("系统名称英文")
-    @TableField("sys_name_en_us")
-    private String sysNameEnUs;
+    @TableField("name_en_us")
+    private String nameEnUs;
 
     @ApiModelProperty("系统logo")
     @TableField("sys_logo")

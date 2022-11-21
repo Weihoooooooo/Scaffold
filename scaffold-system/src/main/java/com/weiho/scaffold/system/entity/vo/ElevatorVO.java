@@ -27,4 +27,6 @@ public class ElevatorVO extends Elevator implements Serializable {
     @ApiModelProperty("电梯类型")
     private Set<ElevatorType> elevatorTypes;
 
+    @ApiModelProperty("电梯类型数组")
+    private Set<String> elevatorTypesString;
 }

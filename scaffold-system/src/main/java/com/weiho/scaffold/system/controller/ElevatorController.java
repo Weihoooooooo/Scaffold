@@ -39,8 +39,8 @@ public class ElevatorController extends CommonController<ElevatorService, Elevat
     @ApiOperation("查询电梯列表")
     @GetMapping
     @PreAuthorize("@el.check('Elevator:list')")
-    public Map<String, Object> getElevatorList(@Validated ElevatorQueryCriteria criteria, Pageable pageable) {
-        return this.getBaseService().getElevatorList(criteria, pageable);
+    public Map<String, Object> getElevatorList(@Validated ElevatorQueryCriteria criteria, HttpServletRequest request, Pageable pageable) {
+        return this.getBaseService().getElevatorList(criteria, request, pageable);
     }
 
     @Logging(title = "导出电梯信息")
@@ -48,7 +48,7 @@ public class ElevatorController extends CommonController<ElevatorService, Elevat
     @GetMapping("/download")
     @PreAuthorize("@el.check('Elevator:list')")
     public void download(HttpServletResponse response, HttpServletRequest request, @Validated ElevatorQueryCriteria criteria) throws IOException {
-        this.getBaseService().download(this.getBaseService().convertToVO(this.getBaseService().findAll(criteria)), response, request);
+        this.getBaseService().download(this.getBaseService().convertToVO(this.getBaseService().findAll(criteria), request), response, request);
     }
 
     @Logging(title = "添加电梯信息", businessType = BusinessTypeEnum.INSERT)

@@ -2,6 +2,7 @@ package com.weiho.scaffold.system.service.impl;
 
 import com.weiho.scaffold.common.util.AesUtils;
 import com.weiho.scaffold.common.util.secure.IdSecureUtils;
+import com.weiho.scaffold.i18n.I18nMessagesUtils;
 import com.weiho.scaffold.mp.service.impl.CommonServiceImpl;
 import com.weiho.scaffold.system.cache.service.CacheRefresh;
 import com.weiho.scaffold.system.entity.SysSetting;
@@ -47,24 +48,7 @@ public class SysSettingServiceImpl extends CommonServiceImpl<SysSettingMapper, S
         Map<String, Object> result = new HashMap<>();
         SysLogoTitleVO sysLogoTitleVO = sysLogoTitleVOConvert.toPojo(sysSetting);
         result.put("logo", sysLogoTitleVO.getSysLogo());
-        String language = request.getHeader("Accept-Language") == null ? "zh-CN" : request.getHeader("Accept-Language");
-        switch (language) {
-            case "zh-CN":
-                result.put("title", sysLogoTitleVO.getSysNameZhCn());
-                break;
-            case "zh-HK":
-                result.put("title", sysLogoTitleVO.getSysNameZhHk());
-                break;
-            case "zh-TW":
-                result.put("title", sysLogoTitleVO.getSysNameZhTw());
-                break;
-            case "en-US":
-                result.put("title", sysLogoTitleVO.getSysNameEnUs());
-                break;
-            default:
-                result.put("title", sysLogoTitleVO.getSysName());
-                break;
-        }
+        result.put("title", I18nMessagesUtils.getNameForI18n(request, sysLogoTitleVO));
         return result;
     }
 

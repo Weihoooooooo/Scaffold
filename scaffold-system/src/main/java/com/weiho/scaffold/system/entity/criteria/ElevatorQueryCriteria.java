@@ -23,7 +23,7 @@ import java.util.List;
 @ApiModel("电梯查询条件")
 public class ElevatorQueryCriteria extends BaseQueryCriteria {
 
-    @Query(blurry = "identityId,numberOfPeople,numberOfWeight,maintainPeople,maintainPeoplePhone")
+    @Query(blurry = "identityId,numberOfPeople,numberOfWeight,hoistwaySize,reservedSizeOfDoorOpening,maintainPeople,maintainPeoplePhone")
     @ApiModelProperty("模糊查询")
     private String blurry;
 

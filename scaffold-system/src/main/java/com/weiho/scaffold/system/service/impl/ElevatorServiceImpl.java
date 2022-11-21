@@ -59,11 +59,13 @@ public class ElevatorServiceImpl extends CommonServiceImpl<ElevatorMapper, Eleva
     }
 
     @Override
-    public List<ElevatorVO> convertToVO(List<Elevator> elevators) {
+    public List<ElevatorVO> convertToVO(List<Elevator> elevators, HttpServletRequest request) {
         List<ElevatorVO> elevatorVOS = elevatorVOConvert.toPojo(elevators);
         for (ElevatorVO elevatorVO : elevatorVOS) {
+            Set<ElevatorType> elevatorTypes = elevatorTypeService.findSetByElevatorId(elevatorVO.getId());
             elevatorVO.setBuildingNum(buildingService.getById(elevatorVO.getBuildingId()).getBuildingNum());
-            elevatorVO.setElevatorTypes(elevatorTypeService.findSetByElevatorId(elevatorVO.getId()));
+            elevatorVO.setElevatorTypes(elevatorTypes);
+            elevatorVO.setElevatorTypesString(elevatorTypes.stream().map(e -> I18nMessagesUtils.getNameForI18n(request, e)).collect(Collectors.toSet()));
         }
         return elevatorVOS;
     }
@@ -95,10 +97,10 @@ public class ElevatorServiceImpl extends CommonServiceImpl<ElevatorMapper, Eleva
     }
 
     @Override
-    public Map<String, Object> getElevatorList(ElevatorQueryCriteria criteria, Pageable pageable) {
+    public Map<String, Object> getElevatorList(ElevatorQueryCriteria criteria, HttpServletRequest request, Pageable pageable) {
         startPage(pageable);
         PageInfo<Elevator> pageInfo = new PageInfo<>(this.findAll(criteria));
-        return PageUtils.toPageContainer(this.convertToVO(pageInfo.getList()), pageInfo.getTotal());
+        return PageUtils.toPageContainer(this.convertToVO(pageInfo.getList(), request), pageInfo.getTotal());
     }
 
     @Override

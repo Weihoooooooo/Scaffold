@@ -8,7 +8,11 @@
         <result column="create_time" property="createTime"/>
         <result column="update_time" property="updateTime"/>
         <result column="is_del" property="isDel"/>
-        <result column="type" property="type"/>
+        <result column="name" property="name"/>
+        <result column="name_zh_cn" property="nameZhCn"/>
+        <result column="name_zh-hk" property="nameZhHk"/>
+        <result column="name_zh_tw" property="nameZhTw"/>
+        <result column="name_en_us" property="nameEnUs"/>
     </resultMap>
 
     <!-- 通用查询结果列 -->
@@ -16,7 +20,7 @@
         et.create_time,
         et.update_time,
         et.is_del,
-        et.id, et.type
+        et.id, et.name,et.name_zh_cn,et.name_zh_hk,et.name_zh_tw,et.name_en_us
     </sql>
 
     <select id="findSetByElevatorId" resultType="com.weiho.scaffold.system.entity.ElevatorType">
@@ -26,6 +30,7 @@
         LEFT OUTER JOIN elevators_types ets ON et.id = ets.type_id
         LEFT OUTER JOIN elevator e ON e.id = ets.elevator_id
         WHERE et.is_del = 0
+        AND e.is_del = 0
         AND e.id = #{elevatorId}
     </select>
 

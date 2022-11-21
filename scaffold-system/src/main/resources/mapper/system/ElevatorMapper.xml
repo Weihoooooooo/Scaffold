@@ -12,6 +12,11 @@
         <result column="identity_id" property="identityId"/>
         <result column="number_of_people" property="numberOfPeople"/>
         <result column="number_of_weight" property="numberOfWeight"/>
+        <result column="is_computer_room" property="isComputerRoom"/>
+        <result column="hoistway_size" property="hoistwaySize"/>
+        <result column="depth_of_foundation_pit" property="depthOfFoundationPit"/>
+        <result column="reserved_size_of_door_opening" property="reservedSizeOfDoorOpening"/>
+        <result column="lifting_height" property="liftingHeight"/>
         <result column="last_maintain_time" property="lastMaintainTime"/>
         <result column="next_maintain_time" property="nextMaintainTime"/>
         <result column="day" property="day"/>
@@ -25,7 +30,9 @@
         create_time,
         update_time,
         is_del,
-        id, building_id, identity_id, number_of_people, number_of_weight, last_maintain_time, next_maintain_time, day, maintain_people, maintain_people_phone, enabled
+        id, building_id, identity_id, number_of_people, number_of_weight, is_computer_room,
+            hoistway_size, depth_of_foundation_pit, reserved_size_of_door_opening, lifting_height,
+            last_maintain_time, next_maintain_time, day, maintain_people, maintain_people_phone, enabled
     </sql>
 
 </mapper>

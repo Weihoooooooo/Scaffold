@@ -1,5 +1,6 @@
 package com.weiho.scaffold.system.entity.vo;
 
+import com.weiho.scaffold.i18n.I18n;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Getter;
@@ -14,21 +15,21 @@ import lombok.ToString;
 @Setter
 @ToString
 @ApiModel(value = "系统Logo和标题VO")
-public class SysLogoTitleVO {
+public class SysLogoTitleVO implements I18n {
     @ApiModelProperty("系统名称")
-    private String sysName;
+    private String name;
 
     @ApiModelProperty("系统名称中文")
-    private String sysNameZhCn;
+    private String nameZhCn;
 
     @ApiModelProperty("系统名称中国香港")
-    private String sysNameZhHk;
+    private String nameZhHk;
 
     @ApiModelProperty("系统名称中国台湾")
-    private String sysNameZhTw;
+    private String nameZhTw;
 
     @ApiModelProperty("系统名称英文")
-    private String sysNameEnUs;
+    private String nameEnUs;
 
     @ApiModelProperty("系统logo")
     private String sysLogo;

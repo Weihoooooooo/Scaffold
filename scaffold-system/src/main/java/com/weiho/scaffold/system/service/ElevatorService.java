@@ -37,7 +37,7 @@ public interface ElevatorService extends CommonService<Elevator> {
      * @param elevators 查询条件
      * @return 电梯列表, 带楼宇栋号
      */
-    List<ElevatorVO> convertToVO(List<Elevator> elevators);
+    List<ElevatorVO> convertToVO(List<Elevator> elevators, HttpServletRequest request);
 
     /**
      * 导出电梯数据
@@ -54,7 +54,7 @@ public interface ElevatorService extends CommonService<Elevator> {
      * @param pageable 分页参数
      * @return 电梯列表, 带分页
      */
-    Map<String, Object> getElevatorList(ElevatorQueryCriteria criteria, Pageable pageable);
+    Map<String, Object> getElevatorList(ElevatorQueryCriteria criteria, HttpServletRequest request, Pageable pageable);
 
     /**
      * 修改电梯信息
