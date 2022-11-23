@@ -1,5 +1,6 @@
 package com.weiho.scaffold.system.entity.criteria;
 
+import com.weiho.scaffold.common.annotation.IdDecrypt;
 import com.weiho.scaffold.mp.annotation.Query;
 import com.weiho.scaffold.mp.enums.QueryTypeEnum;
 import com.weiho.scaffold.system.entity.criteria.base.BaseQueryCriteria;
@@ -28,6 +29,7 @@ public class ElevatorQueryCriteria extends BaseQueryCriteria {
     private String blurry;
 
     @Query
+    @IdDecrypt
     @ApiModelProperty("建筑栋号")
     private Long buildingId;
 

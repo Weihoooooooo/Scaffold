@@ -24,20 +24,15 @@ public class CollUtils extends CollUtil {
      */
     // 判断两个Set中的元素是否一致
     public <T> boolean isCollectionEqual(Collection<T> set1, Collection<T> set2) {
-
         if (isEmpty(set1) && isEmpty(set2)) {
             return true;
         }
-
         if (isEmpty(set1) || isEmpty(set2) || set1.size() != set2.size()) {
             return false;
         }
-
         Iterator<T> ite1 = set1.iterator();
         Iterator<T> ite2 = set2.iterator();
-
         boolean isFullEqual = true;
-
         while (ite2.hasNext()) {
             if (!set1.contains(ite2.next())) {
                 isFullEqual = false;

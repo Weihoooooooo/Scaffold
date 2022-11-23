@@ -2,8 +2,8 @@ package com.weiho.scaffold.common.annotation;
 
 import com.fasterxml.jackson.annotation.JacksonAnnotationsInside;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
-import com.weiho.scaffold.common.sensitive.enums.SensitiveStrategy;
-import com.weiho.scaffold.common.sensitive.json.SensitiveJsonSerializer;
+import com.weiho.scaffold.common.sensitive.DesensitizeSerializer;
+import com.weiho.scaffold.common.sensitive.enums.DesensitizeStrategy;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
@@ -19,10 +19,10 @@ import java.lang.annotation.Target;
 @Retention(RetentionPolicy.RUNTIME)
 @Target(ElementType.FIELD)
 @JacksonAnnotationsInside
-@JsonSerialize(using = SensitiveJsonSerializer.class)
+@JsonSerialize(using = DesensitizeSerializer.class)
 public @interface Desensitize {
     /**
      * 脱敏策略(姓名,身份证,电话号码)
      */
-    SensitiveStrategy value();
+    DesensitizeStrategy value();
 }

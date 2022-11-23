@@ -1,10 +1,9 @@
 package com.weiho.scaffold.common.util;
 
 import cn.hutool.http.HttpUtil;
+import cn.hutool.http.useragent.UserAgentUtil;
 import cn.hutool.json.JSONObject;
 import cn.hutool.json.JSONUtil;
-import eu.bitwalker.useragentutils.Browser;
-import eu.bitwalker.useragentutils.UserAgent;
 import lombok.experimental.UtilityClass;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.web.context.request.RequestContextHolder;
@@ -133,9 +132,7 @@ public class IpUtils {
      * @return String
      */
     public String getBrowser(HttpServletRequest request) {
-        UserAgent userAgent = UserAgent.parseUserAgentString(request.getHeader("User-Agent"));
-        Browser browser = userAgent.getBrowser();
-        return browser.getName();
+        return UserAgentUtil.parse(request.getHeader("User-Agent")).getBrowser().getName();
     }
 
     /**

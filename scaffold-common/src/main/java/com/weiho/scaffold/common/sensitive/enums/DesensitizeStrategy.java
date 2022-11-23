@@ -12,7 +12,7 @@ import java.util.function.Function;
  * @since 2022/8/24
  */
 @RequiredArgsConstructor
-public enum SensitiveStrategy {
+public enum DesensitizeStrategy {
     /**
      * 用户名
      */

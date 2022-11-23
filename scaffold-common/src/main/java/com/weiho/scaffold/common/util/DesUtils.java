@@ -11,8 +11,6 @@ import java.nio.charset.StandardCharsets;
 
 /**
  * DES加解密工具类
- *
- * @author <a href="https://gitee.com/guchengwuyue/yshopmall">参考链接</a>
  */
 @UtilityClass
 public class DesUtils {

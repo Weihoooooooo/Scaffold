@@ -14,8 +14,6 @@ import java.util.Date;
 /**
  * 时间工具类
  * UtilityClass注解：为该类中的每个方法添加关键字static,添加一个私有构造方法,使该类不能被实例化
- *
- * @author <a href="https://gitee.com/guchengwuyue/yshopmall">参考链接</a>
  */
 @UtilityClass
 public class DateUtils extends DateUtil {
@@ -65,16 +63,7 @@ public class DateUtils extends DateUtil {
      * @return Date
      */
     public Date getNowDate() {
-        return new Date();
-    }
-
-    /**
-     * 返回当前时间的 [yyyy-MM-dd HH:mm:ss] 时间格式
-     *
-     * @return String
-     */
-    public String getNowDateToStr() {
-        return parseDateToStr(FormatEnum.YYYY_MM_DD_HH_MM_SS, new Date());
+        return date();
     }
 
     /**
@@ -84,36 +73,7 @@ public class DateUtils extends DateUtil {
      * @return String
      */
     public String getNowDateFormat(FormatEnum formatEnum) {
-        return parseDateToStr(formatEnum, new Date());
-    }
-
-    /**
-     * 返回当前时间 [Timestamp 类型]
-     *
-     * @return Timestamp
-     */
-    public Timestamp getNowTimestamp() {
-        //获取系统当前时间
-        return new Timestamp(System.currentTimeMillis());
-    }
-
-    /**
-     * 返回当前时间的 [yyyy-MM-dd HH:mm:ss] 时间格式
-     *
-     * @return String
-     */
-    public String getNowTimestampToStr() {
-        return parseTimestampToStr(FormatEnum.YYYY_MM_DD_HH_MM_SS, new Timestamp(System.currentTimeMillis()));
-    }
-
-    /**
-     * 返回当前时间的 [yyyy-MM-dd HH:mm:ss] 时间格式
-     *
-     * @param formatEnum 枚举类中指定格式
-     * @return String
-     */
-    public String getNowTimestampFormat(FormatEnum formatEnum) {
-        return parseTimestampToStr(formatEnum, new Timestamp(System.currentTimeMillis()));
+        return parseDateToStr(formatEnum, getNowDate());
     }
 
     /**
@@ -124,34 +84,7 @@ public class DateUtils extends DateUtil {
      * @return String
      */
     public String parseDateToStr(FormatEnum format, Date date) {
-        if (date == null) {
-            return null;
-        }
-        return new SimpleDateFormat(format.getFormat()).format(date);
-    }
-
-    /**
-     * 转换指定的时间[Timestamp]到指定的格式
-     *
-     * @param format    格式
-     * @param timestamp 时间
-     * @return String
-     */
-    public String parseTimestampToStr(FormatEnum format, Timestamp timestamp) {
-        //获取系统当前时间
-        Timestamp time = new Timestamp(timestamp.getTime());
-        SimpleDateFormat df = new SimpleDateFormat(format.getFormat());
-        return df.format(time);
-    }
-
-    /**
-     * Date转Timestamp
-     *
-     * @param date 时间的Date类型
-     * @return Timestamp
-     */
-    public Timestamp parseDateToTimestamp(Date date) {
-        return new Timestamp(date.getTime());
+        return format(date, new SimpleDateFormat(format.getFormat()));
     }
 
     /**
@@ -205,14 +138,17 @@ public class DateUtils extends DateUtil {
      * @return String
      */
     public String getWeekDay() {
-        String[] weekDays = {"Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"};
-        Calendar cal = Calendar.getInstance();
-        cal.setTime(new Date());
-        int w = cal.get(Calendar.DAY_OF_WEEK) - 1;
-        if (w < 0) {
-            w = 0;
-        }
-        return weekDays[w];
+        return thisDayOfWeekEnum().name();
+    }
+
+    /**
+     * 获取当前日期是星期几
+     * 指定前缀(星期XXX，周XXX)
+     *
+     * @return String
+     */
+    public String getWeekDay(String prefix) {
+        return thisDayOfWeekEnum().toChinese(prefix);
     }
 
     /**

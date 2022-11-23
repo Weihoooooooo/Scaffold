@@ -75,7 +75,7 @@ public class FileUtils extends cn.hutool.core.io.FileUtil {
      * @return String
      */
     public String getExtensionName(String filename) {
-        if ((filename != null) && (filename.length() > 0)) {
+        if (StringUtils.isNotBlank(filename)) {
             int dot = filename.lastIndexOf('.');
             if ((dot > -1) && (dot < (filename.length() - 1))) {
                 return filename.substring(dot + 1);
@@ -115,7 +115,7 @@ public class FileUtils extends cn.hutool.core.io.FileUtil {
      * @return String
      */
     public String getFileNameNoEx(String filename) {
-        if ((filename != null) && (filename.length() > 0)) {
+        if (StringUtils.isNotBlank(filename)) {
             int dot = filename.lastIndexOf('.');
             if ((dot > -1) && (dot < (filename.length()))) {
                 return filename.substring(0, dot);
@@ -156,7 +156,7 @@ public class FileUtils extends cn.hutool.core.io.FileUtil {
      */
     public File upload(MultipartFile multipartFile, String filePath) {
         String suffix = getExtensionName(multipartFile.getOriginalFilename());
-        StringBuffer nowStr = fileRename();
+        StringBuilder nowStr = fileRename();
         try {
             String fileName = nowStr + "." + suffix;
             String path = filePath + fileName;
@@ -180,11 +180,11 @@ public class FileUtils extends cn.hutool.core.io.FileUtil {
      *
      * @return 新的文件名
      */
-    public StringBuffer fileRename() {
+    public StringBuilder fileRename() {
         String time = DateUtils.getNowDateFormat(DateUtils.FormatEnum.YYYYMMDD);
-        StringBuffer buf = new StringBuffer(time);
-        buf.append("_").append(MD5Utils.getMd5(IdUtil.simpleUUID()));
-        return buf;
+        StringBuilder sb = StringUtils.builder(time);
+        sb.append("_").append(MD5Utils.getMd5(IdUtil.simpleUUID()));
+        return sb;
     }
 
     /**

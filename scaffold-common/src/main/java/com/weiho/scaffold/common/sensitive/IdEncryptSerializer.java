@@ -1,4 +1,4 @@
-package com.weiho.scaffold.common.sensitive.id;
+package com.weiho.scaffold.common.sensitive;
 
 import com.fasterxml.jackson.core.JsonGenerator;
 import com.fasterxml.jackson.databind.BeanProperty;

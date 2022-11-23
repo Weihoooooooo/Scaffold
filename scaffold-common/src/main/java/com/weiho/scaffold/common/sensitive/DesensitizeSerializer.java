@@ -1,4 +1,4 @@
-package com.weiho.scaffold.common.sensitive.json;
+package com.weiho.scaffold.common.sensitive;
 
 import com.fasterxml.jackson.core.JsonGenerator;
 import com.fasterxml.jackson.databind.BeanProperty;
@@ -7,7 +7,7 @@ import com.fasterxml.jackson.databind.JsonSerializer;
 import com.fasterxml.jackson.databind.SerializerProvider;
 import com.fasterxml.jackson.databind.ser.ContextualSerializer;
 import com.weiho.scaffold.common.annotation.Desensitize;
-import com.weiho.scaffold.common.sensitive.enums.SensitiveStrategy;
+import com.weiho.scaffold.common.sensitive.enums.DesensitizeStrategy;
 
 import java.io.IOException;
 import java.util.Objects;
@@ -18,8 +18,8 @@ import java.util.Objects;
  * @author Weiho
  * @since 2022/8/24
  */
-public class SensitiveJsonSerializer extends JsonSerializer<String> implements ContextualSerializer {
-    private SensitiveStrategy strategy;
+public class DesensitizeSerializer extends JsonSerializer<String> implements ContextualSerializer {
+    private DesensitizeStrategy strategy;
 
     @Override
     public void serialize(String value, JsonGenerator gen, SerializerProvider serializers) throws IOException {

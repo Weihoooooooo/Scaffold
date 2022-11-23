@@ -22,13 +22,6 @@
     </properties>
 
     <dependencies>
-        <!-- 用于获取用户登录的浏览器信息 -->
-        <dependency>
-            <groupId>eu.bitwalker</groupId>
-            <artifactId>UserAgentUtils</artifactId>
-            <version>${bitwalker.version}</version>
-        </dependency>
-
         <!-- knife4j UI -->
         <dependency>
             <groupId>com.github.xiaoymin</groupId>

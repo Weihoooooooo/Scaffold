@@ -1,11 +1,10 @@
-package com.weiho.scaffold.system.security.config;
+package com.weiho.scaffold.common.sensitive.convert;
 
 import cn.hutool.core.lang.Assert;
 import com.weiho.scaffold.common.annotation.EnumConvertMethod;
 import com.weiho.scaffold.common.util.CollUtils;
 import lombok.AllArgsConstructor;
 import org.apache.commons.lang3.reflect.MethodUtils;
-import org.jetbrains.annotations.Nullable;
 import org.springframework.core.convert.converter.Converter;
 import org.springframework.core.convert.converter.ConverterFactory;
 
@@ -23,7 +22,7 @@ import java.util.concurrent.ConcurrentMap;
  * @since 2022/11/20
  */
 @SuppressWarnings("all")
-public class EnumMvcConverterFactory implements ConverterFactory<String, Enum<?>> {
+public class EnumMvcConverter implements ConverterFactory<String, Enum<?>> {
     private final ConcurrentMap<Class<? extends Enum<?>>, EnumMvcConverterHolder> holderMapper = new ConcurrentHashMap<>();
 
     @Override
@@ -34,8 +33,7 @@ public class EnumMvcConverterFactory implements ConverterFactory<String, Enum<?>
 
     @AllArgsConstructor
     static class EnumMvcConverterHolder {
-        @Nullable
-        final EnumMvcConverter<?> converter;
+        final EnumMvcConvert<?> converter;
 
         static EnumMvcConverterHolder createHolder(Class<?> targetType) {
             List<Method> methodList = MethodUtils.getMethodsListWithAnnotation(targetType, EnumConvertMethod.class, false, true);
@@ -45,7 +43,7 @@ public class EnumMvcConverterFactory implements ConverterFactory<String, Enum<?>
             Assert.isTrue(methodList.size() == 1, "@EnumConvertMethod 只能标记在一个工厂方法(静态方法)上");
             Method method = methodList.get(0);
             Assert.isTrue(Modifier.isStatic(method.getModifiers()), "@EnumConvertMethod 只能标记在工厂方法(静态方法)上");
-            return new EnumMvcConverterHolder(new EnumMvcConverter<>(method));
+            return new EnumMvcConverterHolder(new EnumMvcConvert<>(method));
         }
 
     }
@@ -55,11 +53,11 @@ public class EnumMvcConverterFactory implements ConverterFactory<String, Enum<?>
      *
      * @param <T>
      */
-    static class EnumMvcConverter<T extends Enum<T>> implements Converter<String, T> {
+    static class EnumMvcConvert<T extends Enum<T>> implements Converter<String, T> {
 
         private final Method method;
 
-        public EnumMvcConverter(Method method) {
+        public EnumMvcConvert(Method method) {
             this.method = method;
             this.method.setAccessible(true);
         }

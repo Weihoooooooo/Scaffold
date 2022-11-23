@@ -6,7 +6,6 @@ import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
 import com.fasterxml.jackson.annotation.JsonFormat;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.weiho.scaffold.common.annotation.IdDecrypt;
 import com.weiho.scaffold.common.annotation.IdEncrypt;
 import com.weiho.scaffold.mp.entity.CommonEntity;
@@ -41,10 +40,10 @@ public class Elevator extends CommonEntity {
     @TableId(value = "id", type = IdType.AUTO)
     private Long id;
 
+    @IdEncrypt
+    @IdDecrypt
     @ApiModelProperty("所属楼宇")
     @TableField(value = "building_id")
-    @JsonIgnore
-    @JSONField(serialize = false)
     private Long buildingId;
 
     @ApiModelProperty("电梯独立编号")
@@ -73,7 +72,7 @@ public class Elevator extends CommonEntity {
 
     @ApiModelProperty("基坑深度(m)")
     @TableField("depth_of_foundation_pit")
-    @DecimalMin(value = "0.1", message = "基坑深度至少0.1!")
+    @DecimalMin(value = "0.1", message = "基坑深度至少0.01!")
     @Digits(message = "该项必须为数字！", integer = 8, fraction = 2)
     private Double depthOfFoundationPit;
 
@@ -83,7 +82,7 @@ public class Elevator extends CommonEntity {
 
     @ApiModelProperty("提升高度(m)")
     @TableField("lifting_height")
-    @DecimalMin(value = "0.1", message = "基坑深度至少0.1!")
+    @DecimalMin(value = "0.1", message = "基坑深度至少0.01!")
     @Digits(message = "该项必须为数字！", integer = 8, fraction = 2)
     private Double liftingHeight;
 

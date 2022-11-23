@@ -112,7 +112,7 @@ public class BuildingServiceImpl extends CommonServiceImpl<BuildingMapper, Build
         queryWrapper.select("id, building_num");
         List<Building> buildings = this.getBaseMapper().selectList(queryWrapper);
         for (Building building : buildings) {
-            list.add(new VueSelectVO(building.getId(), building.getBuildingNum()));
+            list.add(new VueSelectVO(IdSecureUtils.des().encrypt(building.getId()), building.getBuildingNum()));
         }
         return list;
     }

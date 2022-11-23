@@ -1,6 +1,8 @@
 package com.weiho.scaffold.system.security.config;
 
 import com.weiho.scaffold.common.config.system.ScaffoldSystemProperties;
+import com.weiho.scaffold.common.sensitive.convert.EnumMvcConverter;
+import com.weiho.scaffold.common.sensitive.convert.IdDecryptConverter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -58,11 +60,19 @@ public class GlobalCorsConfig implements WebMvcConfigurer {
     }
 
     /**
-     * 将枚举类转换器声明
+     * 枚举类转换器完成 key -> Enum 的转换
      */
     @Bean
-    public EnumMvcConverterFactory enumMvcConverterFactory() {
-        return new EnumMvcConverterFactory();
+    public EnumMvcConverter enumMvcConverterFactory() {
+        return new EnumMvcConverter();
+    }
+
+    /**
+     * 主键解密转换器 当加入 @IdDecrypt 的字段将会被自动解密
+     */
+    @Bean
+    public IdDecryptConverter idDecryptConverter() {
+        return new IdDecryptConverter();
     }
 
     /**
@@ -71,6 +81,7 @@ public class GlobalCorsConfig implements WebMvcConfigurer {
     @Override
     public void addFormatters(FormatterRegistry registry) {
         registry.addConverterFactory(enumMvcConverterFactory());
+        registry.addConverter(idDecryptConverter());
     }
 }
 

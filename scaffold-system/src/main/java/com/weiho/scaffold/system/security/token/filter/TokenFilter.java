@@ -73,7 +73,7 @@ public class TokenFilter extends GenericFilterBean {
 
         //根据token去Spring Security进行授权
         //从token中获取用户名
-        String username = StringUtils.isNoneBlank(authToken) ? tokenUtils.getUsernameFromToken(authToken) : null;
+        String username = StringUtils.isNotBlank(authToken) ? tokenUtils.getUsernameFromToken(authToken) : null;
         if (onlineUser != null && username != null //Redis中有在线用户信息并且用户名不为空
                 //Spring Security中还未进行授权
                 && SecurityContextHolder.getContext().getAuthentication() == null

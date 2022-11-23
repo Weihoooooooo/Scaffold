@@ -2,8 +2,8 @@ package com.weiho.scaffold.common.annotation;
 
 import com.fasterxml.jackson.annotation.JacksonAnnotationsInside;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import com.weiho.scaffold.common.sensitive.IdEncryptSerializer;
 import com.weiho.scaffold.common.sensitive.enums.IdEncryptStrategy;
-import com.weiho.scaffold.common.sensitive.id.IdEncryptSerializer;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
