@@ -1,8 +1,8 @@
 package com.weiho.scaffold.mp.core;
 
-import cn.hutool.core.collection.CollUtil;
 import cn.hutool.core.util.ObjectUtil;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.weiho.scaffold.common.util.CollUtils;
 import com.weiho.scaffold.common.util.StringUtils;
 import com.weiho.scaffold.mp.annotation.Query;
 import lombok.extern.slf4j.Slf4j;
@@ -88,7 +88,7 @@ public class QueryHelper {
                             queryWrapper.likeRight(finalAttributeName, val);
                             break;
                         case IN:
-                            if (CollUtil.isNotEmpty((Collection<Long>) val)) {
+                            if (CollUtils.isNotEmpty((Collection<Long>) val)) {
                                 queryWrapper.in(finalAttributeName, (Collection<Long>) val);
                             }
                             break;
@@ -131,7 +131,7 @@ public class QueryHelper {
      * @return 例如：[java.lang.String com.r6.util.Test.str1, java.lang.String com.r6.util.Test.str2]
      */
     private static List<Field> getAllFields(Class clazz, List<Field> fields) {
-        if (clazz != null) {
+        if (ObjectUtil.isNotNull(clazz)) {
             fields.addAll(Arrays.asList(clazz.getDeclaredFields()));
             getAllFields(clazz.getSuperclass(), fields);
         }

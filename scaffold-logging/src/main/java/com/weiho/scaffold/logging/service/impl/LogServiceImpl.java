@@ -25,6 +25,7 @@ import org.aspectj.lang.JoinPoint;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.util.CastUtils;
 import org.springframework.http.HttpMethod;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
@@ -76,6 +77,7 @@ public class LogServiceImpl extends CommonServiceImpl<LogMapper, Log> implements
     }
 
     @Override
+    @Async
     public void saveLogInfo(final JoinPoint joinPoint, HttpServletRequest request, Logging logging,
                             Log logInfo, final Exception e, Object jsonResult) {
         log.info("Log -> 开始收集操作日志信息");
@@ -222,7 +224,7 @@ public class LogServiceImpl extends CommonServiceImpl<LogMapper, Log> implements
      * @return 参数的字符串拼接
      */
     private String argsArrayToString(Object[] paramsArray) {
-        StringBuilder params = new StringBuilder();
+        StringBuilder params = StringUtils.builder();
         if (paramsArray != null && paramsArray.length > 0) {
             for (Object o : paramsArray) {
                 if (o != null && !isFilterObject(o)) {

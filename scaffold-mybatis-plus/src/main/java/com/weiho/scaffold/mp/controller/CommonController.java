@@ -2,6 +2,7 @@ package com.weiho.scaffold.mp.controller;
 
 import com.weiho.scaffold.common.exception.BadRequestException;
 import com.weiho.scaffold.common.util.CollUtils;
+import com.weiho.scaffold.common.util.MapUtils;
 import com.weiho.scaffold.common.util.StringUtils;
 import com.weiho.scaffold.common.util.result.Result;
 import com.weiho.scaffold.common.util.result.enums.ResultCodeEnum;
@@ -97,7 +98,7 @@ public abstract class CommonController<S extends CommonService<E>, E> {
      * @return 处理后的数组
      */
     protected static void filterMapNull(Map<?, ?> ids, String errorMessage) {
-        if (CollUtils.isEmpty(ids)) {
+        if (MapUtils.isEmpty(ids)) {
             throw new BadRequestException(errorMessage);
         }
     }

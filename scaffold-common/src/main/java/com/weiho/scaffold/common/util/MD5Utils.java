@@ -27,7 +27,7 @@ public class MD5Utils {
             //获得MD5字节数组,16*8=128位
             byte[] md5Byte = md.digest(messageByte);
             //转换为16进制字符串
-            StringBuilder hexStr = new StringBuilder(md5Byte.length);
+            StringBuilder hexStr = StringUtils.builder(md5Byte.length);
             int num;
             for (byte aByte : md5Byte) {
                 num = aByte;

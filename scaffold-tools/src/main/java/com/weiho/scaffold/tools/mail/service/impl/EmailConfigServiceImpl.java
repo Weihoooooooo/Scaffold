@@ -1,5 +1,6 @@
 package com.weiho.scaffold.tools.mail.service.impl;
 
+import cn.hutool.core.util.ObjectUtil;
 import cn.hutool.extra.mail.Mail;
 import cn.hutool.extra.mail.MailAccount;
 import com.weiho.scaffold.common.exception.BadRequestException;
@@ -62,7 +63,7 @@ public class EmailConfigServiceImpl extends CommonServiceImpl<EmailConfigMapper,
     @Override
     @Transactional(rollbackFor = Exception.class)
     public void send(EmailVO emailVO, EmailConfigVO config) {
-        if (config == null) {
+        if (ObjectUtil.isNull(config)) {
             throw new BadRequestException(I18nMessagesUtils.get("mail.error.tip"));
         }
         // 构建邮件体

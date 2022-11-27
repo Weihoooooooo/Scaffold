@@ -1,5 +1,6 @@
 package com.weiho.scaffold.system.security.token.filter;
 
+import cn.hutool.core.util.ObjectUtil;
 import cn.hutool.extra.spring.SpringUtil;
 import com.weiho.scaffold.common.config.system.ScaffoldSystemProperties;
 import com.weiho.scaffold.common.util.StringUtils;
@@ -60,7 +61,7 @@ public class TokenFilter extends GenericFilterBean {
 
             //获取请求头中的token
             authToken = tokenUtils.getTokenFromRequest(httpServletRequest);
-            if (authToken == null) {
+            if (StringUtils.isBlank(authToken)) {
                 //没有token则进入Spring Security的过滤链中抛出异常
                 filterChain.doFilter(httpServletRequest, servletResponse);
                 return;
@@ -74,9 +75,9 @@ public class TokenFilter extends GenericFilterBean {
         //根据token去Spring Security进行授权
         //从token中获取用户名
         String username = StringUtils.isNotBlank(authToken) ? tokenUtils.getUsernameFromToken(authToken) : null;
-        if (onlineUser != null && username != null //Redis中有在线用户信息并且用户名不为空
+        if (ObjectUtil.isNotNull(onlineUser) && StringUtils.isNotBlank(username) //Redis中有在线用户信息并且用户名不为空
                 //Spring Security中还未进行授权
-                && SecurityContextHolder.getContext().getAuthentication() == null
+                && ObjectUtil.isNull(SecurityContextHolder.getContext().getAuthentication())
                 // token是否与已经登录的一致(缓存中的token未过期)
                 && tokenUtils.validateToken(authToken)) {
             //根据token获取Spring Security用户信息

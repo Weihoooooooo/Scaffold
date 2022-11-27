@@ -62,7 +62,7 @@ public class VerifyUtils extends Validator {
      * @return boolean
      */
     public boolean isMatch(Pattern pattern, String str) {
-        return StringUtils.isNoneEmpty(str) && pattern.matcher(str).matches();
+        return StringUtils.isNotEmpty(str) && pattern.matcher(str).matches();
     }
 
 }

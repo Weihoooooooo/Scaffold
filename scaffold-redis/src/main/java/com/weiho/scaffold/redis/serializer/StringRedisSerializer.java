@@ -1,6 +1,7 @@
 package com.weiho.scaffold.redis.serializer;
 
 import cn.hutool.core.lang.Assert;
+import cn.hutool.core.util.ObjectUtil;
 import com.alibaba.fastjson2.JSON;
 import com.weiho.scaffold.common.util.StringUtils;
 import org.springframework.data.redis.serializer.RedisSerializer;
@@ -28,7 +29,7 @@ public class StringRedisSerializer implements RedisSerializer<Object> {
 
     @Override
     public String deserialize(byte[] bytes) {
-        return (bytes == null ? null : new String(bytes, charset));
+        return (ObjectUtil.isNull(bytes) ? null : new String(bytes, charset));
     }
 
     @Override

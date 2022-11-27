@@ -1,5 +1,6 @@
 package com.weiho.scaffold.system.security.service.impl;
 
+import cn.hutool.core.util.ObjectUtil;
 import com.weiho.scaffold.common.exception.BadRequestException;
 import com.weiho.scaffold.i18n.I18nMessagesUtils;
 import com.weiho.scaffold.system.entity.User;
@@ -28,7 +29,7 @@ public class UserDetailsServiceImpl implements UserDetailsService {
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         User user = userService.findByUsername(username);
-        if (user == null) {
+        if (ObjectUtil.isNull(user)) {
             throw new BadRequestException(I18nMessagesUtils.get("user.not.found"));
         } else {
             if (!user.isEnabled()) {

@@ -46,6 +46,5 @@ public class ConflictWithSwagger {
     private boolean shouldRegisterLinksMapping(WebEndpointProperties webEndpointProperties, Environment environment, String basePath) {
         return webEndpointProperties.getDiscovery().isEnabled() && (StringUtils.hasText(basePath) ||
                 ManagementPortType.get(environment).equals(ManagementPortType.DIFFERENT));
-
     }
 }

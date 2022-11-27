@@ -1,5 +1,7 @@
 package com.weiho.scaffold.redis.util;
 
+import cn.hutool.core.util.ObjectUtil;
+import com.weiho.scaffold.common.util.StringUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.connection.RedisConnection;
@@ -164,10 +166,10 @@ public class RedisUtils {
      * @param key 可以传一个值 或多个
      */
     public void del(String... keys) {
-        if (keys != null && keys.length > 0) {
+        if (ObjectUtil.isNotNull(keys)) {
             if (keys.length == 1) {
                 boolean result = redisTemplate.delete(keys[0]);
-                log.info(new StringBuilder("删除缓存：").append(keys[0]).append("，结果：").append(result).toString());
+                log.info(StringUtils.builder("删除缓存：").append(keys[0]).append("，结果：").append(result).toString());
             } else {
                 Set<Object> keySet = new HashSet<>();
                 for (String key : keys) {
@@ -189,7 +191,7 @@ public class RedisUtils {
      * @return 值
      */
     public Object get(String key) {
-        return key == null ? null : redisTemplate.opsForValue().get(key);
+        return StringUtils.isBlank(key) ? null : redisTemplate.opsForValue().get(key);
     }
 
     /**
@@ -199,7 +201,7 @@ public class RedisUtils {
      * @return {@link String}
      */
     public String getString(String key) {
-        return key == null || !redisTemplate.hasKey(key) ? "" : redisTemplate.opsForValue().get(key).toString();
+        return StringUtils.isBlank(key) || !redisTemplate.hasKey(key) ? "" : redisTemplate.opsForValue().get(key).toString();
     }
 
     /**

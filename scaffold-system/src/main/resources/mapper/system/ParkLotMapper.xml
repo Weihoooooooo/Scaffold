@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.weiho.scaffold.system.mapper.ParkLotMapper">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="com.weiho.scaffold.system.entity.ParkLot">
+        <id column="id" property="id"/>
+        <result column="create_time" property="createTime"/>
+        <result column="update_time" property="updateTime"/>
+        <result column="is_del" property="isDel"/>
+        <result column="region" property="region"/>
+        <result column="number" property="number"/>
+        <result column="floor" property="floor"/>
+        <result column="other_number" property="otherNumber"/>
+        <result column="enabled" property="enabled"/>
+    </resultMap>
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+        create_time,
+        update_time,
+        is_del,
+        id, region, number, floor, other_number, enabled
+    </sql>
+
+</mapper>

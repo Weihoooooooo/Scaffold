@@ -14,6 +14,8 @@ import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
 
+import javax.validation.constraints.NotBlank;
+
 /**
  * <p>
  *
@@ -37,21 +39,26 @@ public class ElevatorType extends CommonEntity implements I18n {
 
     @ApiModelProperty("电梯类型")
     @TableField("name")
+    @NotBlank(message = "电梯类型不能为空！")
     private String name;
 
     @ApiModelProperty("电梯类型zh-CN")
     @TableField("name_zh_cn")
+    @NotBlank(message = "电梯类型zh-CN不能为空！")
     private String nameZhCn;
 
     @ApiModelProperty("电梯类型zh-HK")
     @TableField("name_zh_hk")
+    @NotBlank(message = "电梯类型zh-HK不能为空！")
     private String nameZhHk;
 
     @ApiModelProperty("电梯类型zh-TW")
     @TableField("name_zh_tw")
+    @NotBlank(message = "电梯类型zh-TW不能为空！")
     private String nameZhTw;
 
     @ApiModelProperty("电梯类型en-US")
     @TableField("name_en_us")
+    @NotBlank(message = "电梯类型en-US不能为空！")
     private String nameEnUs;
 }

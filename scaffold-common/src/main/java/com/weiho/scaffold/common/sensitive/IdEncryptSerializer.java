@@ -1,5 +1,6 @@
 package com.weiho.scaffold.common.sensitive;
 
+import cn.hutool.core.util.ObjectUtil;
 import com.fasterxml.jackson.core.JsonGenerator;
 import com.fasterxml.jackson.databind.BeanProperty;
 import com.fasterxml.jackson.databind.JsonMappingException;
@@ -27,7 +28,7 @@ public class IdEncryptSerializer extends JsonSerializer<Long> implements Context
     @Override
     public JsonSerializer<?> createContextual(SerializerProvider prov, BeanProperty property) throws JsonMappingException {
         IdEncrypt annotation = property.getAnnotation(IdEncrypt.class);
-        if (Objects.nonNull(annotation) && Objects.equals(Long.class, property.getType().getRawClass())) {
+        if (ObjectUtil.isNotNull(annotation) && Objects.equals(Long.class, property.getType().getRawClass())) {
             this.strategy = annotation.value();
             return this;
         }

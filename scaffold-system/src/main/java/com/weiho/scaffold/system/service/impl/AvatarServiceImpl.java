@@ -1,5 +1,6 @@
 package com.weiho.scaffold.system.service.impl;
 
+import cn.hutool.core.util.ObjectUtil;
 import com.weiho.scaffold.common.util.CollUtils;
 import com.weiho.scaffold.common.util.FileUtils;
 import com.weiho.scaffold.common.util.secure.IdSecureUtils;
@@ -73,13 +74,13 @@ public class AvatarServiceImpl extends CommonServiceImpl<AvatarMapper, Avatar> i
     public List<AvatarVO> getAll(AvatarQueryCriteria criteria) {
         List<AvatarVO> avatarVOS;
         if (CollUtils.isNotEmpty(criteria.getCreateTime())) {
-            if (criteria.getEnabled() != null) {
+            if (ObjectUtil.isNotNull(criteria.getEnabled())) {
                 avatarVOS = this.getBaseMapper().selectAvatarList(criteria.getBlurry(), criteria.getCreateTime().get(0), criteria.getCreateTime().get(1), criteria.getEnabled().getKey());
             } else {
                 avatarVOS = this.getBaseMapper().selectAvatarList(criteria.getBlurry(), criteria.getCreateTime().get(0), criteria.getCreateTime().get(1), null);
             }
         } else {
-            if (criteria.getEnabled() != null) {
+            if (ObjectUtil.isNotNull(criteria.getEnabled())) {
                 avatarVOS = this.getBaseMapper().selectAvatarList(criteria.getBlurry(), null, null, criteria.getEnabled().getKey());
             } else {
                 avatarVOS = this.getBaseMapper().selectAvatarList(criteria.getBlurry(), null, null, null);

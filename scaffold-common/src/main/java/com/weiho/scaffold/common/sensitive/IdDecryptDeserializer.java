@@ -1,5 +1,6 @@
 package com.weiho.scaffold.common.sensitive;
 
+import cn.hutool.core.util.ObjectUtil;
 import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.databind.BeanProperty;
 import com.fasterxml.jackson.databind.DeserializationContext;
@@ -28,7 +29,7 @@ public class IdDecryptDeserializer extends JsonDeserializer<Long> implements Con
     @Override
     public JsonDeserializer<?> createContextual(DeserializationContext ctxt, BeanProperty property) throws JsonMappingException {
         IdDecrypt annotation = property.getAnnotation(IdDecrypt.class);
-        if (Objects.nonNull(annotation) && Objects.equals(Long.class, property.getType().getRawClass())) {
+        if (ObjectUtil.isNotNull(annotation) && Objects.equals(Long.class, property.getType().getRawClass())) {
             this.strategy = annotation.value();
             return this;
         }

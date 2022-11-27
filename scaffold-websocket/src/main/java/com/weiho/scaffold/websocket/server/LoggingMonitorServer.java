@@ -1,8 +1,10 @@
 package com.weiho.scaffold.websocket.server;
 
+import cn.hutool.core.util.ObjectUtil;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.weiho.scaffold.common.config.system.ScaffoldSystemProperties;
 import com.weiho.scaffold.common.util.DateUtils;
+import com.weiho.scaffold.common.util.StringUtils;
 import com.weiho.scaffold.websocket.config.MyEndpointConfigure;
 import com.weiho.scaffold.websocket.entity.WebSocketResult;
 import com.weiho.scaffold.websocket.util.WebSocketErrorUtils;
@@ -35,7 +37,6 @@ import java.util.regex.Pattern;
 public class LoggingMonitorServer {
     @Value("${spring.application.name}")
     private String applicationName;
-
     private final AsyncTaskExecutor asyncTaskExecutor;
     private final ScaffoldSystemProperties properties;
 
@@ -70,7 +71,7 @@ public class LoggingMonitorServer {
                 boolean first = true;
                 BufferedReader reader = null;
                 FileReader fileReader = null;
-                while (sessionMap.get(session.getId()) != null) {
+                while (ObjectUtil.isNotNull(sessionMap.get(session.getId()))) {
                     try {
                         //日志文件，获取最新的
                         fileReader = new FileReader(System.getProperty("user.dir") + "/logs/" + DateUtils.getNowDateFormat(DateUtils.FormatEnum.YYYYMMDD) + "/" + applicationName + ".log");
@@ -99,7 +100,7 @@ public class LoggingMonitorServer {
 
                             //处理类名(核心算法)
                             String[] split = line.split("]");
-                            StringBuilder sb = new StringBuilder();
+                            StringBuilder sb = StringUtils.builder();
 
                             if (split.length == 2) {
                                 // length = 2,无]结尾
@@ -116,7 +117,7 @@ public class LoggingMonitorServer {
                                 }
                                 line = sb.toString();
                             } else if (split.length > 2) {
-                                StringBuilder flag = new StringBuilder();
+                                StringBuilder flag = StringUtils.builder();
                                 // length > 2
                                 sb.append(split[0]).append("]").append("<span style='color: #298a8a;'>");
                                 for (int j = 1; j <= split.length - 1; j++) {
@@ -137,7 +138,7 @@ public class LoggingMonitorServer {
                                 //找到下标
                                 int start = m.start();
                                 //插入
-                                StringBuilder sbbr = new StringBuilder(line);
+                                StringBuilder sbbr = StringUtils.builder(line);
                                 sbbr.insert(start, "<br/><br/><span style='color:red;'><b>");
                                 sbbr.insert(start + 62, "</b></span>");
                                 line = sbbr.toString();
@@ -223,10 +224,10 @@ public class LoggingMonitorServer {
      * @return
      */
     public static String join(Object[] target, String separator) {
-        if (target == null) {
+        if (ObjectUtil.isNull(target)) {
             return null;
         } else {
-            StringBuilder sb = new StringBuilder();
+            StringBuilder sb = StringUtils.builder();
             if (target.length > 0) {
                 sb.append(target[0]);
                 for (int i = 1; i < target.length; ++i) {

@@ -1,11 +1,11 @@
 package com.weiho.scaffold.common.util;
 
+import cn.hutool.core.net.url.UrlBuilder;
 import cn.hutool.http.HttpUtil;
 import cn.hutool.http.useragent.UserAgentUtil;
 import cn.hutool.json.JSONObject;
 import cn.hutool.json.JSONUtil;
 import lombok.experimental.UtilityClass;
-import org.apache.commons.lang3.StringUtils;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
 
@@ -21,11 +21,6 @@ import java.util.Objects;
  */
 @UtilityClass
 public class IpUtils {
-    /**
-     * 获取请求的信息
-     */
-    private static final String IP_REQUEST_URL = "http://whois.pconline.com.cn/ipJson.jsp?ip=%s&json=true";
-
     /**
      * 获取客户端IP
      *
@@ -115,7 +110,11 @@ public class IpUtils {
      * 根据ip获取详细地址
      */
     public String getCityInfo(String ip) {
-        String api = String.format(IP_REQUEST_URL, ip);
+        if (StringUtils.isBlank(ip)) {
+            return null;
+        }
+        String api = UrlBuilder.ofHttp("whois.pconline.com.cn")
+                .addPath("/ipJson.jsp").addQuery("ip", ip).addQuery("json", "true").build();
         try {
             String result = HttpUtil.get(api);
             JSONObject object = JSONUtil.parseObj(result);

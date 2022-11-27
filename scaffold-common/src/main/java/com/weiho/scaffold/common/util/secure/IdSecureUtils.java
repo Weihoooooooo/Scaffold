@@ -1,5 +1,6 @@
 package com.weiho.scaffold.common.util.secure;
 
+import cn.hutool.core.util.ObjectUtil;
 import com.weiho.scaffold.common.exception.BadRequestException;
 import com.weiho.scaffold.i18n.I18nMessagesUtils;
 import lombok.experimental.UtilityClass;
@@ -35,7 +36,7 @@ public class IdSecureUtils {
      * 验证主键不能为空
      */
     public void verifyIdNotNull(Long id) {
-        if (id == null) {
+        if (ObjectUtil.isNull(id)) {
             throw new BadRequestException(I18nMessagesUtils.get("id.not.null.tip"));
         }
     }
@@ -44,7 +45,7 @@ public class IdSecureUtils {
      * 验证主键一定为空
      */
     public void verifyIdNull(Long id) {
-        if (id != null) {
+        if (ObjectUtil.isNotNull(id)) {
             throw new BadRequestException(I18nMessagesUtils.get("id.null.tip"));
         }
     }

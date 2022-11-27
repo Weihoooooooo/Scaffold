@@ -1,5 +1,6 @@
 package com.weiho.scaffold.redis.serializer;
 
+import cn.hutool.core.util.ObjectUtil;
 import com.alibaba.fastjson2.JSON;
 import org.springframework.data.redis.serializer.RedisSerializer;
 
@@ -28,7 +29,7 @@ public class FastJsonRedisSerializer<T> implements RedisSerializer<T> {
 
     @Override
     public T deserialize(byte[] bytes) {
-        if (bytes == null || bytes.length <= 0) {
+        if (ObjectUtil.isNull(bytes) || bytes.length <= 0) {
             return null;
         }
         String str = new String(bytes, StandardCharsets.UTF_8);

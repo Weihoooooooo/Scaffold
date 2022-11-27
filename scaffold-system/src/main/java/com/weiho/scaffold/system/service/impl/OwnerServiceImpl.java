@@ -1,11 +1,12 @@
 package com.weiho.scaffold.system.service.impl;
 
+import cn.hutool.core.util.ObjectUtil;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.github.pagehelper.PageInfo;
 import com.weiho.scaffold.common.exception.BadRequestException;
 import com.weiho.scaffold.common.util.AesUtils;
 import com.weiho.scaffold.common.util.FileUtils;
-import com.weiho.scaffold.common.util.LikeCipher;
+import com.weiho.scaffold.common.util.LikeCipherUtils;
 import com.weiho.scaffold.common.util.PageUtils;
 import com.weiho.scaffold.common.util.secure.IdSecureUtils;
 import com.weiho.scaffold.i18n.I18nMessagesUtils;
@@ -46,7 +47,7 @@ public class OwnerServiceImpl extends CommonServiceImpl<OwnerMapper, Owner> impl
 
     @Override
     public List<Owner> findAll(OwnerQueryCriteria criteria) {
-        criteria.setBlurry(LikeCipher.likeEncrypt(criteria.getBlurry()));
+        criteria.setBlurry(LikeCipherUtils.likeEncrypt(criteria.getBlurry()));
         return this.getBaseMapper().selectList(CastUtils.cast(QueryHelper.getQueryWrapper(Owner.class, criteria)));
     }
 
@@ -75,13 +76,13 @@ public class OwnerServiceImpl extends CommonServiceImpl<OwnerMapper, Owner> impl
     @Transactional(rollbackFor = Exception.class)
     public boolean createOwner(OwnerVO ownerVO) {
         IdSecureUtils.verifyIdNull(ownerVO.getId());
-        if (this.getOne(new LambdaQueryWrapper<Owner>().eq(Owner::getIdentityId, AesUtils.encrypt(ownerVO.getIdentityId()))) != null) {
+        if (ObjectUtil.isNotNull(this.getOne(new LambdaQueryWrapper<Owner>().eq(Owner::getIdentityId, AesUtils.encrypt(ownerVO.getIdentityId()))))) {
             throw new BadRequestException(I18nMessagesUtils.get("identity.exist.tip"));
         }
-        if (this.getOne(new LambdaQueryWrapper<Owner>().eq(Owner::getEmail, AesUtils.encrypt(ownerVO.getEmail()))) != null) {
+        if (ObjectUtil.isNotNull(this.getOne(new LambdaQueryWrapper<Owner>().eq(Owner::getEmail, AesUtils.encrypt(ownerVO.getEmail()))))) {
             throw new BadRequestException(I18nMessagesUtils.get("mail.change.error"));
         }
-        if (this.getOne(new LambdaQueryWrapper<Owner>().eq(Owner::getPhone, LikeCipher.phoneLikeEncrypt(ownerVO.getPhone()))) != null) {
+        if (ObjectUtil.isNotNull(this.getOne(new LambdaQueryWrapper<Owner>().eq(Owner::getPhone, LikeCipherUtils.phoneLikeEncrypt(ownerVO.getPhone()))))) {
             throw new BadRequestException(I18nMessagesUtils.get("phone.exist.tip"));
         }
         MailUtils.checkEmail(ownerVO.getEmail());
@@ -105,17 +106,17 @@ public class OwnerServiceImpl extends CommonServiceImpl<OwnerMapper, Owner> impl
         // 根据邮箱查找
         Owner ownerEmail = this.getOne(new LambdaQueryWrapper<Owner>().eq(Owner::getEmail, AesUtils.encrypt(ownerVO.getEmail())));
         // 根据手机号查找
-        Owner ownerPhone = this.getOne(new LambdaQueryWrapper<Owner>().eq(Owner::getPhone, LikeCipher.phoneLikeEncrypt(ownerVO.getPhone())));
+        Owner ownerPhone = this.getOne(new LambdaQueryWrapper<Owner>().eq(Owner::getPhone, LikeCipherUtils.phoneLikeEncrypt(ownerVO.getPhone())));
 
-        if (ownerIdentityId != null && !owner.getId().equals(ownerIdentityId.getId())) {
+        if (ObjectUtil.isNotNull(ownerIdentityId) && !owner.getId().equals(ownerIdentityId.getId())) {
             throw new BadRequestException(I18nMessagesUtils.get("identity.exist.tip"));
         }
 
-        if (ownerEmail != null && !owner.getId().equals(ownerEmail.getId())) {
+        if (ObjectUtil.isNotNull(ownerEmail) && !owner.getId().equals(ownerEmail.getId())) {
             throw new BadRequestException(I18nMessagesUtils.get("mail.change.error"));
         }
 
-        if (ownerPhone != null && !owner.getId().equals(ownerPhone.getId())) {
+        if (ObjectUtil.isNotNull(ownerPhone) && !owner.getId().equals(ownerPhone.getId())) {
             throw new BadRequestException(I18nMessagesUtils.get("phone.exist.tip"));
         }
         return this.saveOrUpdate(ownerVOConvert.toEntity(ownerVO));
@@ -126,7 +127,7 @@ public class OwnerServiceImpl extends CommonServiceImpl<OwnerMapper, Owner> impl
     public boolean resetPassword(Serializable id) {
         IdSecureUtils.verifyIdNotNull((Long) id);
         Owner owner = this.getById(id);
-        if (owner != null) {
+        if (ObjectUtil.isNotNull(owner)) {
             String initPass = owner.getIdentityId().substring(owner.getIdentityId().length() - 6);
             return this.lambdaUpdate().set(Owner::getPassword, initPass, "typeHandler=com.weiho.scaffold.mp.handler.EncryptHandler")
                     .eq(Owner::getId, id).eq(Owner::getIsDel, 0).update();

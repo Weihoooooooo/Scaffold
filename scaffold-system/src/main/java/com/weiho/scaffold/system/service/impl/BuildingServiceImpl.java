@@ -1,5 +1,6 @@
 package com.weiho.scaffold.system.service.impl;
 
+import cn.hutool.core.util.ObjectUtil;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.github.pagehelper.PageInfo;
@@ -91,7 +92,7 @@ public class BuildingServiceImpl extends CommonServiceImpl<BuildingMapper, Build
     public boolean addBuilding(Building resources) {
         IdSecureUtils.verifyIdNull(resources.getId());
         Building buildingBuildingNum = this.getOne(new LambdaQueryWrapper<Building>().eq(Building::getBuildingNum, resources.getBuildingNum()));
-        if (buildingBuildingNum != null) {
+        if (ObjectUtil.isNotNull(buildingBuildingNum)) {
             throw new BadRequestException(I18nMessagesUtils.get("buildingNum.exist.error"));
         }
         // 后台计算总户数

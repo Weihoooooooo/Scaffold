@@ -55,6 +55,7 @@ public class I18nMessagesUtils {
 
     /**
      * 根据请求头获取相应的资源
+     * 需要国际化的实体类需要实现{@link I18n}接口
      *
      * @param request 请求参数
      * @param i18n    资源实体

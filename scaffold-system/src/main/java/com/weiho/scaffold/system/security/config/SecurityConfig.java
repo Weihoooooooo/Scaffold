@@ -1,5 +1,6 @@
 package com.weiho.scaffold.system.security.config;
 
+import cn.hutool.core.util.ObjectUtil;
 import com.weiho.scaffold.common.annotation.Anonymous;
 import com.weiho.scaffold.system.security.exception.JwtAccessDeniedHandler;
 import com.weiho.scaffold.system.security.exception.JwtAuthenticationEntryPoint;
@@ -77,7 +78,7 @@ public class SecurityConfig {
         for (Map.Entry<RequestMappingInfo, HandlerMethod> infoEntry : handlerMethodMap.entrySet()) {
             HandlerMethod handlerMethod = infoEntry.getValue();
             Anonymous anonymous = handlerMethod.getMethodAnnotation(Anonymous.class);
-            if (null != anonymous) {
+            if (ObjectUtil.isNotNull(anonymous)) {
                 assert infoEntry.getKey().getPatternsCondition() != null;
                 anonymousUrls.addAll(infoEntry.getKey().getPatternsCondition().getPatterns());
             }

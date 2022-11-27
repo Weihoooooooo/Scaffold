@@ -1,6 +1,7 @@
 package com.weiho.scaffold.common.util;
 
 import cn.hutool.core.collection.CollUtil;
+import cn.hutool.core.util.ObjectUtil;
 import lombok.experimental.UtilityClass;
 
 import java.util.Collection;
@@ -50,5 +51,27 @@ public class CollUtils extends CollUtil {
      */
     public <T> boolean isCollectionNotEqual(Collection<T> set1, Collection<T> set2) {
         return !isCollectionEqual(set1, set2);
+    }
+
+    /**
+     * 判断集合是否真空
+     * 集合 = null / 集合.size() = 0
+     *
+     * @param collection 传入的集合
+     * @return 是否为真空
+     */
+    public boolean isBlank(Collection<?> collection) {
+        return ObjectUtil.isNull(collection) && isEmpty(collection);
+    }
+
+    /**
+     * 判断集合是否真空
+     * 集合 = null / 集合.size() = 0
+     *
+     * @param collection 传入的集合
+     * @return 是否为真空
+     */
+    public boolean isNotBlank(Collection<?> collection) {
+        return !isBlank(collection);
     }
 }

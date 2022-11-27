@@ -1,5 +1,6 @@
 package com.weiho.scaffold.system.security.token.utils;
 
+import cn.hutool.core.util.ObjectUtil;
 import com.alibaba.fastjson2.JSON;
 import com.weiho.scaffold.common.config.system.ScaffoldSystemProperties;
 import com.weiho.scaffold.common.util.StringUtils;
@@ -57,7 +58,7 @@ public class TokenUtils {
      */
     public String getUsernameFromToken(String token) {
         Claims claims = getClaimsFromToken(token);
-        return claims != null ? claims.getSubject() : null;
+        return ObjectUtil.isNotNull(claims) ? claims.getSubject() : null;
     }
 
     /**
@@ -68,7 +69,7 @@ public class TokenUtils {
      */
     public Date getExpiredFromToken(String token) {
         Claims claims = getClaimsFromToken(token);
-        return claims != null ? claims.getExpiration() : null;
+        return ObjectUtil.isNotNull(claims) ? claims.getExpiration() : null;
     }
 
     /**
@@ -129,7 +130,7 @@ public class TokenUtils {
         //从Redis中获取指定key的value
         Object data = redisUtils.get(key);
         //Redis中查询出来的Token
-        String redisToken = data == null ? null : data.toString();
+        String redisToken = ObjectUtil.isNull(data) ? null : data.toString();
         return StringUtils.isNotEmpty(token)//保证不为空
                 && !isTokenExpired(token)//token不过期
                 && token.equals(redisToken);//两个token一致
@@ -167,7 +168,7 @@ public class TokenUtils {
      */
     public UserDetails getUserDetails(String token) {
         String userDetailsString = getUserDetailsString(token);
-        if (userDetailsString != null) {
+        if (StringUtils.isNotBlank(userDetailsString)) {
             JwtUserVO jwtUserVO = JSON.parseObject(formatUserDetailsString(userDetailsString), JwtUserVO.class);
             jwtUserVO.setAuthorities(roleService.mapToGrantedAuthorities(jwtUserVO.getId(), getUsernameFromToken(token)));
             return jwtUserVO;
@@ -211,7 +212,7 @@ public class TokenUtils {
      */
     public String getTokenFromRequest(HttpServletRequest request) {
         final String requestHeader = request.getHeader(properties.getJwtProperties().getHeader());
-        if (requestHeader != null && requestHeader.startsWith(properties.getJwtProperties().getTokenStartWith())) {
+        if (StringUtils.isNotBlank(requestHeader) && requestHeader.startsWith(properties.getJwtProperties().getTokenStartWith())) {
             return requestHeader.substring(properties.getJwtProperties().getTokenStartWith().length());
         }
         return null;

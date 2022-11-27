@@ -13,8 +13,8 @@ public class VisibleThreadPoolTaskExecutor extends ThreadPoolTaskExecutor {
     private void showThreadPoolInfo() {
         ThreadPoolExecutor threadPoolExecutor = getThreadPoolExecutor();
         log.info(
-                "线程池状况 -> 线程前缀为[{}],当前线程总数为[{}],完成的线程总数为[{}]," +
-                        "当前正在处理任务的线程数为[{}],当前在队列中等待的线程数为[{}]",
+                "\n线程池状况 -> 线程前缀为[{}]\n当前线程总数为[{}]\n完成的线程总数为[{}]\n" +
+                        "当前正在处理任务的线程数为[{}]\n当前在队列中等待的线程数为[{}]",
                 this.getThreadNamePrefix(),
                 threadPoolExecutor.getTaskCount(),
                 threadPoolExecutor.getCompletedTaskCount(),

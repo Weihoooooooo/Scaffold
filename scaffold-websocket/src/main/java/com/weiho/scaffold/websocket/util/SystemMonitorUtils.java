@@ -1,6 +1,7 @@
 package com.weiho.scaffold.websocket.util;
 
 import com.sun.management.OperatingSystemMXBean;
+import com.weiho.scaffold.common.util.StringUtils;
 import com.weiho.scaffold.websocket.entity.Monitor;
 import lombok.extern.slf4j.Slf4j;
 import oshi.SystemInfo;
@@ -164,7 +165,7 @@ public class SystemMonitorUtils {
      * @return 字符串结果
      */
     private static String runCommand(String cmd) {
-        StringBuilder info = new StringBuilder(50);
+        StringBuilder info = StringUtils.builder(50);
         InputStreamReader isr = null;
         LineNumberReader lnr = null;
         try {

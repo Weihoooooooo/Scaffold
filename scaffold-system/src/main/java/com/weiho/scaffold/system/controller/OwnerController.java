@@ -1,5 +1,6 @@
 package com.weiho.scaffold.system.controller;
 
+import com.weiho.scaffold.common.util.MapUtils;
 import com.weiho.scaffold.common.util.result.Result;
 import com.weiho.scaffold.i18n.I18nMessagesUtils;
 import com.weiho.scaffold.logging.annotation.Logging;
@@ -77,7 +78,7 @@ public class OwnerController extends CommonController<OwnerService, Owner> {
     @ApiImplicitParam(paramType = "query", name = "id", value = "业主主键", dataType = "Long", dataTypeClass = Long.class, required = true)
     public Result getOwnerForId(@ApiIgnore @RequestBody Map<String, Object> map) {
         filterMapNull(map, I18nMessagesUtils.get("param.error"));
-        return Result.success(this.getBaseService().getById(filterNullAndDecrypt((String) map.get("id"), I18nMessagesUtils.get("param.null"))));
+        return Result.success(this.getBaseService().getById(filterNullAndDecrypt(MapUtils.getStr(map, "id"), I18nMessagesUtils.get("param.null"))));
     }
 
     @Logging(title = "重置业主密码", businessType = BusinessTypeEnum.UPDATE)
@@ -88,7 +89,7 @@ public class OwnerController extends CommonController<OwnerService, Owner> {
     public Result resetPass(@ApiIgnore @RequestBody Map<String, Object> map) {
         filterMapNull(map, I18nMessagesUtils.get("param.error"));
         return resultMessage(Operate.OPERATE,
-                this.getBaseService().resetPassword(filterNullAndDecrypt((String) map.get("id"), I18nMessagesUtils.get("param.null"))));
+                this.getBaseService().resetPassword(filterNullAndDecrypt(MapUtils.getStr(map, "id"), I18nMessagesUtils.get("param.null"))));
     }
 
     @Logging(title = "删除业主", businessType = BusinessTypeEnum.DELETE)

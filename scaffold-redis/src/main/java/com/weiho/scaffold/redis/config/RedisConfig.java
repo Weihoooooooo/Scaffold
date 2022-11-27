@@ -1,5 +1,6 @@
 package com.weiho.scaffold.redis.config;
 
+import cn.hutool.core.util.ObjectUtil;
 import com.alibaba.fastjson2.JSON;
 import com.weiho.scaffold.redis.serializer.CacheableRedisSerializer;
 import com.weiho.scaffold.redis.serializer.FastJsonRedisSerializer;
@@ -76,13 +77,13 @@ public class RedisConfig extends CachingConfigurerSupport {
                 .forEach(clazz -> ReflectionUtils.doWithMethods(clazz, method -> {
                             ReflectionUtils.makeAccessible(method);
                             Cacheable cacheable = AnnotationUtils.findAnnotation(method, Cacheable.class);
-                            if (Objects.nonNull(cacheable)) {
-                                for (String cache : cacheable.cacheNames()) {
-                                    RedisSerializationContext.SerializationPair<Object> sp = RedisSerializationContext.SerializationPair
-                                            .fromSerializer(new CacheableRedisSerializer<>(method.getGenericReturnType()));
-                                    cacheConfigMap.put(cache, RedisCacheConfiguration.defaultCacheConfig().serializeValuesWith(sp).entryTtl(Duration.ofDays(1)));
-                                }
-                            }
+                    if (ObjectUtil.isNotNull(cacheable)) {
+                        for (String cache : cacheable.cacheNames()) {
+                            RedisSerializationContext.SerializationPair<Object> sp = RedisSerializationContext.SerializationPair
+                                    .fromSerializer(new CacheableRedisSerializer<>(method.getGenericReturnType()));
+                            cacheConfigMap.put(cache, RedisCacheConfiguration.defaultCacheConfig().serializeValuesWith(sp).entryTtl(Duration.ofDays(1)));
+                        }
+                    }
                         })
                 );
         return cacheConfigMap;

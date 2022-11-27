@@ -41,7 +41,7 @@ public class OnlineUserServiceImpl implements OnlineUserService {
         String browser = IpUtils.getBrowser(request);
         //获取登录时候用户IP地址所在城市
         String address = IpUtils.getCityInfo(ip);
-        OnlineUserVO onlineUser = null;
+        OnlineUserVO onlineUser;
         try {
             //构造实体
             onlineUser = new OnlineUserVO(jwtUser.getUsername(),
@@ -132,7 +132,7 @@ public class OnlineUserServiceImpl implements OnlineUserService {
     @Override
     public void checkLoginOnUser(String username, String ignoreToken) {
         List<OnlineUserVO> onlineUsers = getAll(username, 0);
-        if (onlineUsers == null || onlineUsers.isEmpty()) {
+        if (CollUtils.isEmpty(onlineUsers)) {
             return;
         }
         for (OnlineUserVO onlineUser : onlineUsers) {

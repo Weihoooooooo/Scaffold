@@ -1,13 +1,12 @@
 package com.weiho.scaffold.common.sensitive.convert;
 
+import cn.hutool.core.util.ObjectUtil;
 import com.weiho.scaffold.common.annotation.IdDecrypt;
 import com.weiho.scaffold.common.sensitive.enums.IdDecryptStrategy;
 import org.springframework.core.convert.TypeDescriptor;
 import org.springframework.core.convert.converter.ConditionalConverter;
 import org.springframework.core.convert.converter.Converter;
 import org.springframework.lang.Nullable;
-
-import java.util.Objects;
 
 /**
  * 主键解密的全局转换器
@@ -27,7 +26,7 @@ public class IdDecryptConverter implements Converter<String, Long>, ConditionalC
     @Override
     public boolean matches(@Nullable TypeDescriptor sourceType, TypeDescriptor targetType) {
         IdDecrypt annotation = targetType.getAnnotation(IdDecrypt.class);
-        if (Objects.nonNull(annotation)) {
+        if (ObjectUtil.isNotNull(annotation)) {
             this.strategy = annotation.value();
             return targetType.hasAnnotation(IdDecrypt.class);
         } else {

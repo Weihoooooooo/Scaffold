@@ -206,7 +206,7 @@ public class UserController extends CommonController<UserService, User> {
     @PostMapping("/verifyAccount")
     public Result verifyAccount(@RequestBody Map<String, Object> map) throws Exception {
         filterMapNull(map, I18nMessagesUtils.get("param.error"));
-        return loginService.verifyAccount((String) map.get("password"));
+        return loginService.verifyAccount(MapUtils.getStr(map, "password"));
     }
 
 }

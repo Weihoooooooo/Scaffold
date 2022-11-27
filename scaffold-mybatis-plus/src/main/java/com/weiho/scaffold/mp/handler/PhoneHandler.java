@@ -1,6 +1,6 @@
 package com.weiho.scaffold.mp.handler;
 
-import com.weiho.scaffold.common.util.LikeCipher;
+import com.weiho.scaffold.common.util.LikeCipherUtils;
 import org.apache.ibatis.type.BaseTypeHandler;
 import org.apache.ibatis.type.JdbcType;
 
@@ -16,24 +16,24 @@ import java.sql.SQLException;
 public class PhoneHandler extends BaseTypeHandler<Object> {
     @Override
     public void setNonNullParameter(PreparedStatement preparedStatement, int i, Object o, JdbcType jdbcType) throws SQLException {
-        preparedStatement.setString(i, LikeCipher.phoneLikeEncrypt((String) o));
+        preparedStatement.setString(i, LikeCipherUtils.phoneLikeEncrypt((String) o));
     }
 
     @Override
     public Object getNullableResult(ResultSet resultSet, String s) throws SQLException {
         String columnValue = resultSet.getString(s);
-        return LikeCipher.phoneLikeDecrypt(columnValue);
+        return LikeCipherUtils.phoneLikeDecrypt(columnValue);
     }
 
     @Override
     public Object getNullableResult(ResultSet resultSet, int i) throws SQLException {
         String columnValue = resultSet.getString(i);
-        return LikeCipher.phoneLikeDecrypt(columnValue);
+        return LikeCipherUtils.phoneLikeDecrypt(columnValue);
     }
 
     @Override
     public Object getNullableResult(CallableStatement callableStatement, int i) throws SQLException {
         String columnValue = callableStatement.getString(i);
-        return LikeCipher.phoneLikeDecrypt(columnValue);
+        return LikeCipherUtils.phoneLikeDecrypt(columnValue);
     }
 }

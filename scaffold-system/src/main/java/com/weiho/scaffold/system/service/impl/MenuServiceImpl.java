@@ -4,6 +4,7 @@ import cn.hutool.core.util.ObjectUtil;
 import cn.hutool.core.util.StrUtil;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.weiho.scaffold.common.exception.BadRequestException;
+import com.weiho.scaffold.common.util.CollUtils;
 import com.weiho.scaffold.common.util.FileUtils;
 import com.weiho.scaffold.common.util.PageUtils;
 import com.weiho.scaffold.common.util.StringUtils;
@@ -72,7 +73,7 @@ public class MenuServiceImpl extends CommonServiceImpl<MenuMapper, Menu> impleme
                 //若某一个菜单是某一个顶级菜单的子菜单则放入children中
                 if (it.getParentId().equals(menuDTO.getId())) {
                     //children非空判断
-                    if (menuDTO.getChildren() == null) {
+                    if (ObjectUtil.isNull(menuDTO.getChildren())) {
                         menuDTO.setChildren(new ArrayList<>());
                     }
                     menuDTO.getChildren().add(it);
@@ -81,7 +82,7 @@ public class MenuServiceImpl extends CommonServiceImpl<MenuMapper, Menu> impleme
             }
         }
         //过滤作为子菜单的menu,将下一级菜单进行展示,保证tree不是空
-        if (trees.size() == 0) {
+        if (CollUtils.isEmpty(trees)) {
             trees = menuDTOS.stream().filter(s -> !ids.contains(s.getId())).collect(Collectors.toList());
         }
         return trees;
@@ -92,13 +93,13 @@ public class MenuServiceImpl extends CommonServiceImpl<MenuMapper, Menu> impleme
         //采用链表结构，提高add和remove有效率
         List<MenuVO> menuVOs = new LinkedList<>();
         menuDTOS.forEach(menuDTO -> {
-            if (menuDTO != null) {
+            if (ObjectUtil.isNotNull(menuDTO)) {
                 //获取子菜单
                 List<MenuDTO> menuDTOList = menuDTO.getChildren();
                 //构造VO对象
                 MenuVO menuVO = new MenuVO();
                 //设置菜单名称 (如果组件名不为空则拿组件名，否则拿name)
-                menuVO.setName(ObjectUtil.isNotEmpty(menuDTO.getComponentName()) ? menuDTO.getComponentName() : I18nMessagesUtils.getNameForI18n(request, menuDTO));
+                menuVO.setName(StringUtils.isNotBlank(menuDTO.getComponentName()) ? menuDTO.getComponentName() : I18nMessagesUtils.getNameForI18n(request, menuDTO));
                 //一级目录的path需要加上'/'
                 menuVO.setPath(menuDTO.getParentId() == 0 ? "/" + menuDTO.getPath() : menuDTO.getPath());
                 menuVO.setHidden(menuDTO.getHidden());
@@ -114,7 +115,7 @@ public class MenuServiceImpl extends CommonServiceImpl<MenuMapper, Menu> impleme
                 menuVO.setMeta(new MenuMetaVO(I18nMessagesUtils.getNameForI18n(request, menuDTO), menuDTO.getIconCls()));
 
                 //处理Children
-                if (menuDTOList != null && menuDTOList.size() != 0) {
+                if (CollUtils.isNotBlank(menuDTOList)) {
                     menuVO.setRedirect("noRedirect");
                     //递归处理
                     menuVO.setChildren(buildMenuList(menuDTOList, request));
@@ -137,7 +138,6 @@ public class MenuServiceImpl extends CommonServiceImpl<MenuMapper, Menu> impleme
                     }};
                     menuVO.setChildren(list);
                 }
-
                 menuVOs.add(menuVO);
             }
         });
@@ -148,13 +148,13 @@ public class MenuServiceImpl extends CommonServiceImpl<MenuMapper, Menu> impleme
     public List<MenuTreeVO> getMenuTree(List<Menu> menus, HttpServletRequest request) {
         List<MenuTreeVO> list = new LinkedList<>();
         menus.forEach(menu -> {
-            if (menu != null) {
+            if (ObjectUtil.isNotNull(menu)) {
                 // 获取子菜单
                 List<Menu> menuList = this.findByParentId(menu.getId());
                 MenuTreeVO menuTreeVO = new MenuTreeVO();
                 menuTreeVO.setId(menu.getId());
                 menuTreeVO.setLabel(I18nMessagesUtils.getNameForI18n(request, menu));
-                if (menuList != null && menuList.size() != 0) {
+                if (CollUtils.isNotBlank(menuList)) {
                     menuTreeVO.setChildren(getMenuTree(menuList, request));
                 }
                 list.add(menuTreeVO);
@@ -209,7 +209,7 @@ public class MenuServiceImpl extends CommonServiceImpl<MenuMapper, Menu> impleme
     @Override
     public boolean createMenu(Menu resources) {
         IdSecureUtils.verifyIdNull(resources.getId());
-        if (this.getOne(new LambdaQueryWrapper<Menu>().eq(Menu::getName, resources.getName())) != null) {
+        if (ObjectUtil.isNotNull(this.getOne(new LambdaQueryWrapper<Menu>().eq(Menu::getName, resources.getName())))) {
             throw new BadRequestException(I18nMessagesUtils.get("menu.name.tip"));
         }
         verifyResources(resources);
@@ -229,7 +229,7 @@ public class MenuServiceImpl extends CommonServiceImpl<MenuMapper, Menu> impleme
         Menu menuForName = this.getOne(new LambdaQueryWrapper<Menu>().eq(Menu::getName, resources.getName()));
 
         // 验证菜单名是否已存在
-        if (menuForName != null && !menuForName.getId().equals(menuForId.getId())) {
+        if (ObjectUtil.isNotNull(menuForName) && !menuForName.getId().equals(menuForId.getId())) {
             throw new BadRequestException(I18nMessagesUtils.get("menu.name.tip"));
         }
 
@@ -253,7 +253,7 @@ public class MenuServiceImpl extends CommonServiceImpl<MenuMapper, Menu> impleme
             // ComponentName只能唯一并且一定存在
             if (StringUtils.isNotBlank(resources.getComponentName())) {
                 Menu menuForComponentName = this.getOne(new LambdaQueryWrapper<Menu>().eq(Menu::getComponentName, resources.getComponentName()));
-                if (menuForComponentName != null && !menuForComponentName.getId().equals(menuForId.getId())) {
+                if (ObjectUtil.isNotNull(menuForComponentName) && !menuForComponentName.getId().equals(menuForId.getId())) {
                     throw new BadRequestException(I18nMessagesUtils.get("menu.componentName.tip"));
                 }
             } else {
@@ -263,7 +263,7 @@ public class MenuServiceImpl extends CommonServiceImpl<MenuMapper, Menu> impleme
             // Component只能唯一并且一定存在
             if (StringUtils.isNotBlank(resources.getComponent())) {
                 Menu menuForComponent = this.getOne(new LambdaQueryWrapper<Menu>().eq(Menu::getComponent, resources.getComponent()));
-                if (menuForComponent != null && !menuForComponent.getId().equals(menuForId.getId())) {
+                if (ObjectUtil.isNotNull(menuForComponent) && !menuForComponent.getId().equals(menuForId.getId())) {
                     throw new BadRequestException(I18nMessagesUtils.get("menu.component.tip"));
                 }
             } else {
@@ -327,7 +327,7 @@ public class MenuServiceImpl extends CommonServiceImpl<MenuMapper, Menu> impleme
             resultList.add(menu);
             // 查找子菜单列表
             List<Menu> menus = this.findByParentId(menu.getId());
-            if (menus != null && menus.size() != 0) {
+            if (CollUtils.isNotEmpty(menus) && ObjectUtil.isNotNull(menus)) {
                 // 再次递归
                 getLowerMenus(menus, resultList);
             }
@@ -338,7 +338,7 @@ public class MenuServiceImpl extends CommonServiceImpl<MenuMapper, Menu> impleme
     private void verifyPermissionForUpdate(Menu resources, Menu menuForId) {
         if (StringUtils.isNotBlank(resources.getPermission())) {
             Menu menuForPermission = this.getOne(new LambdaQueryWrapper<Menu>().eq(Menu::getPermission, resources.getPermission()));
-            if (menuForPermission != null && !menuForPermission.getId().equals(menuForId.getId())) {
+            if (ObjectUtil.isNotNull(menuForPermission) && !menuForPermission.getId().equals(menuForId.getId())) {
                 throw new BadRequestException(I18nMessagesUtils.get("menu.permission.tip"));
             }
         } else {
@@ -360,7 +360,7 @@ public class MenuServiceImpl extends CommonServiceImpl<MenuMapper, Menu> impleme
     private void verifyPathAndUrlForUpdate(Menu resources, Menu menuForId) {
         if (StringUtils.isNotBlank(resources.getPath())) {
             Menu menuForPath = this.getOne(new LambdaQueryWrapper<Menu>().eq(Menu::getPath, resources.getPath()));
-            if (menuForPath != null && !menuForPath.getId().equals(menuForId.getId())) {
+            if (ObjectUtil.isNotNull(menuForPath) && !menuForPath.getId().equals(menuForId.getId())) {
                 throw new BadRequestException(I18nMessagesUtils.get("menu.path.tip"));
             }
         } else {
@@ -375,13 +375,12 @@ public class MenuServiceImpl extends CommonServiceImpl<MenuMapper, Menu> impleme
     private void verifyResources(Menu resources) {
         if (resources.getType().getKey() == 0) {
             verifyPathAndUrlForAdd(resources);
-
             resources.setComponent(null);
             resources.setComponentName(null);
             resources.setPermission(null);
         } else if (resources.getType().getKey() == 1) {
             if (StringUtils.isNotBlank(resources.getComponentName())) {
-                if (this.getOne(new LambdaQueryWrapper<Menu>().eq(Menu::getComponentName, resources.getComponentName())) != null) {
+                if (ObjectUtil.isNotNull(this.getOne(new LambdaQueryWrapper<Menu>().eq(Menu::getComponentName, resources.getComponentName())))) {
                     throw new BadRequestException(I18nMessagesUtils.get("menu.componentName.tip"));
                 }
             } else {
@@ -412,7 +411,7 @@ public class MenuServiceImpl extends CommonServiceImpl<MenuMapper, Menu> impleme
 
     private void verifyPathAndUrlForAdd(Menu resources) {
         if (StringUtils.isNotBlank(resources.getPath())) {
-            if (this.getOne(new LambdaQueryWrapper<Menu>().eq(Menu::getPath, resources.getPath())) != null) {
+            if (ObjectUtil.isNotNull(this.getOne(new LambdaQueryWrapper<Menu>().eq(Menu::getPath, resources.getPath())))) {
                 throw new BadRequestException(I18nMessagesUtils.get("menu.path.tip"));
             }
         } else {

@@ -1,5 +1,6 @@
 package com.weiho.scaffold.redis.limiter.aspect;
 
+import cn.hutool.core.util.ObjectUtil;
 import com.weiho.scaffold.common.config.system.ScaffoldSystemProperties;
 import com.weiho.scaffold.common.exception.RateLimitException;
 import com.weiho.scaffold.common.util.IpUtils;
@@ -45,10 +46,9 @@ public class RateLimiterAspect {
         try {
             if (properties.getRateLimiterProperties().isEnabled()) {
                 Long number = redisTemplate.execute(limitScript, keys, count, time);
-                if (number == null || number.intValue() > count) {
+                if (ObjectUtil.isNull(number) || number.intValue() > count) {
                     throw new RateLimitException(I18nMessagesUtils.get("exception.rate.limit.error"));
                 }
-//                log.info("限制请求次数{},当前请求次数{},IP为{}", count, number.intValue(), IpUtils.getIp(IpUtils.getHttpServletRequest()));
             }
         } catch (RateLimitException e) {
             throw e;

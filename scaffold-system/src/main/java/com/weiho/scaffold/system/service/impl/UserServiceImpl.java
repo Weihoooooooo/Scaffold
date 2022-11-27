@@ -1,5 +1,6 @@
 package com.weiho.scaffold.system.service.impl;
 
+import cn.hutool.core.util.ObjectUtil;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.github.pagehelper.PageInfo;
 import com.weiho.scaffold.common.config.system.ScaffoldSystemProperties;
@@ -109,7 +110,7 @@ public class UserServiceImpl extends CommonServiceImpl<UserMapper, User> impleme
         User user = findByUsername(SecurityUtils.getUsername());
         // 查找该用户的头像信息
         Avatar avatar = avatarService.selectByAvatarId(user.getAvatarId(), user.getUsername());
-        if (avatar == null) {
+        if (ObjectUtil.isNull(avatar)) {
             // 若该用户不存在头像 插入
             avatar = new Avatar();
             getAvatar(multipartFile, avatar);
@@ -176,7 +177,7 @@ public class UserServiceImpl extends CommonServiceImpl<UserMapper, User> impleme
 
     @Override
     public List<User> getAll(UserQueryCriteria criteria) {
-        criteria.setPhone(LikeCipher.likeEncrypt(criteria.getPhone()));
+        criteria.setPhone(LikeCipherUtils.likeEncrypt(criteria.getPhone()));
         return this.getBaseMapper().selectList(CastUtils.cast(QueryHelper.getQueryWrapper(User.class, criteria)));
     }
 
@@ -200,11 +201,11 @@ public class UserServiceImpl extends CommonServiceImpl<UserMapper, User> impleme
         User userEmail = this.getOne(new LambdaQueryWrapper<User>().eq(User::getEmail, AesUtils.encrypt(resource.getEmail())));
 
         // 验证用户名是否存在
-        if (userUsername != null && !user.getId().equals(userUsername.getId())) {
+        if (ObjectUtil.isNotNull(userUsername) && !user.getId().equals(userUsername.getId())) {
             throw new BadRequestException(I18nMessagesUtils.get("username.exists"));
         }
 
-        if (userEmail != null && !user.getEmail().equals(userEmail.getEmail())) {
+        if (ObjectUtil.isNotNull(userEmail) && !user.getEmail().equals(userEmail.getEmail())) {
             throw new BadRequestException(I18nMessagesUtils.get("email.exists"));
         }
 
@@ -225,7 +226,7 @@ public class UserServiceImpl extends CommonServiceImpl<UserMapper, User> impleme
             Set<Long> newRoleIds = roleMapper.findSetByUserId(resource.getId()).stream().map(Role::getId).collect(Collectors.toSet());
 
             // 如果角色集合不一致再进行更新
-            if (CollUtils.isCollectionNotEqual(oldRoleIds, newRoleIds) && CollUtils.isNotEmpty(resource.getRoles())) {
+            if (CollUtils.isCollectionNotEqual(oldRoleIds, newRoleIds) && CollUtils.isNotBlank(resource.getRoles())) {
                 // 删除所有角色
                 usersRolesService.removeById(resource.getId());
                 // 批量添加角色
@@ -282,12 +283,12 @@ public class UserServiceImpl extends CommonServiceImpl<UserMapper, User> impleme
         MailUtils.checkEmail(resource.getEmail());
         // 根据用户名去查询是否存在用户
         User userUsername = this.getOne(new LambdaQueryWrapper<User>().eq(User::getUsername, resource.getUsername()));
-        if (userUsername != null) {
+        if (ObjectUtil.isNotNull(userUsername)) {
             throw new BadRequestException(I18nMessagesUtils.get("username.exists"));
         }
         // 根据邮箱去查询
         User userEmail = this.getOne(new LambdaQueryWrapper<User>().eq(User::getEmail, AesUtils.encrypt(resource.getEmail())));
-        if (userEmail != null) {
+        if (ObjectUtil.isNotNull(userEmail)) {
             throw new BadRequestException(I18nMessagesUtils.get("email.exists"));
         }
         // 转换实体

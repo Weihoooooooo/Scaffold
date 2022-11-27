@@ -65,7 +65,6 @@ public class LocalStorageServiceImpl extends CommonServiceImpl<LocalStorageMappe
         String suffix = FileUtils.getExtensionName(multipartFile.getOriginalFilename());
         // 获取文件的分类
         String type = FileUtils.getFileType(suffix);
-        System.err.println(properties.getResourcesProperties().getStorageLocalAddressPrefix());
         // 处理上传的文件,保存文件
         File file = FileUtils.upload(multipartFile, properties.getResourcesProperties().getStorageLocalAddressPrefix() + type + "\\");
         if (ObjectUtil.isNull(file)) {
@@ -128,7 +127,7 @@ public class LocalStorageServiceImpl extends CommonServiceImpl<LocalStorageMappe
     public boolean deleteByIds(Set<Long> ids) {
         for (Long id : ids) {
             LocalStorage localStorage = this.getById(id);
-            if (localStorage != null && localStorage.getLocalUrl() != null) {
+            if (ObjectUtil.isNotNull(localStorage) && StringUtils.isNotBlank(localStorage.getLocalUrl())) {
                 boolean flag = FileUtils.del(localStorage.getLocalUrl());
                 if (flag) {
                     return this.removeById(id);
@@ -145,7 +144,7 @@ public class LocalStorageServiceImpl extends CommonServiceImpl<LocalStorageMappe
 
         LocalStorage localStorageFileName = this.getOne(new LambdaQueryWrapper<LocalStorage>().eq(LocalStorage::getFileName, localStorageVO.getFileName()));
 
-        if (localStorageFileName != null && !localStorage.getId().equals(localStorageFileName.getId())) {
+        if (ObjectUtil.isNotNull(localStorageFileName) && !localStorage.getId().equals(localStorageFileName.getId())) {
             throw new BadRequestException(I18nMessagesUtils.get("file.exist.tip"));
         }
 

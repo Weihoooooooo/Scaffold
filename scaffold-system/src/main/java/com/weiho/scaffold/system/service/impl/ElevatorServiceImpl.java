@@ -1,5 +1,6 @@
 package com.weiho.scaffold.system.service.impl;
 
+import cn.hutool.core.util.ObjectUtil;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.github.pagehelper.PageInfo;
 import com.weiho.scaffold.common.exception.BadRequestException;
@@ -91,6 +92,8 @@ public class ElevatorServiceImpl extends CommonServiceImpl<ElevatorMapper, Eleva
             map.put(I18nMessagesUtils.get("download.elevator.maintain.people"), elevatorVO.getMaintainPeople());
             map.put(I18nMessagesUtils.get("download.elevator.maintain.phone"), elevatorVO.getMaintainPeoplePhone());
             map.put(I18nMessagesUtils.get("download.elevator.enabled"), elevatorVO.isEnabled() ? "是" : "否");
+            map.put(I18nMessagesUtils.get("download.createTime"), elevatorVO.getCreateTime());
+            map.put(I18nMessagesUtils.get("download.updateTime"), elevatorVO.getUpdateTime());
             list.add(map);
         }
         FileUtils.downloadExcel(list, response);
@@ -111,7 +114,7 @@ public class ElevatorServiceImpl extends CommonServiceImpl<ElevatorMapper, Eleva
 
         // 根据电梯的唯一编号查找
         Elevator elevatorIdentityId = this.getOne(new LambdaQueryWrapper<Elevator>().eq(Elevator::getIdentityId, resources.getIdentityId()));
-        if (elevatorIdentityId != null && !elevator.getId().equals(elevatorIdentityId.getId())) {
+        if (ObjectUtil.isNotNull(elevatorIdentityId) && !elevator.getId().equals(elevatorIdentityId.getId())) {
             throw new BadRequestException(I18nMessagesUtils.get("elevator.exist.error"));
         }
 
@@ -159,7 +162,7 @@ public class ElevatorServiceImpl extends CommonServiceImpl<ElevatorMapper, Eleva
         IdSecureUtils.verifyIdNull(resources.getId());
         // 根据电梯的唯一编号查找
         Elevator elevatorIdentityId = this.getOne(new LambdaQueryWrapper<Elevator>().eq(Elevator::getIdentityId, resources.getIdentityId()));
-        if (elevatorIdentityId != null) {
+        if (ObjectUtil.isNotNull(elevatorIdentityId)) {
             throw new BadRequestException(I18nMessagesUtils.get("elevator.exist.error"));
         }
 
@@ -187,6 +190,7 @@ public class ElevatorServiceImpl extends CommonServiceImpl<ElevatorMapper, Eleva
     @Override
     @Transactional(rollbackFor = Exception.class)
     public boolean maintainElevator(ElevatorMaintainVO resources) {
+        IdSecureUtils.verifyIdNotNull(resources.getId());
         Elevator elevator = this.getById(resources.getId());
         return this.lambdaUpdate().set(Elevator::getMaintainPeople, resources.getMaintainPeople())
                 .set(Elevator::getMaintainPeoplePhone, resources.getMaintainPeoplePhone())

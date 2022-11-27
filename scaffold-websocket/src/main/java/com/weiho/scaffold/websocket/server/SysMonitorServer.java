@@ -1,5 +1,6 @@
 package com.weiho.scaffold.websocket.server;
 
+import cn.hutool.core.util.ObjectUtil;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.weiho.scaffold.common.config.system.ScaffoldSystemProperties;
 import com.weiho.scaffold.websocket.config.MyEndpointConfigure;
@@ -50,7 +51,7 @@ public class SysMonitorServer {
             //获取系统监控信息
             asyncTaskExecutor.submit(() -> {
                 log.info("Monitor -> [SysMonitorServer 系统监测任务开始]");
-                while (sessionMap.get(session.getId()) != null) {
+                while (ObjectUtil.isNotNull(sessionMap.get(session.getId()))) {
                     try {
                         //获取系统监控信息 发送
                         send(session, new ObjectMapper().writeValueAsString(new WebSocketResult<Monitor>(10006, SystemMonitorUtils.getSysMonitor())));

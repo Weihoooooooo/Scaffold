@@ -10,7 +10,7 @@ import lombok.experimental.UtilityClass;
  * @since 2022/10/21
  */
 @UtilityClass
-public class LikeCipher {
+public class LikeCipherUtils {
     /**
      * 对姓名等敏感字段进行加密的算法(可以进行模糊查询)
      *
@@ -18,10 +18,10 @@ public class LikeCipher {
      * @return 密文
      */
     public String likeEncrypt(String str) {
-        if (str == null) {
+        if (StringUtils.isBlank(str)) {
             return null;
         }
-        StringBuilder sb = new StringBuilder("$");
+        StringBuilder sb = StringUtils.builder("$");
         for (int i = 0; i < str.length(); i++) {
             sb.append(AesUtils.encrypt(String.valueOf(str.charAt(i)))).append("$");
         }
@@ -35,13 +35,13 @@ public class LikeCipher {
      * @return 明文
      */
     public String likeDecrypt(String str) {
-        if (str == null) {
+        if (StringUtils.isBlank(str)) {
             return null;
         }
         if (str.charAt(0) != '$' || str.charAt(str.length() - 1) != '$') {
             return null;
         }
-        StringBuilder sb = new StringBuilder();
+        StringBuilder sb = StringUtils.builder();
         String[] ss = str.split("\\$");
         for (String s : ss) {
             sb.append(AesUtils.decrypt(s));
@@ -69,14 +69,14 @@ public class LikeCipher {
      * @return 明文
      */
     public String phoneLikeDecrypt(String str) {
-        if (str == null) {
+        if (StringUtils.isBlank(str)) {
             return null;
         }
         if (str.charAt(0) != '$' || str.charAt(str.length() - 1) != '$') {
             return null;
         }
         String[] ss = str.substring(1, str.length() - 2).split("\\$");
-        StringBuilder sb = new StringBuilder();
+        StringBuilder sb = StringUtils.builder();
         for (String s : ss) {
             sb.append(AesUtils.decrypt(s));
         }

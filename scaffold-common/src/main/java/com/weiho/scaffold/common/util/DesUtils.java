@@ -24,7 +24,7 @@ public class DesUtils {
     private static final IvParameterSpec IV = new IvParameterSpec(STR_PARAM.getBytes(StandardCharsets.UTF_8));
 
     private DESKeySpec getDesKeySpec(String source) throws Exception {
-        if (source == null || source.length() == 0) {
+        if (StringUtils.isBlank(source)) {
             return null;
         }
         cipher = Cipher.getInstance("DES/CBC/PKCS5Padding");
@@ -73,7 +73,7 @@ public class DesUtils {
      */
     private String byte2hex(byte[] inStr) {
         String stmp;
-        StringBuilder out = new StringBuilder(inStr.length * 2);
+        StringBuilder out = StringUtils.builder(inStr.length * 2);
         for (byte b : inStr) {
             stmp = Integer.toHexString(b & 0xFF);
             if (stmp.length() == 1) {

@@ -7,7 +7,6 @@ import com.weiho.scaffold.logging.enums.LogTypeEnum;
 import com.weiho.scaffold.mp.service.CommonService;
 import org.aspectj.lang.JoinPoint;
 import org.springframework.data.domain.Pageable;
-import org.springframework.scheduling.annotation.Async;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -52,8 +51,6 @@ public interface LogService extends CommonService<Log> {
      * @param e          异常
      * @param jsonResult 响应结果
      */
-    @Async
-    //放入异步线程池运行
     void saveLogInfo(final JoinPoint joinPoint, HttpServletRequest request, Logging logging, Log log, final Exception e, Object jsonResult);
 
     /**
