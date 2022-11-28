@@ -1,6 +1,7 @@
 package com.weiho.scaffold.redis.util;
 
 import cn.hutool.core.util.ObjectUtil;
+import com.weiho.scaffold.common.util.ListUtils;
 import com.weiho.scaffold.common.util.StringUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -95,7 +96,7 @@ public class RedisUtils {
         RedisConnectionFactory factory = redisTemplate.getConnectionFactory();
         RedisConnection rc = Objects.requireNonNull(factory).getConnection();
         Cursor<byte[]> cursor = rc.scan(options);
-        List<String> result = new ArrayList<>();
+        List<String> result = ListUtils.list(false);
         while (cursor.hasNext()) {
             result.add(new String(cursor.next()));
         }

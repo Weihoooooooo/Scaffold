@@ -1,5 +1,6 @@
 package com.weiho.scaffold.common.util;
 
+import cn.hutool.core.builder.GenericBuilder;
 import lombok.experimental.UtilityClass;
 
 import java.util.LinkedHashMap;
@@ -34,9 +35,8 @@ public class PageUtils {
      * @return Map<String, Object>
      */
     public Map<String, Object> toPageContainer(final Object object, final Object totalElements) {
-        return new LinkedHashMap<String, Object>(2) {{
-            put("content", object);
-            put("totalElements", totalElements);
-        }};
+        return GenericBuilder.of(LinkedHashMap<String, Object>::new)
+                .with(Map::put, "content", object)
+                .with(Map::put, "totalElements", totalElements).build();
     }
 }

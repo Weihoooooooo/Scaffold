@@ -3,6 +3,7 @@ package com.weiho.scaffold.system.service.impl;
 import cn.hutool.core.util.ObjectUtil;
 import com.weiho.scaffold.common.util.CollUtils;
 import com.weiho.scaffold.common.util.FileUtils;
+import com.weiho.scaffold.common.util.ListUtils;
 import com.weiho.scaffold.common.util.secure.IdSecureUtils;
 import com.weiho.scaffold.i18n.I18nMessagesUtils;
 import com.weiho.scaffold.mp.service.impl.CommonServiceImpl;
@@ -21,7 +22,10 @@ import org.springframework.transaction.annotation.Transactional;
 
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.util.*;
+import java.util.LinkedHashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
 /**
  * <p>
@@ -56,7 +60,7 @@ public class AvatarServiceImpl extends CommonServiceImpl<AvatarMapper, Avatar> i
 
     @Override
     public void download(List<AvatarVO> all, HttpServletResponse response) throws IOException {
-        List<Map<String, Object>> list = new ArrayList<>();
+        List<Map<String, Object>> list = ListUtils.list(false);
         for (AvatarVO avatarVO : all) {
             Map<String, Object> map = new LinkedHashMap<>();
             map.put(I18nMessagesUtils.get("download.avatar.username"), avatarVO.getUsername());

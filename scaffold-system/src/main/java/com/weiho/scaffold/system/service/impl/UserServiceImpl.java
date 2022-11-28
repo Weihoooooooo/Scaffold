@@ -43,7 +43,10 @@ import org.springframework.web.multipart.MultipartFile;
 import javax.servlet.http.HttpServletResponse;
 import java.io.File;
 import java.io.IOException;
-import java.util.*;
+import java.util.LinkedHashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 /**
@@ -165,7 +168,7 @@ public class UserServiceImpl extends CommonServiceImpl<UserMapper, User> impleme
 
     @Override
     public List<UserVO> convertToVO(List<User> users) {
-        List<UserVO> userVOS = new ArrayList<>();
+        List<UserVO> userVOS = ListUtils.list(false);
         for (User user : users) {
             UserVO userVO = userVOConvert.toPojo(user);
             userVO.setAvatar(avatarMapper.selectById(user.getAvatarId()));
@@ -259,7 +262,7 @@ public class UserServiceImpl extends CommonServiceImpl<UserMapper, User> impleme
 
     @Override
     public void download(List<UserVO> all, HttpServletResponse response) throws IOException {
-        List<Map<String, Object>> list = new ArrayList<>();
+        List<Map<String, Object>> list = ListUtils.list(false);
         for (UserVO userVO : all) {
             Map<String, Object> map = new LinkedHashMap<>();
             map.put(I18nMessagesUtils.get("download.user.username"), userVO.getUsername());

@@ -4,10 +4,7 @@ import cn.hutool.core.util.ObjectUtil;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.weiho.scaffold.common.config.system.ScaffoldSystemProperties;
 import com.weiho.scaffold.common.exception.BadRequestException;
-import com.weiho.scaffold.common.util.DateUtils;
-import com.weiho.scaffold.common.util.FileUtils;
-import com.weiho.scaffold.common.util.SecurityUtils;
-import com.weiho.scaffold.common.util.StringUtils;
+import com.weiho.scaffold.common.util.*;
 import com.weiho.scaffold.i18n.I18nMessagesUtils;
 import com.weiho.scaffold.mp.core.QueryHelper;
 import com.weiho.scaffold.mp.service.impl.CommonServiceImpl;
@@ -28,7 +25,10 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.File;
 import java.io.IOException;
 import java.io.Serializable;
-import java.util.*;
+import java.util.LinkedHashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
 /**
  * <p>
@@ -104,7 +104,7 @@ public class LocalStorageServiceImpl extends CommonServiceImpl<LocalStorageMappe
 
     @Override
     public void download(List<LocalStorage> all, HttpServletResponse response) throws IOException {
-        List<Map<String, Object>> list = new ArrayList<>();
+        List<Map<String, Object>> list = ListUtils.list(false);
         for (LocalStorage localStorage : all) {
             Map<String, Object> map = new LinkedHashMap<>();
             map.put("操作人", localStorage.getUsername());

@@ -17,7 +17,10 @@ import org.springframework.stereotype.Service;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.util.*;
+import java.util.Collections;
+import java.util.LinkedHashMap;
+import java.util.List;
+import java.util.Map;
 
 /**
  * 在线用户业务实现类
@@ -64,7 +67,7 @@ public class OnlineUserServiceImpl implements OnlineUserService {
             keys = redisUtils.scan(properties.getJwtProperties().getOnlineKey() + "*");
         }
         Collections.reverse(keys);
-        List<OnlineUserVO> onlineUsers = new ArrayList<>();
+        List<OnlineUserVO> onlineUsers = ListUtils.list(false);
         for (String key : keys) {
             OnlineUserVO onlineUser = JSON.parseObject(redisUtils.getString(key), OnlineUserVO.class);
             if (StringUtils.isNotBlank(filter)) {
@@ -111,7 +114,7 @@ public class OnlineUserServiceImpl implements OnlineUserService {
 
     @Override
     public void download(List<OnlineUserVO> all, HttpServletResponse response) throws IOException {
-        List<Map<String, Object>> list = new ArrayList<>();
+        List<Map<String, Object>> list = ListUtils.list(false);
         for (OnlineUserVO user : all) {
             Map<String, Object> map = new LinkedHashMap<>();
             map.put("用户名", user.getUsername());

@@ -48,7 +48,7 @@
     </select>
 
     <select id="findListByRoles" resultType="com.weiho.scaffold.system.entity.Menu">
-        SELECT
+        SELECT DISTINCT
         <include refid="Base_Column_List"/>
         FROM menu m
         LEFT OUTER JOIN roles_menus rm on m.id = rm.menu_id

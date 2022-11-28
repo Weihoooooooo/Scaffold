@@ -1,5 +1,6 @@
 package com.weiho.scaffold.common.util;
 
+import cn.hutool.core.net.NetUtil;
 import cn.hutool.core.net.url.UrlBuilder;
 import cn.hutool.http.HttpUtil;
 import cn.hutool.http.useragent.UserAgentUtil;
@@ -20,7 +21,7 @@ import java.util.Objects;
  * @author Weiho
  */
 @UtilityClass
-public class IpUtils {
+public class IpUtils extends NetUtil {
     /**
      * 获取客户端IP
      *
@@ -77,49 +78,19 @@ public class IpUtils {
     }
 
     /**
-     * 从多级反向代理中获得第一个非unknown IP地址
-     *
-     * @param ip 获得的IP地址
-     * @return 第一个非unknown IP地址
-     */
-    public String getMultistageReverseProxyIp(String ip) {
-        // 多级反向代理检测
-        if (ip != null && ip.indexOf(",") > 0) {
-            final String[] ips = ip.trim().split(",");
-            for (String subIp : ips) {
-                if (!isUnknown(subIp)) {
-                    ip = subIp;
-                    break;
-                }
-            }
-        }
-        return ip;
-    }
-
-    /**
-     * 检测给定字符串是否为未知，多用于检测HTTP请求相关
-     *
-     * @param checkString 被检测的字符串
-     * @return 是否未知
-     */
-    public boolean isUnknown(String checkString) {
-        return StringUtils.isBlank(checkString) || "unknown".equalsIgnoreCase(checkString);
-    }
-
-    /**
      * 根据ip获取详细地址
      */
     public String getCityInfo(String ip) {
         if (StringUtils.isBlank(ip)) {
             return null;
         }
-        String api = UrlBuilder.ofHttp("whois.pconline.com.cn")
-                .addPath("/ipJson.jsp").addQuery("ip", ip).addQuery("json", "true").build();
-        try {
-            String result = HttpUtil.get(api);
+        if (ping("https://hutool.cn")) {
+            String api = UrlBuilder.ofHttp("whois.pconline.com.cn")
+                    .addPath("/ipJson.jsp").addQuery("ip", ip).addQuery("json", "true").build();
+            String result = HttpUtil.get(api, 1000);
             JSONObject object = JSONUtil.parseObj(result);
             return object.get("addr", String.class);
-        } catch (Exception e) {
+        } else {
             return "无网络";
         }
     }

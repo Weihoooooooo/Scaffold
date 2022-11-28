@@ -4,10 +4,7 @@ import cn.hutool.core.util.ObjectUtil;
 import cn.hutool.core.util.StrUtil;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.weiho.scaffold.common.exception.BadRequestException;
-import com.weiho.scaffold.common.util.CollUtils;
-import com.weiho.scaffold.common.util.FileUtils;
-import com.weiho.scaffold.common.util.PageUtils;
-import com.weiho.scaffold.common.util.StringUtils;
+import com.weiho.scaffold.common.util.*;
 import com.weiho.scaffold.common.util.secure.IdSecureUtils;
 import com.weiho.scaffold.i18n.I18nMessagesUtils;
 import com.weiho.scaffold.mp.core.QueryHelper;
@@ -60,7 +57,7 @@ public class MenuServiceImpl extends CommonServiceImpl<MenuMapper, Menu> impleme
     @Override
     public List<MenuDTO> buildTree(List<MenuDTO> menuDTOS) {
         //构建空的返回结果
-        List<MenuDTO> trees = new ArrayList<>();
+        List<MenuDTO> trees = ListUtils.list(false);
         //构造作为子菜单的主键集合,用于防止菜单树为空
         Set<Long> ids = new HashSet<>();
         for (MenuDTO menuDTO : menuDTOS) {
@@ -74,7 +71,7 @@ public class MenuServiceImpl extends CommonServiceImpl<MenuMapper, Menu> impleme
                 if (it.getParentId().equals(menuDTO.getId())) {
                     //children非空判断
                     if (ObjectUtil.isNull(menuDTO.getChildren())) {
-                        menuDTO.setChildren(new ArrayList<>());
+                        menuDTO.setChildren(ListUtils.list(false));
                     }
                     menuDTO.getChildren().add(it);
                     ids.add(it.getId());
@@ -185,7 +182,7 @@ public class MenuServiceImpl extends CommonServiceImpl<MenuMapper, Menu> impleme
 
     @Override
     public void download(List<MenuDTO> all, HttpServletResponse response) throws IOException {
-        List<Map<String, Object>> list = new ArrayList<>();
+        List<Map<String, Object>> list = ListUtils.list(false);
         for (MenuDTO menuDTO : all) {
             Map<String, Object> map = new LinkedHashMap<>();
             map.put(I18nMessagesUtils.get("download.menu.component"), menuDTO.getComponent());

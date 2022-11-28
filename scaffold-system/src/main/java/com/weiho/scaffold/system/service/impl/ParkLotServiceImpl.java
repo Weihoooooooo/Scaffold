@@ -4,6 +4,7 @@ import cn.hutool.core.util.ObjectUtil;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.weiho.scaffold.common.exception.BadRequestException;
 import com.weiho.scaffold.common.util.FileUtils;
+import com.weiho.scaffold.common.util.ListUtils;
 import com.weiho.scaffold.common.util.secure.IdSecureUtils;
 import com.weiho.scaffold.i18n.I18nMessagesUtils;
 import com.weiho.scaffold.mp.core.QueryHelper;
@@ -20,7 +21,10 @@ import org.springframework.transaction.annotation.Transactional;
 
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.util.*;
+import java.util.LinkedHashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
 /**
  * <p>
@@ -46,7 +50,7 @@ public class ParkLotServiceImpl extends CommonServiceImpl<ParkLotMapper, ParkLot
 
     @Override
     public void download(List<ParkLot> all, HttpServletResponse response) throws IOException {
-        List<Map<String, Object>> list = new ArrayList<>();
+        List<Map<String, Object>> list = ListUtils.list(false);
         for (ParkLot parkLot : all) {
             Map<String, Object> map = new LinkedHashMap<>();
             map.put("停车区域", parkLot.getRegion());

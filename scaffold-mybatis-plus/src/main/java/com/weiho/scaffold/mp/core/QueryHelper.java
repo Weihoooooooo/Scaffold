@@ -3,6 +3,7 @@ package com.weiho.scaffold.mp.core;
 import cn.hutool.core.util.ObjectUtil;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.weiho.scaffold.common.util.CollUtils;
+import com.weiho.scaffold.common.util.ListUtils;
 import com.weiho.scaffold.common.util.StringUtils;
 import com.weiho.scaffold.mp.annotation.Query;
 import lombok.extern.slf4j.Slf4j;
@@ -37,7 +38,7 @@ public class QueryHelper {
             return queryWrapper;
         }
         try {
-            List<Field> fields = getAllFields(query.getClass(), new ArrayList<>());
+            List<Field> fields = getAllFields(query.getClass(), ListUtils.list(false));
             for (Field field : fields) {
                 boolean accessible = field.isAccessible();
                 field.setAccessible(true);

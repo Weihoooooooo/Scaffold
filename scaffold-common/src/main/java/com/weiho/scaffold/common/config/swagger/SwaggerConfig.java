@@ -2,6 +2,7 @@ package com.weiho.scaffold.common.config.swagger;
 
 import com.github.xiaoymin.knife4j.spring.annotations.EnableKnife4j;
 import com.weiho.scaffold.common.config.system.ScaffoldSystemProperties;
+import com.weiho.scaffold.common.util.ListUtils;
 import com.weiho.scaffold.common.util.result.enums.ResultCodeEnum;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -16,7 +17,6 @@ import springfox.documentation.spring.web.plugins.ApiSelectorBuilder;
 import springfox.documentation.spring.web.plugins.Docket;
 import springfox.documentation.swagger2.annotations.EnableSwagger2;
 
-import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -113,7 +113,7 @@ public class SwaggerConfig {
      * @return 状态码列表
      */
     private List<Response> createResponseCodes() {
-        List<Response> responseList = new ArrayList<>();
+        List<Response> responseList = ListUtils.list(false);
         for (ResultCodeEnum resultCodeEnum : ResultCodeEnum.values()) {
             responseList.add(new ResponseBuilder().code(String.valueOf(resultCodeEnum.getCode())).description(resultCodeEnum.getMsg()).build());
         }
@@ -126,7 +126,7 @@ public class SwaggerConfig {
      * @return 请求参数列表
      */
     public List<RequestParameter> createHeaderRequired() {
-        List<RequestParameter> parameters = new ArrayList<>();
+        List<RequestParameter> parameters = ListUtils.list(false);
         parameters.add(new RequestParameterBuilder().description("token").name(properties.getJwtProperties().getHeader())
                 .in(ParameterType.HEADER).required(true)
                 .query(param -> param.model(model -> model.scalarModel(ScalarType.STRING))).build());

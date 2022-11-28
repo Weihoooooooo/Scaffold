@@ -4,10 +4,7 @@ import cn.hutool.core.util.ObjectUtil;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.github.pagehelper.PageInfo;
 import com.weiho.scaffold.common.exception.BadRequestException;
-import com.weiho.scaffold.common.util.CollUtils;
-import com.weiho.scaffold.common.util.DateUtils;
-import com.weiho.scaffold.common.util.FileUtils;
-import com.weiho.scaffold.common.util.PageUtils;
+import com.weiho.scaffold.common.util.*;
 import com.weiho.scaffold.common.util.secure.IdSecureUtils;
 import com.weiho.scaffold.i18n.I18nMessagesUtils;
 import com.weiho.scaffold.mp.core.QueryHelper;
@@ -34,7 +31,10 @@ import org.springframework.transaction.annotation.Transactional;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.util.*;
+import java.util.LinkedHashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 /**
@@ -73,7 +73,7 @@ public class ElevatorServiceImpl extends CommonServiceImpl<ElevatorMapper, Eleva
 
     @Override
     public void download(List<ElevatorVO> all, HttpServletResponse response, HttpServletRequest request) throws IOException {
-        List<Map<String, Object>> list = new ArrayList<>();
+        List<Map<String, Object>> list = ListUtils.list(false);
         for (ElevatorVO elevatorVO : all) {
             Map<String, Object> map = new LinkedHashMap<>();
             map.put(I18nMessagesUtils.get("download.elevator.buildingNum"), elevatorVO.getBuildingNum());

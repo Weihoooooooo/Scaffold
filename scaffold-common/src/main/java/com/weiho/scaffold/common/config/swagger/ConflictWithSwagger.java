@@ -1,5 +1,6 @@
 package com.weiho.scaffold.common.config.swagger;
 
+import com.weiho.scaffold.common.util.ListUtils;
 import org.springframework.boot.actuate.autoconfigure.endpoint.web.CorsEndpointProperties;
 import org.springframework.boot.actuate.autoconfigure.endpoint.web.WebEndpointProperties;
 import org.springframework.boot.actuate.autoconfigure.web.server.ManagementPortType;
@@ -13,7 +14,6 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.core.env.Environment;
 import org.springframework.util.StringUtils;
 
-import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
@@ -31,7 +31,7 @@ public class ConflictWithSwagger {
                                                                          CorsEndpointProperties corsProperties,
                                                                          WebEndpointProperties webEndpointProperties,
                                                                          Environment environment) {
-        List<ExposableEndpoint<?>> allEndpoints = new ArrayList<>();
+        List<ExposableEndpoint<?>> allEndpoints = ListUtils.list(false);
         Collection<ExposableWebEndpoint> webEndpoints = webEndpointsSupplier.getEndpoints();
         allEndpoints.addAll(webEndpoints);
         allEndpoints.addAll(servletEndpointsSupplier.getEndpoints());

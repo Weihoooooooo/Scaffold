@@ -5,6 +5,7 @@ import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.github.pagehelper.PageInfo;
 import com.weiho.scaffold.common.exception.BadRequestException;
 import com.weiho.scaffold.common.util.FileUtils;
+import com.weiho.scaffold.common.util.ListUtils;
 import com.weiho.scaffold.common.util.PageUtils;
 import com.weiho.scaffold.common.util.SecurityUtils;
 import com.weiho.scaffold.common.util.result.VueSelectVO;
@@ -30,7 +31,10 @@ import org.springframework.transaction.annotation.Transactional;
 
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.util.*;
+import java.util.LinkedHashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 /**
@@ -73,7 +77,7 @@ public class NoticeServiceImpl extends CommonServiceImpl<NoticeMapper, Notice> i
 
     @Override
     public void download(HttpServletResponse response, List<NoticeVO> all) throws IOException {
-        List<Map<String, Object>> list = new ArrayList<>();
+        List<Map<String, Object>> list = ListUtils.list(false);
         for (NoticeVO noticeVO : all) {
             Map<String, Object> map = new LinkedHashMap<>();
             map.put(I18nMessagesUtils.get("download.notice.scope"), noticeVO.getType().getDisplay());
@@ -122,7 +126,7 @@ public class NoticeServiceImpl extends CommonServiceImpl<NoticeMapper, Notice> i
 
     @Override
     public List<VueSelectVO> getDistinctUserSelect() {
-        List<VueSelectVO> list = new ArrayList<>();
+        List<VueSelectVO> list = ListUtils.list(false);
         QueryWrapper<Notice> queryWrapper = new QueryWrapper<>();
         queryWrapper.select("distinct user_id");
         List<Long> userIds = this.getBaseMapper().selectList(queryWrapper).stream().map(Notice::getUserId).collect(Collectors.toList());

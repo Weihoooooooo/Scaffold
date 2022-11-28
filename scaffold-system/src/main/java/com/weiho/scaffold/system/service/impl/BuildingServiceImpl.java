@@ -6,6 +6,7 @@ import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.github.pagehelper.PageInfo;
 import com.weiho.scaffold.common.exception.BadRequestException;
 import com.weiho.scaffold.common.util.FileUtils;
+import com.weiho.scaffold.common.util.ListUtils;
 import com.weiho.scaffold.common.util.PageUtils;
 import com.weiho.scaffold.common.util.result.VueSelectVO;
 import com.weiho.scaffold.common.util.secure.IdSecureUtils;
@@ -25,7 +26,10 @@ import org.springframework.transaction.annotation.Transactional;
 
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.util.*;
+import java.util.LinkedHashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
 /**
  * <p>
@@ -54,7 +58,7 @@ public class BuildingServiceImpl extends CommonServiceImpl<BuildingMapper, Build
 
     @Override
     public void download(HttpServletResponse response, List<Building> all) throws IOException {
-        List<Map<String, Object>> list = new ArrayList<>();
+        List<Map<String, Object>> list = ListUtils.list(false);
         for (Building building : all) {
             Map<String, Object> map = new LinkedHashMap<>();
             map.put(I18nMessagesUtils.get("download.building.buildingNum"), building.getBuildingNum());
@@ -108,7 +112,7 @@ public class BuildingServiceImpl extends CommonServiceImpl<BuildingMapper, Build
 
     @Override
     public List<VueSelectVO> getDistinctBuildingSelect() {
-        List<VueSelectVO> list = new ArrayList<>();
+        List<VueSelectVO> list = ListUtils.list(false);
         QueryWrapper<Building> queryWrapper = new QueryWrapper<>();
         queryWrapper.select("id, building_num");
         List<Building> buildings = this.getBaseMapper().selectList(queryWrapper);

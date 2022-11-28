@@ -1,11 +1,14 @@
 package com.weiho.scaffold.logging.aspect;
 
+import cn.hutool.core.date.TimeInterval;
+import com.weiho.scaffold.common.util.DateUtils;
 import com.weiho.scaffold.common.util.IpUtils;
 import com.weiho.scaffold.common.util.SecurityUtils;
 import com.weiho.scaffold.logging.annotation.Logging;
 import com.weiho.scaffold.logging.entity.Log;
 import com.weiho.scaffold.logging.enums.LogTypeEnum;
 import com.weiho.scaffold.logging.service.LogService;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.aspectj.lang.JoinPoint;
 import org.aspectj.lang.ProceedingJoinPoint;
@@ -21,16 +24,10 @@ import javax.servlet.http.HttpServletRequest;
 @Aspect
 @Component
 @Slf4j
+@RequiredArgsConstructor
 public class LoggingAspect {
     private final LogService logService;
-
-    private final ThreadLocal<Long> currentTime = new ThreadLocal<>();
-
     private Log logInfo;
-
-    public LoggingAspect(LogService logService) {
-        this.logService = logService;
-    }
 
     @Before(value = "@annotation(logging)")
     public void deBefore(Logging logging) {
@@ -41,9 +38,10 @@ public class LoggingAspect {
     @Around(value = "@annotation(logging)")
     public Object doAround(ProceedingJoinPoint joinPoint, Logging logging) throws Throwable {
         Object result;
-        currentTime.set(System.currentTimeMillis());
+        TimeInterval timer = DateUtils.timer();
         result = joinPoint.proceed();
-        logInfo.setTime(System.currentTimeMillis() - currentTime.get());
+        long time = timer.interval();
+        logInfo.setTime(time);
         return result;
     }
 

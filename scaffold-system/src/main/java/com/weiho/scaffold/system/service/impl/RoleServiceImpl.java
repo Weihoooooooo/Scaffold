@@ -169,7 +169,7 @@ public class RoleServiceImpl extends CommonServiceImpl<RoleMapper, Role> impleme
 
     @Override
     public void download(List<RoleDTO> all, HttpServletResponse response) throws IOException {
-        List<Map<String, Object>> list = new ArrayList<>();
+        List<Map<String, Object>> list = ListUtils.list(false);
         for (RoleDTO roleDTO : all) {
             Map<String, Object> map = new LinkedHashMap<>();
             map.put(I18nMessagesUtils.get("download.role.name"), roleDTO.getName());

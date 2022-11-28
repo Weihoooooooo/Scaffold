@@ -2,9 +2,9 @@ package com.weiho.scaffold.common.util.enums;
 
 import cn.hutool.core.util.EnumUtil;
 import com.weiho.scaffold.common.exception.BadRequestException;
+import com.weiho.scaffold.common.util.ListUtils;
 import lombok.experimental.UtilityClass;
 
-import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -24,7 +24,7 @@ public class EnumUtils extends EnumUtil {
      * @return /
      */
     public <T extends java.lang.Enum<?> & Enum> List<EnumSelectVO> getEnumSelect(Class<T> clazz) {
-        List<EnumSelectVO> selects = new ArrayList<>();
+        List<EnumSelectVO> selects = ListUtils.list(false);
         for (T o : clazz.getEnumConstants()) {
             selects.add(new EnumSelectVO(o.getKey(), o.getDisplay(), o.name()));
         }

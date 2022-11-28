@@ -36,7 +36,10 @@ import org.springframework.web.servlet.HandlerMapping;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.util.*;
+import java.util.Collection;
+import java.util.LinkedHashMap;
+import java.util.List;
+import java.util.Map;
 
 /**
  * <p>
@@ -101,7 +104,7 @@ public class LogServiceImpl extends CommonServiceImpl<LogMapper, Log> implements
 
     @Override
     public void download(List<Log> logs, HttpServletResponse response) throws IOException {
-        List<Map<String, Object>> list = new ArrayList<>();
+        List<Map<String, Object>> list = ListUtils.list(false);
         for (Log log : logs) {
             Map<String, Object> map = new LinkedHashMap<>();
             map.put("操作用户", log.getUsername());

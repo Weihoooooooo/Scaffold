@@ -4,10 +4,7 @@ import cn.hutool.core.util.ObjectUtil;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.github.pagehelper.PageInfo;
 import com.weiho.scaffold.common.exception.BadRequestException;
-import com.weiho.scaffold.common.util.AesUtils;
-import com.weiho.scaffold.common.util.FileUtils;
-import com.weiho.scaffold.common.util.LikeCipherUtils;
-import com.weiho.scaffold.common.util.PageUtils;
+import com.weiho.scaffold.common.util.*;
 import com.weiho.scaffold.common.util.secure.IdSecureUtils;
 import com.weiho.scaffold.i18n.I18nMessagesUtils;
 import com.weiho.scaffold.mp.core.QueryHelper;
@@ -29,7 +26,10 @@ import org.springframework.transaction.annotation.Transactional;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.io.Serializable;
-import java.util.*;
+import java.util.LinkedHashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
 /**
  * <p>
@@ -60,7 +60,7 @@ public class OwnerServiceImpl extends CommonServiceImpl<OwnerMapper, Owner> impl
 
     @Override
     public void download(List<OwnerVO> all, HttpServletResponse response) throws IOException {
-        List<Map<String, Object>> list = new ArrayList<>();
+        List<Map<String, Object>> list = ListUtils.list(false);
         for (OwnerVO ownerVO : all) {
             Map<String, Object> map = new LinkedHashMap<>();
             map.put(I18nMessagesUtils.get("download.owner.username"), ownerVO.getName());

@@ -4,6 +4,7 @@ import cn.hutool.core.util.ObjectUtil;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.weiho.scaffold.common.exception.BadRequestException;
 import com.weiho.scaffold.common.util.FileUtils;
+import com.weiho.scaffold.common.util.ListUtils;
 import com.weiho.scaffold.common.util.result.VueSelectVO;
 import com.weiho.scaffold.common.util.secure.IdSecureUtils;
 import com.weiho.scaffold.i18n.I18nMessagesUtils;
@@ -22,7 +23,10 @@ import org.springframework.transaction.annotation.Transactional;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.util.*;
+import java.util.LinkedHashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
 /**
  * <p>
@@ -42,7 +46,7 @@ public class ElevatorTypeServiceImpl extends CommonServiceImpl<ElevatorTypeMappe
 
     @Override
     public List<VueSelectVO> getElevatorTypeSelect(HttpServletRequest request) {
-        List<VueSelectVO> list = new ArrayList<>();
+        List<VueSelectVO> list = ListUtils.list(false);
         List<ElevatorType> elevatorTypes = this.list();
         for (ElevatorType elevatorType : elevatorTypes) {
             list.add(new VueSelectVO(IdSecureUtils.des().encrypt(elevatorType.getId()),
@@ -64,7 +68,7 @@ public class ElevatorTypeServiceImpl extends CommonServiceImpl<ElevatorTypeMappe
 
     @Override
     public void download(List<ElevatorType> all, HttpServletResponse response) throws IOException {
-        List<Map<String, Object>> list = new ArrayList<>();
+        List<Map<String, Object>> list = ListUtils.list(false);
         for (ElevatorType elevatorType : all) {
             Map<String, Object> map = new LinkedHashMap<>();
             map.put("电梯类型", elevatorType.getName());

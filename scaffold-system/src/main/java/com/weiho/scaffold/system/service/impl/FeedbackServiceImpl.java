@@ -1,10 +1,7 @@
 package com.weiho.scaffold.system.service.impl;
 
 import com.github.pagehelper.PageInfo;
-import com.weiho.scaffold.common.util.DateUtils;
-import com.weiho.scaffold.common.util.FileUtils;
-import com.weiho.scaffold.common.util.PageUtils;
-import com.weiho.scaffold.common.util.SecurityUtils;
+import com.weiho.scaffold.common.util.*;
 import com.weiho.scaffold.common.util.secure.IdSecureUtils;
 import com.weiho.scaffold.i18n.I18nMessagesUtils;
 import com.weiho.scaffold.mp.core.QueryHelper;
@@ -25,7 +22,10 @@ import org.springframework.transaction.annotation.Transactional;
 
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.util.*;
+import java.util.LinkedHashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
 /**
  * <p>
@@ -87,7 +87,7 @@ public class FeedbackServiceImpl extends CommonServiceImpl<FeedbackMapper, Feedb
 
     @Override
     public void download(List<FeedbackVO> all, HttpServletResponse response) throws IOException {
-        List<Map<String, Object>> list = new ArrayList<>();
+        List<Map<String, Object>> list = ListUtils.list(false);
         for (FeedbackVO feedbackVO : all) {
             Map<String, Object> map = new LinkedHashMap<>();
             map.put(I18nMessagesUtils.get("download.feedback.ownername"), feedbackVO.getOwnerName());

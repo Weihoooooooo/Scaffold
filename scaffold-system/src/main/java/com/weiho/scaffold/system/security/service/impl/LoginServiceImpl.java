@@ -1,5 +1,6 @@
 package com.weiho.scaffold.system.security.service.impl;
 
+import cn.hutool.core.builder.GenericBuilder;
 import cn.hutool.core.util.IdUtil;
 import com.weiho.scaffold.common.config.system.ScaffoldSystemProperties;
 import com.weiho.scaffold.common.exception.BadRequestException;
@@ -77,10 +78,9 @@ public class LoginServiceImpl implements LoginService {
         String uuid = properties.getCodeProperties().getCodeKey() + IdUtil.simpleUUID();
         //保存到Redis中
         redisUtils.set(uuid, result, properties.getCodeProperties().getExpiration(), TimeUnit.MINUTES);
-        return new HashMap<String, Object>(2) {{
-            put("uuid", uuid);
-            put("code", captcha.toBase64());
-        }};
+        return GenericBuilder.of(HashMap<String, Object>::new)
+                .with(Map::put, "uuid", uuid)
+                .with(Map::put, "code", captcha.toBase64()).build();
     }
 
     @Override
@@ -116,11 +116,11 @@ public class LoginServiceImpl implements LoginService {
             }
             // 获取最大权限等级
             List<Role> roles = roleService.findListByUser(userService.findByUsername(SecurityUtils.getUsername()));
-            return new HashMap<String, Object>(3) {{
-                put("token", properties.getJwtProperties().getTokenStartWith() + token);
-                put("userInfo", jwtUserVO);
-                put("maxLevel", CollUtils.min(roles.stream().map(Role::getLevel).collect(Collectors.toList())));
-            }};
+            return GenericBuilder.of(HashMap<String, Object>::new)
+                    .with(Map::put, "token", properties.getJwtProperties().getTokenStartWith() + token)
+                    .with(Map::put, "userInfo", jwtUserVO)
+                    .with(Map::put, "maxLevel", CollUtils.min(roles.stream().map(Role::getLevel).collect(Collectors.toList())))
+                    .build();
         } catch (IllegalStateException e) {
             throw new SecurityException(ResultCodeEnum.SYSTEM_FORBIDDEN, I18nMessagesUtils.get("login.error"));
         }
