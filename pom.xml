@@ -22,7 +22,7 @@
         <relativePath/>
     </parent>
 
-    <groupId>com.weiho.scaffold</groupId>
+    <groupId>com.jcweiho.scaffold</groupId>
     <artifactId>scaffold</artifactId>
     <version>1.0</version>
 

@@ -1,19 +1,19 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.weiho.scaffold.system.mapper.UserMapper">
+<mapper namespace="com.jcweiho.scaffold.system.mapper.UserMapper">
 
     <!-- 通用查询映射结果 -->
-    <resultMap id="BaseResultMap" type="com.weiho.scaffold.system.entity.User">
+    <resultMap id="BaseResultMap" type="com.jcweiho.scaffold.system.entity.User">
         <id column="id" property="id"/>
         <result column="create_time" property="createTime"/>
         <result column="update_time" property="updateTime"/>
         <result column="is_del" property="isDel"/>
         <result column="avatar_id" property="avatarId"/>
         <result column="username" property="username"/>
-        <result column="password" property="password" typeHandler="com.weiho.scaffold.mp.handler.EncryptHandler"/>
+        <result column="password" property="password" typeHandler="com.jcweiho.scaffold.mp.handler.EncryptHandler"/>
         <result column="sex" property="sex"/>
-        <result column="email" property="email" typeHandler="com.weiho.scaffold.mp.handler.EncryptHandler"/>
-        <result column="phone" property="phone" typeHandler="com.weiho.scaffold.mp.handler.PhoneHandler"/>
+        <result column="email" property="email" typeHandler="com.jcweiho.scaffold.mp.handler.EncryptHandler"/>
+        <result column="phone" property="phone" typeHandler="com.jcweiho.scaffold.mp.handler.PhoneHandler"/>
         <result column="enabled" property="enabled"/>
         <result column="last_pass_reset_time" property="lastPassResetTime"/>
     </resultMap>

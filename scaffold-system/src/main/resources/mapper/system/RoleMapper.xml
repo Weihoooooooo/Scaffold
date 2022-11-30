@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.weiho.scaffold.system.mapper.RoleMapper">
+<mapper namespace="com.jcweiho.scaffold.system.mapper.RoleMapper">
 
     <!-- 通用查询映射结果 -->
-    <resultMap id="BaseResultMap" type="com.weiho.scaffold.system.entity.Role">
+    <resultMap id="BaseResultMap" type="com.jcweiho.scaffold.system.entity.Role">
         <id column="id" property="id"/>
         <result column="create_time" property="createTime"/>
         <result column="update_time" property="updateTime"/>
@@ -25,7 +25,7 @@
         r.id, r.name, r.level, r.permission,r.name_zh_cn,r.name_zh_hk,r.name_zh_tw,r.name_en_us
     </sql>
 
-    <select id="findSetByUserId" resultType="com.weiho.scaffold.system.entity.Role">
+    <select id="findSetByUserId" resultType="com.jcweiho.scaffold.system.entity.Role">
         SELECT
         <include refid="Base_Column_List"/>
         FROM
@@ -36,7 +36,7 @@
         AND u.id = #{userId}
     </select>
 
-    <select id="findListByUserId" resultType="com.weiho.scaffold.system.entity.Role">
+    <select id="findListByUserId" resultType="com.jcweiho.scaffold.system.entity.Role">
         SELECT
         <include refid="Base_Column_List"/>
         FROM role r

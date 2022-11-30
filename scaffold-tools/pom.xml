@@ -5,12 +5,12 @@
     <modelVersion>4.0.0</modelVersion>
 
     <parent>
+        <groupId>com.jcweiho.scaffold</groupId>
         <artifactId>scaffold</artifactId>
-        <groupId>com.weiho.scaffold</groupId>
         <version>1.0</version>
     </parent>
 
-    <groupId>com.weiho.scaffold.tools</groupId>
+    <groupId>com.jcweiho.scaffold.tools</groupId>
     <artifactId>scaffold-tools</artifactId>
     <version>1.0</version>
 
@@ -31,21 +31,21 @@
 
         <!-- 引入logging日志模块 -->
         <dependency>
-            <groupId>com.weiho.scaffold.logging</groupId>
+            <groupId>com.jcweiho.scaffold.logging</groupId>
             <artifactId>scaffold-logging</artifactId>
             <version>1.0</version>
         </dependency>
 
         <!-- 引入Mybatis-Plus模块 -->
         <dependency>
-            <groupId>com.weiho.scaffold.mp</groupId>
+            <groupId>com.jcweiho.scaffold.mp</groupId>
             <artifactId>scaffold-mybatis-plus</artifactId>
             <version>1.0</version>
         </dependency>
 
         <!-- 引入Redis模块 -->
         <dependency>
-            <groupId>com.weiho.scaffold.redis</groupId>
+            <groupId>com.jcweiho.scaffold.redis</groupId>
             <artifactId>scaffold-redis</artifactId>
             <version>1.0</version>
         </dependency>

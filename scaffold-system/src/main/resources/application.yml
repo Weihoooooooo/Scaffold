@@ -99,7 +99,7 @@ spring:
 
 logging:
   level:
-    com.weiho.scaffold: DEBUG #开启Mybatis Log Plugin sql日志
+    com.jcweiho.scaffold: DEBUG #开启Mybatis Log Plugin sql日志
 
 #Mybatis  - - -  resultMap 不用全写映射，当数据库中的某些字段不匹配时，只用写某些字段
 mybatis-plus:
@@ -110,7 +110,7 @@ mybatis-plus:
     banner: false # 关闭控制台banner输出
   configuration:
     default-enum-type-handler: org.apache.ibatis.type.EnumOrdinalTypeHandler # 处理枚举类
-  type-aliases-package: com.weiho.scaffold.**.entity # 别名注解扫描路径
+  type-aliases-package: com.jcweiho.scaffold.**.entity # 别名注解扫描路径
 
 # PageHelper 分页插件
 pagehelper:

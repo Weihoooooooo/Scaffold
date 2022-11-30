@@ -5,12 +5,12 @@
     <modelVersion>4.0.0</modelVersion>
 
     <parent>
-        <groupId>com.weiho.scaffold</groupId>
+        <groupId>com.jcweiho.scaffold</groupId>
         <artifactId>scaffold</artifactId>
         <version>1.0</version>
     </parent>
 
-    <groupId>com.weiho.scaffold.mp</groupId>
+    <groupId>com.jcweiho.scaffold.mp</groupId>
     <artifactId>scaffold-mybatis-plus</artifactId>
     <version>1.0</version>
 
@@ -24,7 +24,7 @@
     <dependencies>
         <!-- 引用common公共模块 -->
         <dependency>
-            <groupId>com.weiho.scaffold.common</groupId>
+            <groupId>com.jcweiho.scaffold.common</groupId>
             <artifactId>scaffold-common</artifactId>
             <version>1.0</version>
         </dependency>

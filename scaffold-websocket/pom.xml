@@ -5,12 +5,12 @@
     <modelVersion>4.0.0</modelVersion>
 
     <parent>
-        <groupId>com.weiho.scaffold</groupId>
+        <groupId>com.jcweiho.scaffold</groupId>
         <artifactId>scaffold</artifactId>
         <version>1.0</version>
     </parent>
 
-    <groupId>com.weiho.scaffold.websocket</groupId>
+    <groupId>com.jcweiho.scaffold.websocket</groupId>
     <artifactId>scaffold-websocket</artifactId>
     <version>1.0</version>
 
@@ -37,7 +37,7 @@
 
         <!-- 引入公共模块 -->
         <dependency>
-            <groupId>com.weiho.scaffold.common</groupId>
+            <groupId>com.jcweiho.scaffold.common</groupId>
             <artifactId>scaffold-common</artifactId>
             <version>1.0</version>
         </dependency>
