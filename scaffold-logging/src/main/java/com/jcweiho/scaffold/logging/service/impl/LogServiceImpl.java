@@ -177,7 +177,7 @@ public class LogServiceImpl extends CommonServiceImpl<LogMapper, Log> implements
     private void getControllerMethodDescription(JoinPoint joinPoint, Logging logging, HttpServletRequest request,
                                                 Log logInfo, Object jsonResult) {
         //模块名称
-        logInfo.setTitle(logging.title());
+        logInfo.setTitle(StringUtils.isBlank(logging.title()) ? logging.value() : logging.title());
         //设置业务类型
         logInfo.setBusinessType(logging.businessType());
         //是否需要保存请求参数信息

@@ -194,7 +194,7 @@ public class UserController extends CommonController<UserService, User> {
         return resultMessage(Operate.DELETE, this.getBaseService().deleteUser(ids));
     }
 
-    @Logging(title = "导出用户数据")
+    @Logging("导出用户数据")
     @ApiOperation("导出用户数据")
     @GetMapping("/download")
     @PreAuthorize("@el.check('User:list')")

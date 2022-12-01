@@ -41,7 +41,7 @@ public class ParkLotController extends CommonController<ParkLotService, ParkLot>
         return this.getBaseService().findAll(criteria, pageable);
     }
 
-    @Logging(title = "导出停车场信息")
+    @Logging("导出停车场信息")
     @ApiOperation("导出停车场信息")
     @PreAuthorize("@el.check('ParkLot:list')")
     @GetMapping("/download")

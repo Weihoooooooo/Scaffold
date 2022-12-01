@@ -43,7 +43,7 @@ public class ElevatorController extends CommonController<ElevatorService, Elevat
         return this.getBaseService().getElevatorList(criteria, request, pageable);
     }
 
-    @Logging(title = "导出电梯信息")
+    @Logging("导出电梯信息")
     @ApiOperation("导出电梯信息")
     @GetMapping("/download")
     @PreAuthorize("@el.check('Elevator:list')")

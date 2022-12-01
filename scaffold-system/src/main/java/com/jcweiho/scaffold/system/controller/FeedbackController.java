@@ -60,7 +60,7 @@ public class FeedbackController extends CommonController<FeedbackService, Feedba
         return resultMessage(Operate.DELETE, this.getBaseService().deleteFeedback(filterCollNullAndDecrypt(ids)));
     }
 
-    @Logging(title = "导出反馈信息")
+    @Logging("导出反馈信息")
     @ApiOperation("导出反馈信息")
     @GetMapping("/download")
     @PreAuthorize("@el.check('Feedback:list')")

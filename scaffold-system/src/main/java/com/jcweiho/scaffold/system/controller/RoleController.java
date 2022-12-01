@@ -65,7 +65,7 @@ public class RoleController extends CommonController<RoleService, Role> {
         return this.getBaseService().getLevelScope();
     }
 
-    @Logging(title = "导出角色数据")
+    @Logging("导出角色数据")
     @ApiOperation("导出角色数据")
     @GetMapping("/download")
     @PreAuthorize("@el.check('Role:list')")

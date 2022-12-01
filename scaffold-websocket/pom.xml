@@ -39,7 +39,7 @@
         <dependency>
             <groupId>com.jcweiho.scaffold.common</groupId>
             <artifactId>scaffold-common</artifactId>
-            <version>1.0</version>
+            <version>${jcweiho-scaffold.version}</version>
         </dependency>
     </dependencies>
 </project>

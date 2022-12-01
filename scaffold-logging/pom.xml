@@ -26,14 +26,14 @@
         <dependency>
             <groupId>com.jcweiho.scaffold.common</groupId>
             <artifactId>scaffold-common</artifactId>
-            <version>1.0</version>
+            <version>${jcweiho-scaffold.version}</version>
         </dependency>
 
         <!-- 引入项目Mybatis-Plus模块 -->
         <dependency>
             <groupId>com.jcweiho.scaffold.mp</groupId>
             <artifactId>scaffold-mybatis-plus</artifactId>
-            <version>1.0</version>
+            <version>${jcweiho-scaffold.version}</version>
         </dependency>
     </dependencies>
 </project>

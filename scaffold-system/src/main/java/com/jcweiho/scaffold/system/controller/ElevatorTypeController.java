@@ -76,7 +76,7 @@ public class ElevatorTypeController extends CommonController<ElevatorTypeService
         return resultMessage(Operate.DELETE, this.getBaseService().deleteElevatorType(filterCollNullAndDecrypt(ids)));
     }
 
-    @Logging(title = "导出电梯类型数据")
+    @Logging("导出电梯类型数据")
     @ApiOperation("导出电梯类型数据")
     @GetMapping("/download")
     @PreAuthorize("@el.check('Elevator:list')")

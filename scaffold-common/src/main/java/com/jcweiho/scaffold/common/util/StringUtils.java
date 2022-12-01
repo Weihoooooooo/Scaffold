@@ -5,8 +5,6 @@ import lombok.experimental.UtilityClass;
 
 /**
  * 字符串工具类
- *
- * @author <a href="https://gitee.com/guchengwuyue/yshopmall">参考链接</a>
  */
 @UtilityClass
 public class StringUtils extends StrUtil {

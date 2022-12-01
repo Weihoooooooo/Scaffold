@@ -44,7 +44,7 @@ public class BuildingController extends CommonController<BuildingService, Buildi
         return this.getBaseService().getBuildingList(criteria, pageable);
     }
 
-    @Logging(title = "导出楼宇信息")
+    @Logging("导出楼宇信息")
     @ApiOperation("导出楼宇信息")
     @GetMapping("/download")
     @PreAuthorize("@el.check('Building:list')")

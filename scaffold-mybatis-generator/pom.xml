@@ -46,7 +46,7 @@
         <dependency>
             <groupId>com.jcweiho.scaffold.mp</groupId>
             <artifactId>scaffold-mybatis-plus</artifactId>
-            <version>1.0</version>
+            <version>${jcweiho-scaffold.version}</version>
         </dependency>
     </dependencies>
 </project>

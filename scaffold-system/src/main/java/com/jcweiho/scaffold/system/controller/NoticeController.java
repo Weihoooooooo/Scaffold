@@ -45,7 +45,7 @@ public class NoticeController extends CommonController<NoticeService, Notice> {
         return this.getBaseService().getNoticeList(criteria, pageable);
     }
 
-    @Logging(title = "导出通知信息")
+    @Logging("导出通知信息")
     @ApiOperation("导出通知信息")
     @GetMapping("/download")
     @PreAuthorize("@el.check('Notice:use')")

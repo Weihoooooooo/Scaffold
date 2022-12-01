@@ -1,3 +1,17 @@
+/* Copyright 2018 Elune,hu peng
+ * <p>
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ * <p>
+ * http://www.apache.org/licenses/LICENSE-2.0
+ * <p>
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
 package com.jcweiho.scaffold.redis.config;
 
 import cn.hutool.core.util.ObjectUtil;
@@ -43,8 +57,6 @@ import java.util.Objects;
 
 /**
  * Redis配置 (防止出现SpringBoot2.x缓存Redis序列化问题)
- *
- * @author yshopmall - <a href="https://gitee.com/guchengwuyue/yshopmall">参考链接</a>
  */
 @Slf4j
 @Configuration
@@ -77,13 +89,13 @@ public class RedisConfig extends CachingConfigurerSupport {
                 .forEach(clazz -> ReflectionUtils.doWithMethods(clazz, method -> {
                             ReflectionUtils.makeAccessible(method);
                             Cacheable cacheable = AnnotationUtils.findAnnotation(method, Cacheable.class);
-                    if (ObjectUtil.isNotNull(cacheable)) {
-                        for (String cache : cacheable.cacheNames()) {
-                            RedisSerializationContext.SerializationPair<Object> sp = RedisSerializationContext.SerializationPair
-                                    .fromSerializer(new CacheableRedisSerializer<>(method.getGenericReturnType()));
-                            cacheConfigMap.put(cache, RedisCacheConfiguration.defaultCacheConfig().serializeValuesWith(sp).entryTtl(Duration.ofDays(1)));
-                        }
-                    }
+                            if (ObjectUtil.isNotNull(cacheable)) {
+                                for (String cache : cacheable.cacheNames()) {
+                                    RedisSerializationContext.SerializationPair<Object> sp = RedisSerializationContext.SerializationPair
+                                            .fromSerializer(new CacheableRedisSerializer<>(method.getGenericReturnType()));
+                                    cacheConfigMap.put(cache, RedisCacheConfiguration.defaultCacheConfig().serializeValuesWith(sp).entryTtl(Duration.ofDays(1)));
+                                }
+                            }
                         })
                 );
         return cacheConfigMap;

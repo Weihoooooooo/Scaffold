@@ -1,6 +1,7 @@
 package com.jcweiho.scaffold.logging.annotation;
 
 import com.jcweiho.scaffold.logging.enums.BusinessTypeEnum;
+import org.springframework.core.annotation.AliasFor;
 
 import java.lang.annotation.*;
 
@@ -17,6 +18,13 @@ public @interface Logging {
     /**
      * 模块名称
      */
+    @AliasFor("title")
+    String value() default "";
+
+    /**
+     * 模块名称
+     */
+    @AliasFor("value")
     String title() default "";
 
     /**

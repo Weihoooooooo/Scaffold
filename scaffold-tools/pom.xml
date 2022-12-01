@@ -33,21 +33,21 @@
         <dependency>
             <groupId>com.jcweiho.scaffold.logging</groupId>
             <artifactId>scaffold-logging</artifactId>
-            <version>1.0</version>
+            <version>${jcweiho-scaffold.version}</version>
         </dependency>
 
         <!-- 引入Mybatis-Plus模块 -->
         <dependency>
             <groupId>com.jcweiho.scaffold.mp</groupId>
             <artifactId>scaffold-mybatis-plus</artifactId>
-            <version>1.0</version>
+            <version>${jcweiho-scaffold.version}</version>
         </dependency>
 
         <!-- 引入Redis模块 -->
         <dependency>
             <groupId>com.jcweiho.scaffold.redis</groupId>
             <artifactId>scaffold-redis</artifactId>
-            <version>1.0</version>
+            <version>${jcweiho-scaffold.version}</version>
         </dependency>
 
         <!-- 引入模板引擎 -->

@@ -93,7 +93,7 @@ public class MenuController extends CommonController<MenuService, Menu> {
         }
     }
 
-    @Logging(title = "导出菜单数据")
+    @Logging("导出菜单数据")
     @ApiOperation("导出菜单数据")
     @GetMapping("/download")
     @PreAuthorize("@el.check('Menu:list')")
@@ -113,9 +113,9 @@ public class MenuController extends CommonController<MenuService, Menu> {
     @ApiOperation("修改菜单")
     @PutMapping
     @PreAuthorize("@el.check('Menu:update')")
-    public Result updateMenu(@Validated @RequestBody Menu resources, HttpServletRequest request) {
+    public Result updateMenu(@Validated @RequestBody Menu resources) {
         // 刷新缓存
-        this.refreshMenuCache(this.getBaseService().updateMenu(resources), request);
+        this.refreshMenuCache(this.getBaseService().updateMenu(resources));
         return Result.success(I18nMessagesUtils.get("update.success.tip"));
     }
 
@@ -123,7 +123,7 @@ public class MenuController extends CommonController<MenuService, Menu> {
     @ApiOperation("删除菜单")
     @DeleteMapping
     @PreAuthorize("@el.check('Menu:delete')")
-    public Result deleteMenu(@RequestBody Set<Long> ids, HttpServletRequest request) {
+    public Result deleteMenu(@RequestBody Set<Long> ids) {
         Set<Menu> menuSet = new HashSet<>();
         for (Long id : ids) {
             // 查找子菜单
@@ -133,17 +133,16 @@ public class MenuController extends CommonController<MenuService, Menu> {
         }
         Set<Long> deleteIds = menuSet.stream().map(Menu::getId).collect(Collectors.toSet());
         // 执行删除并且更新缓存
-        this.refreshMenuCache(this.getBaseService().deleteMenu(deleteIds), request);
+        this.refreshMenuCache(this.getBaseService().deleteMenu(deleteIds));
         return Result.success(I18nMessagesUtils.get("delete.success.tip"));
     }
 
     /**
      * 刷新菜单缓存(在删除和更新菜单后都要刷新缓存)
      *
-     * @param flag    是否刷新
-     * @param request 请求参数
+     * @param flag 是否刷新
      */
-    public void refreshMenuCache(boolean flag, HttpServletRequest request) {
+    public void refreshMenuCache(boolean flag) {
         String username = SecurityUtils.getUsername();
         Long userId = SecurityUtils.getUserId();
 

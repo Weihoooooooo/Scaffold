@@ -27,10 +27,11 @@
     <version>1.0</version>
 
     <name>Scaffold</name>
-    <description>Scaffold project for Spring Boot</description>
+    <description>JC Student is my beloved</description>
 
     <properties>
         <java.version>1.8</java.version>
+        <jcweiho-scaffold.version>1.0</jcweiho-scaffold.version>
         <apache-commons-pool2.version>2.11.1</apache-commons-pool2.version>
         <apache-commons-lang3.version>3.12.0</apache-commons-lang3.version>
         <apache-commons-codec.version>1.15</apache-commons-codec.version>

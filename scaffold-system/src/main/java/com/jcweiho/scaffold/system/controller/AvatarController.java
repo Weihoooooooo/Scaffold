@@ -42,7 +42,7 @@ public class AvatarController extends CommonController<AvatarService, Avatar> {
         return this.getBaseService().selectAvatarList(criteria, pageable);
     }
 
-    @Logging(title = "导出头像信息")
+    @Logging("导出头像信息")
     @GetMapping("/download")
     @ApiOperation("导出头像信息")
     @PreAuthorize("@el.check('Avatar:list')")
@@ -60,7 +60,7 @@ public class AvatarController extends CommonController<AvatarService, Avatar> {
     }
 
     @PutMapping
-    @Logging(title = "审核用户头像")
+    @Logging("审核用户头像")
     @ApiOperation("审核用户头像")
     @PreAuthorize("@el.check('Avatar:update')")
     public Result updateEnabled(@RequestBody AvatarEnabledVO avatarEnabledVO) {

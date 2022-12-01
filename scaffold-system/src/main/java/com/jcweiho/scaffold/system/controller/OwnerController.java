@@ -48,7 +48,7 @@ public class OwnerController extends CommonController<OwnerService, Owner> {
         return this.getBaseService().getOwnerList(criteria, pageable);
     }
 
-    @Logging(title = "导出业主信息")
+    @Logging("导出业主信息")
     @ApiOperation("导出业主信息")
     @GetMapping("/download")
     @PreAuthorize("@el.check('OwnerInfo:list')")
