@@ -1,6 +1,7 @@
 package com.jcweiho.scaffold.system.controller;
 
 import com.jcweiho.scaffold.common.util.result.Result;
+import com.jcweiho.scaffold.common.util.result.VueSelectVO;
 import com.jcweiho.scaffold.logging.annotation.Logging;
 import com.jcweiho.scaffold.logging.enums.BusinessTypeEnum;
 import com.jcweiho.scaffold.mp.controller.CommonController;
@@ -17,6 +18,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
@@ -38,6 +40,7 @@ public class ParkLotController extends CommonController<ParkLotService, ParkLot>
     @PreAuthorize("@el.check('ParkLot:list')")
     @GetMapping
     public Map<String, Object> getParkLotList(@Validated ParkLotQueryCriteria criteria, Pageable pageable) {
+        System.err.println(criteria.getEnabled());
         return this.getBaseService().findAll(criteria, pageable);
     }
 
@@ -71,5 +74,12 @@ public class ParkLotController extends CommonController<ParkLotService, ParkLot>
     @DeleteMapping
     public Result deleteParkLot(@RequestBody Set<String> ids) {
         return resultMessage(Operate.DELETE, this.getBaseService().deleteParkLot(filterCollNullAndDecrypt(ids)));
+    }
+
+    @ApiOperation("获取车位所在区域下拉框")
+    @PreAuthorize("@el.check('ParkLot:list')")
+    @GetMapping("/parkRegions")
+    public List<VueSelectVO> getDistinctRegionSelect() {
+        return this.getBaseService().getDistinctRegionSelect();
     }
 }

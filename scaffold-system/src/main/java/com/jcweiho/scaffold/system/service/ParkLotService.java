@@ -1,5 +1,6 @@
 package com.jcweiho.scaffold.system.service;
 
+import com.jcweiho.scaffold.common.util.result.VueSelectVO;
 import com.jcweiho.scaffold.mp.service.CommonService;
 import com.jcweiho.scaffold.system.entity.ParkLot;
 import com.jcweiho.scaffold.system.entity.criteria.ParkLotQueryCriteria;
@@ -68,4 +69,11 @@ public interface ParkLotService extends CommonService<ParkLot> {
      * @return 是否成功
      */
     boolean deleteParkLot(Set<Long> ids);
+
+    /**
+     * 获取停车区域下拉框
+     *
+     * @return /
+     */
+    List<VueSelectVO> getDistinctRegionSelect();
 }

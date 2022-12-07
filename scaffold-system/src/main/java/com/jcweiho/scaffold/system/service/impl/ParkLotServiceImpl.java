@@ -2,9 +2,11 @@ package com.jcweiho.scaffold.system.service.impl;
 
 import cn.hutool.core.util.ObjectUtil;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.jcweiho.scaffold.common.exception.BadRequestException;
 import com.jcweiho.scaffold.common.util.FileUtils;
 import com.jcweiho.scaffold.common.util.ListUtils;
+import com.jcweiho.scaffold.common.util.result.VueSelectVO;
 import com.jcweiho.scaffold.common.util.secure.IdSecureUtils;
 import com.jcweiho.scaffold.i18n.I18nMessagesUtils;
 import com.jcweiho.scaffold.mp.core.QueryHelper;
@@ -97,5 +99,17 @@ public class ParkLotServiceImpl extends CommonServiceImpl<ParkLotMapper, ParkLot
     @Transactional(rollbackFor = Exception.class)
     public boolean deleteParkLot(Set<Long> ids) {
         return this.removeByIds(ids);
+    }
+
+    @Override
+    public List<VueSelectVO> getDistinctRegionSelect() {
+        List<VueSelectVO> list = ListUtils.list(false);
+        QueryWrapper<ParkLot> queryWrapper = new QueryWrapper<>();
+        queryWrapper.select("id, region");
+        List<ParkLot> parkLots = this.getBaseMapper().selectList(queryWrapper);
+        for (ParkLot parkLot : parkLots) {
+            list.add(new VueSelectVO(IdSecureUtils.des().encrypt(parkLot.getId()), parkLot.getRegion()));
+        }
+        return list;
     }
 }
