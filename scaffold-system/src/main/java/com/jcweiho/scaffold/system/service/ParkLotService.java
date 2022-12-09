@@ -4,6 +4,7 @@ import com.jcweiho.scaffold.common.util.result.VueSelectVO;
 import com.jcweiho.scaffold.mp.service.CommonService;
 import com.jcweiho.scaffold.system.entity.ParkLot;
 import com.jcweiho.scaffold.system.entity.criteria.ParkLotQueryCriteria;
+import com.jcweiho.scaffold.system.entity.enums.ParkTypeEnum;
 import org.springframework.data.domain.Pageable;
 
 import javax.servlet.http.HttpServletResponse;
@@ -69,6 +70,15 @@ public interface ParkLotService extends CommonService<ParkLot> {
      * @return 是否成功
      */
     boolean deleteParkLot(Set<Long> ids);
+
+    /**
+     * 获取指定停车场ID和指定停车位类型的车位数量
+     *
+     * @param parkLotId 停车场ID
+     * @param type      停车位类型
+     * @return 数量
+     */
+    Integer getCountByParkLotAndType(Long parkLotId, ParkTypeEnum type);
 
     /**
      * 获取停车区域下拉框

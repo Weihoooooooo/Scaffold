@@ -128,7 +128,7 @@ public class NoticeServiceImpl extends CommonServiceImpl<NoticeMapper, Notice> i
     public List<VueSelectVO> getDistinctUserSelect() {
         List<VueSelectVO> list = ListUtils.list(false);
         QueryWrapper<Notice> queryWrapper = new QueryWrapper<>();
-        queryWrapper.select("distinct user_id");
+        queryWrapper.select("DISTINCT user_id");
         List<Long> userIds = this.getBaseMapper().selectList(queryWrapper).stream().map(Notice::getUserId).collect(Collectors.toList());
         for (Long userId : userIds) {
             list.add(new VueSelectVO(userId, userService.getById(userId).getUsername()));

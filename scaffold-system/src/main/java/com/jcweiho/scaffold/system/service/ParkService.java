@@ -14,7 +14,7 @@ import java.util.Set;
 
 /**
  * <p>
- * 车位信息表信息表 服务类
+ * 车位信息表 服务类
  * </p>
  *
  * @author Weiho
@@ -30,7 +30,7 @@ public interface ParkService extends CommonService<Park> {
     List<ParkVO> convertToVO(List<Park> parks);
 
     /**
-     * 查询所有符合条件的车位信息表
+     * 查询所有符合条件的车位
      *
      * @param criteria 条件
      * @return 查询结果
@@ -38,7 +38,7 @@ public interface ParkService extends CommonService<Park> {
     List<Park> findAll(ParkQueryCriteria criteria);
 
     /**
-     * 查询所有符合条件的车位信息表(分页)
+     * 查询所有符合条件的车位(分页)
      *
      * @param criteria 条件
      * @param pageable 分页
@@ -47,7 +47,7 @@ public interface ParkService extends CommonService<Park> {
     Map<String, Object> findAll(ParkQueryCriteria criteria, Pageable pageable);
 
     /**
-     * 下载车位信息表
+     * 下载车位信息
      *
      * @param response 响应参数
      * @param all      结果集
@@ -55,7 +55,7 @@ public interface ParkService extends CommonService<Park> {
     void download(HttpServletResponse response, List<ParkVO> all) throws IOException;
 
     /**
-     * 更新车位信息表
+     * 更新车位信息
      *
      * @param resources 新车位信息表
      * @return 是否成功
@@ -63,7 +63,7 @@ public interface ParkService extends CommonService<Park> {
     boolean updatePark(ParkVO resources);
 
     /**
-     * 添加车位信息表
+     * 添加车位信息
      *
      * @param resources 车位信息表
      * @return 是否成功
@@ -71,7 +71,7 @@ public interface ParkService extends CommonService<Park> {
     boolean addPark(ParkVO resources);
 
     /**
-     * 删除车位信息表
+     * 删除车位信息
      *
      * @param ids 通知ID
      * @return 是否成功

@@ -15,7 +15,7 @@ import lombok.ToString;
 
 /**
  * <p>
- * 车位信息表信息表
+ * 车位信息
  * </p>
  *
  * @author Weiho

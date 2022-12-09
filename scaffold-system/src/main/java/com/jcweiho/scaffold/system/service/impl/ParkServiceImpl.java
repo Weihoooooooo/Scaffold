@@ -97,15 +97,6 @@ public class ParkServiceImpl extends CommonServiceImpl<ParkMapper, Park> impleme
         if (ObjectUtil.isNotNull(parkIdentityId) && !park.getId().equals(parkIdentityId.getId())) {
             throw new BadRequestException("该停车位编号已存在！");
         }
-
-//        ParkLot parkLot = parkLotService.getById(park.getParkLotId());
-//        if (!parkLot.getRegion().equals(resources.getRegion())) {
-//            ParkLot parkLot1 = parkLotService.getOne(new LambdaQueryWrapper<ParkLot>().eq(ParkLot::getRegion, resources.getRegion()));
-//            if (ObjectUtil.isNull(parkLot1)) {
-//                throw new BadRequestException("该停车场区域不存在！");
-//            }
-//            park.setParkLotId(parkLot1.getId());
-//        }
         park.setParkLotId(resources.getParkLotId());
         park.setType(resources.getType());
         park.setIsBuy(resources.getIsBuy());

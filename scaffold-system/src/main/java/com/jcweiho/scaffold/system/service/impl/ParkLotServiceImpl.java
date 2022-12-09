@@ -1,8 +1,8 @@
 package com.jcweiho.scaffold.system.service.impl;
 
+import cn.hutool.core.convert.Convert;
 import cn.hutool.core.util.ObjectUtil;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
-import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.jcweiho.scaffold.common.exception.BadRequestException;
 import com.jcweiho.scaffold.common.util.FileUtils;
 import com.jcweiho.scaffold.common.util.ListUtils;
@@ -11,10 +11,14 @@ import com.jcweiho.scaffold.common.util.secure.IdSecureUtils;
 import com.jcweiho.scaffold.i18n.I18nMessagesUtils;
 import com.jcweiho.scaffold.mp.core.QueryHelper;
 import com.jcweiho.scaffold.mp.service.impl.CommonServiceImpl;
+import com.jcweiho.scaffold.system.entity.Park;
 import com.jcweiho.scaffold.system.entity.ParkLot;
 import com.jcweiho.scaffold.system.entity.criteria.ParkLotQueryCriteria;
+import com.jcweiho.scaffold.system.entity.enums.ParkTypeEnum;
 import com.jcweiho.scaffold.system.mapper.ParkLotMapper;
+import com.jcweiho.scaffold.system.mapper.ParkMapper;
 import com.jcweiho.scaffold.system.service.ParkLotService;
+import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.util.CastUtils;
 import org.springframework.stereotype.Service;
@@ -37,8 +41,11 @@ import java.util.Set;
  * @since 2022-11-27
  */
 @Service
+@RequiredArgsConstructor
 @Transactional(propagation = Propagation.SUPPORTS, readOnly = true, rollbackFor = Exception.class)
 public class ParkLotServiceImpl extends CommonServiceImpl<ParkLotMapper, ParkLot> implements ParkLotService {
+    private final ParkMapper parkMapper;
+
     @Override
     public List<ParkLot> findAll(ParkLotQueryCriteria criteria) {
         return this.getBaseMapper().selectList(CastUtils.cast(QueryHelper.getQueryWrapper(ParkLot.class, criteria)));
@@ -102,13 +109,28 @@ public class ParkLotServiceImpl extends CommonServiceImpl<ParkLotMapper, ParkLot
     }
 
     @Override
+    public Integer getCountByParkLotAndType(Long parkLotId, ParkTypeEnum type) {
+        // 条件构造器
+        LambdaQueryWrapper<Park> wrapper = new LambdaQueryWrapper<>();
+        wrapper.eq(Park::getParkLotId, parkLotId).eq(Park::getType, type.getKey());
+        return Convert.toInt(parkMapper.selectCount(wrapper));
+    }
+
+    @Override
     public List<VueSelectVO> getDistinctRegionSelect() {
         List<VueSelectVO> list = ListUtils.list(false);
-        QueryWrapper<ParkLot> queryWrapper = new QueryWrapper<>();
-        queryWrapper.select("id, region");
-        List<ParkLot> parkLots = this.getBaseMapper().selectList(queryWrapper);
+        LambdaQueryWrapper<ParkLot> wrapper = new LambdaQueryWrapper<>();
+        wrapper.select(ParkLot::getId, ParkLot::getRegion);
+        List<ParkLot> parkLots = this.getBaseMapper().selectList(wrapper);
         for (ParkLot parkLot : parkLots) {
-            list.add(new VueSelectVO(IdSecureUtils.des().encrypt(parkLot.getId()), parkLot.getRegion()));
+            // 获取小车车位数量
+            Integer typeCarCount = this.getCountByParkLotAndType(parkLot.getId(), ParkTypeEnum.CAR_PARK);
+            // 获取其他车位数量
+            Integer typeOtherCount = this.getCountByParkLotAndType(parkLot.getId(), ParkTypeEnum.OTHER_PARK);
+            // 当车位数量不大于规定的数量才放入数组
+            if (typeCarCount <= parkLot.getNumber() && typeOtherCount <= parkLot.getOtherNumber()) {
+                list.add(new VueSelectVO(IdSecureUtils.des().encrypt(parkLot.getId()), parkLot.getRegion()));
+            }
         }
         return list;
     }

@@ -2,7 +2,6 @@ package com.jcweiho.scaffold.system.service.impl;
 
 import cn.hutool.core.util.ObjectUtil;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
-import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.github.pagehelper.PageInfo;
 import com.jcweiho.scaffold.common.exception.BadRequestException;
 import com.jcweiho.scaffold.common.util.FileUtils;
@@ -79,7 +78,7 @@ public class BuildingServiceImpl extends CommonServiceImpl<BuildingMapper, Build
         Building building = this.getById(resources.getId());
 
         Building buildingBuildingNum = this.getOne(new LambdaQueryWrapper<Building>().eq(Building::getBuildingNum, resources.getBuildingNum()));
-        if (buildingBuildingNum != null && !building.getId().equals(buildingBuildingNum.getId())) {
+        if (ObjectUtil.isNotNull(buildingBuildingNum) && !building.getId().equals(buildingBuildingNum.getId())) {
             throw new BadRequestException(I18nMessagesUtils.get("buildingNum.exist.error"));
         }
 
@@ -113,9 +112,9 @@ public class BuildingServiceImpl extends CommonServiceImpl<BuildingMapper, Build
     @Override
     public List<VueSelectVO> getDistinctBuildingSelect() {
         List<VueSelectVO> list = ListUtils.list(false);
-        QueryWrapper<Building> queryWrapper = new QueryWrapper<>();
-        queryWrapper.select("id, building_num");
-        List<Building> buildings = this.getBaseMapper().selectList(queryWrapper);
+        LambdaQueryWrapper<Building> wrapper = new LambdaQueryWrapper<>();
+        wrapper.select(Building::getId, Building::getBuildingNum);
+        List<Building> buildings = this.getBaseMapper().selectList(wrapper);
         for (Building building : buildings) {
             list.add(new VueSelectVO(IdSecureUtils.des().encrypt(building.getId()), building.getBuildingNum()));
         }

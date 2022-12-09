@@ -10,7 +10,7 @@
     <!-- name的值是变量的名称，value的值时变量定义的值。通过定义的值会被插入到logger上下文中。定义变量后，可以使“${}”来使用变量。 -->
     <property name="log.charset" value="utf-8"/>
     <!-- 日志保存位置 -->
-    <property name="log.path" value="${user.dir}/logs"/>
+    <property name="log.path" value="logs"/>
 
     <!-- magenta:洋红 -->
     <!-- boldMagenta:粗红-->

@@ -40,7 +40,6 @@ public class ParkLotController extends CommonController<ParkLotService, ParkLot>
     @PreAuthorize("@el.check('ParkLot:list')")
     @GetMapping
     public Map<String, Object> getParkLotList(@Validated ParkLotQueryCriteria criteria, Pageable pageable) {
-        System.err.println(criteria.getEnabled());
         return this.getBaseService().findAll(criteria, pageable);
     }
 

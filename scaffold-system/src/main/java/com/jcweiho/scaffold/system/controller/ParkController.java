@@ -23,7 +23,7 @@ import java.util.Set;
 
 /**
  * <p>
- * 车位信息表信息表 前端控制器
+ * 车位信息表 前端控制器
  * </p>
  *
  * @author Weiho
@@ -42,7 +42,7 @@ public class ParkController extends CommonController<ParkService, Park> {
     }
 
     @Logging("导出车位信息")
-    @ApiOperation("导出车位信息表信息")
+    @ApiOperation("导出车位信息")
     @PreAuthorize("@el.check('Park:list')")
     @GetMapping("/download")
     public void download(@Validated ParkQueryCriteria criteria, HttpServletResponse response) throws IOException {
@@ -50,7 +50,7 @@ public class ParkController extends CommonController<ParkService, Park> {
     }
 
     @Logging(title = "新增车位信息", businessType = BusinessTypeEnum.INSERT)
-    @ApiOperation("新增车位信息表信息")
+    @ApiOperation("新增车位信息")
     @PreAuthorize("@el.check('Park:add')")
     @PostMapping
     public Result addPark(@RequestBody @Validated ParkVO resources) {
@@ -58,7 +58,7 @@ public class ParkController extends CommonController<ParkService, Park> {
     }
 
     @Logging(title = "修改车位信息", businessType = BusinessTypeEnum.UPDATE)
-    @ApiOperation("修改车位信息表信息")
+    @ApiOperation("修改车位信息")
     @PreAuthorize("@el.check('Park:update')")
     @PutMapping
     public Result updatePark(@RequestBody @Validated ParkVO resources) {
@@ -66,7 +66,7 @@ public class ParkController extends CommonController<ParkService, Park> {
     }
 
     @Logging(title = "删除车位信息", businessType = BusinessTypeEnum.DELETE)
-    @ApiOperation("删除车位信息表信息")
+    @ApiOperation("删除车位信息")
     @PreAuthorize("@el.check('Park:delete')")
     @DeleteMapping
     public Result deletePark(@RequestBody Set<String> ids) {

@@ -166,7 +166,6 @@ public class UserController extends CommonController<UserService, User> {
     @PostMapping
     @PreAuthorize("@el.check('User:add')")
     public Result createUser(@Validated @RequestBody UserVO resources) {
-        System.err.println(resources.toString());
         roleService.checkLevel(resources.getRoles());
         return resultMessage(Operate.ADD, this.getBaseService().createUser(resources));
     }
