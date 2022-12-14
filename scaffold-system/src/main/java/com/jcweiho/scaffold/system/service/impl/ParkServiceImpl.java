@@ -4,9 +4,12 @@ import cn.hutool.core.util.ObjectUtil;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.github.pagehelper.PageInfo;
 import com.jcweiho.scaffold.common.exception.BadRequestException;
+import com.jcweiho.scaffold.common.util.CollUtils;
 import com.jcweiho.scaffold.common.util.FileUtils;
 import com.jcweiho.scaffold.common.util.ListUtils;
 import com.jcweiho.scaffold.common.util.PageUtils;
+import com.jcweiho.scaffold.common.util.result.VueCascadeVO;
+import com.jcweiho.scaffold.common.util.result.VueSelectVO;
 import com.jcweiho.scaffold.common.util.secure.IdSecureUtils;
 import com.jcweiho.scaffold.mp.core.QueryHelper;
 import com.jcweiho.scaffold.mp.service.impl.CommonServiceImpl;
@@ -97,6 +100,11 @@ public class ParkServiceImpl extends CommonServiceImpl<ParkMapper, Park> impleme
         if (ObjectUtil.isNotNull(parkIdentityId) && !park.getId().equals(parkIdentityId.getId())) {
             throw new BadRequestException("该停车位编号已存在！");
         }
+
+        if (!parkLotService.verifyParkLot(resources.getParkLotId())) {
+            throw new BadRequestException("该停车区域已满！");
+        }
+
         park.setParkLotId(resources.getParkLotId());
         park.setType(resources.getType());
         park.setIsBuy(resources.getIsBuy());
@@ -115,6 +123,10 @@ public class ParkServiceImpl extends CommonServiceImpl<ParkMapper, Park> impleme
             throw new BadRequestException("该停车位编号已存在！");
         }
 
+        if (!parkLotService.verifyParkLot(resources.getParkLotId())) {
+            throw new BadRequestException("该停车区域已满！");
+        }
+
         Park park = parkVOConvert.toEntity(resources);
 
         ParkLot parkLot = parkLotService.getById(resources.getParkLotId());
@@ -127,5 +139,27 @@ public class ParkServiceImpl extends CommonServiceImpl<ParkMapper, Park> impleme
     @Transactional(rollbackFor = Exception.class)
     public boolean deletePark(Set<Long> ids) {
         return this.removeByIds(ids);
+    }
+
+    @Override
+    public List<VueCascadeVO> getCascadeSelect() {
+        // 计算停车场级别
+        List<VueCascadeVO> list = ListUtils.list(false);
+        LambdaQueryWrapper<ParkLot> wrapper = new LambdaQueryWrapper<>();
+        wrapper.select(ParkLot::getId, ParkLot::getRegion);
+        List<ParkLot> parkLots = parkLotService.getBaseMapper().selectList(wrapper);
+        for (ParkLot parkLot : parkLots) {
+            // 查询停车场对应的停车位列表
+            List<Park> parks = this.getBaseMapper().selectList(new LambdaQueryWrapper<Park>().eq(Park::getParkLotId, parkLot.getId()));
+            List<VueSelectVO> parksSelect = ListUtils.list(false);
+            if (CollUtils.isNotBlank(parks)) {
+                for (Park park : parks) {
+                    parksSelect.add(new VueSelectVO(IdSecureUtils.des().encrypt(park.getId()), park.getIdentityId()));
+                }
+            }
+            list.add(new VueCascadeVO(IdSecureUtils.des().encrypt(parkLot.getId()),
+                    parkLot.getRegion(), CollUtils.isBlank(parks) ? null : parksSelect));
+        }
+        return list;
     }
 }

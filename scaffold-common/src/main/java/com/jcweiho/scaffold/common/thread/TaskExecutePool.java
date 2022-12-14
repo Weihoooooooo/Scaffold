@@ -1,6 +1,7 @@
 package com.jcweiho.scaffold.common.thread;
 
 import com.jcweiho.scaffold.common.config.system.ScaffoldSystemProperties;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.scheduling.annotation.AsyncConfigurer;
@@ -16,16 +17,13 @@ import java.util.concurrent.ThreadPoolExecutor;
  */
 @Configuration
 @Slf4j
+@RequiredArgsConstructor
 public class TaskExecutePool implements AsyncConfigurer {
     private final ScaffoldSystemProperties properties;
 
-    public TaskExecutePool(ScaffoldSystemProperties properties) {
-        this.properties = properties;
-    }
-
     @Override
     public Executor getAsyncExecutor() {
-        ThreadPoolTaskExecutor executor = new VisibleThreadPoolTaskExecutor();
+        ThreadPoolTaskExecutor executor = new ThreadPoolTaskExecutor();
         //核心线程数
         executor.setCorePoolSize(properties.getThreadPoolProperties().getCorePoolSize());
         //最大线程数

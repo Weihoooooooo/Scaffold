@@ -46,6 +46,7 @@ public class SysSettingController extends CommonController<SysSettingService, Sy
     @ApiOperation("获取系统参数")
     @GetMapping
     @PreAuthorize("@el.check('SystemSettings:use')")
+    @RateLimiter(limitType = LimitType.IP)
     public SysSettingVO getSysSetting() {
         return sysSettingVOConvert.toPojo(this.getBaseService().getSysSettings());
     }

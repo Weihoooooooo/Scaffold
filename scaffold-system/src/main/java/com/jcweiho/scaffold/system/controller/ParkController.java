@@ -1,9 +1,12 @@
 package com.jcweiho.scaffold.system.controller;
 
 import com.jcweiho.scaffold.common.util.result.Result;
+import com.jcweiho.scaffold.common.util.result.VueCascadeVO;
 import com.jcweiho.scaffold.logging.annotation.Logging;
 import com.jcweiho.scaffold.logging.enums.BusinessTypeEnum;
 import com.jcweiho.scaffold.mp.controller.CommonController;
+import com.jcweiho.scaffold.redis.limiter.annotation.RateLimiter;
+import com.jcweiho.scaffold.redis.limiter.enums.LimitType;
 import com.jcweiho.scaffold.system.entity.Park;
 import com.jcweiho.scaffold.system.entity.criteria.ParkQueryCriteria;
 import com.jcweiho.scaffold.system.entity.vo.ParkVO;
@@ -18,6 +21,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
@@ -73,4 +77,11 @@ public class ParkController extends CommonController<ParkService, Park> {
         return resultMessage(Operate.DELETE, this.getBaseService().deletePark(filterCollNullAndDecrypt(ids)));
     }
 
+    @ApiOperation("获取停车场-停车位级联列表")
+    @GetMapping("/cascadeList")
+    @PreAuthorize("@el.check('Park:list','ParkLot:list')")
+    @RateLimiter(limitType = LimitType.IP)
+    public List<VueCascadeVO> getCascadeList() {
+        return this.getBaseService().getCascadeSelect();
+    }
 }

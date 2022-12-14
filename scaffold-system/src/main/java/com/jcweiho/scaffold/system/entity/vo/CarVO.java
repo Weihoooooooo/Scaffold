@@ -13,7 +13,9 @@ import lombok.Setter;
 import lombok.ToString;
 
 import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.Size;
 import java.io.Serializable;
+import java.util.List;
 
 /**
  * @author Weiho
@@ -56,4 +58,11 @@ public class CarVO extends CommonEntity implements Serializable {
     @NotBlank(message = "车辆颜色不能为空！")
     @Xss
     private String carColor;
+
+    @ApiModelProperty("停车场-停车位信息列表")
+    @Size(max = 2, message = "该项大小最大为2！")
+    private List<String> parkInfo;
+
+    @ApiModelProperty("业主手机号")
+    private String phone;
 }

@@ -1,5 +1,6 @@
 package com.jcweiho.scaffold.common.util;
 
+import cn.hutool.core.util.ObjectUtil;
 import lombok.experimental.UtilityClass;
 
 import javax.crypto.Cipher;
@@ -8,6 +9,7 @@ import javax.crypto.SecretKeyFactory;
 import javax.crypto.spec.DESKeySpec;
 import javax.crypto.spec.IvParameterSpec;
 import java.nio.charset.StandardCharsets;
+import java.util.HashMap;
 
 /**
  * DES加解密工具类
@@ -21,13 +23,23 @@ public class DesUtils {
 
     private static Cipher cipher;
 
+    private static final HashMap<String, Cipher> map = new HashMap<>();
+
     private static final IvParameterSpec IV = new IvParameterSpec(STR_PARAM.getBytes(StandardCharsets.UTF_8));
+
+    public static void main(String[] args) throws Exception {
+        System.err.println(desEncrypt("123"));
+        System.err.println(desDecrypt(desEncrypt("123")));
+    }
 
     private DESKeySpec getDesKeySpec(String source) throws Exception {
         if (StringUtils.isBlank(source)) {
             return null;
         }
-        cipher = Cipher.getInstance("DES/CBC/PKCS5Padding");
+        if (ObjectUtil.isNull(map.get("keyString"))) {
+            cipher = Cipher.getInstance("DES/CBC/PKCS5Padding");
+            map.put("keyString", cipher);
+        }
         String strKey = "Passw0rd";
         return new DESKeySpec(strKey.getBytes(StandardCharsets.UTF_8));
     }

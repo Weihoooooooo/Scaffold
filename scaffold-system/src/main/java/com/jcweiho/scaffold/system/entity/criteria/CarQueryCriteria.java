@@ -22,4 +22,8 @@ public class CarQueryCriteria extends BaseQueryCriteria {
     @ApiModelProperty("模糊查询")
     @Xss
     private String blurry;
+
+    @ApiModelProperty("业主姓名模糊查询")
+    @Xss
+    private String name;
 }

@@ -5,6 +5,8 @@ import com.jcweiho.scaffold.common.util.result.VueSelectVO;
 import com.jcweiho.scaffold.logging.annotation.Logging;
 import com.jcweiho.scaffold.logging.enums.BusinessTypeEnum;
 import com.jcweiho.scaffold.mp.controller.CommonController;
+import com.jcweiho.scaffold.redis.limiter.annotation.RateLimiter;
+import com.jcweiho.scaffold.redis.limiter.enums.LimitType;
 import com.jcweiho.scaffold.system.entity.ParkLot;
 import com.jcweiho.scaffold.system.entity.criteria.ParkLotQueryCriteria;
 import com.jcweiho.scaffold.system.service.ParkLotService;
@@ -78,6 +80,7 @@ public class ParkLotController extends CommonController<ParkLotService, ParkLot>
     @ApiOperation("获取车位所在区域下拉框")
     @PreAuthorize("@el.check('ParkLot:list')")
     @GetMapping("/parkRegions")
+    @RateLimiter(limitType = LimitType.IP)
     public List<VueSelectVO> getDistinctRegionSelect() {
         return this.getBaseService().getDistinctRegionSelect();
     }

@@ -9,6 +9,8 @@ import com.jcweiho.scaffold.i18n.I18nMessagesUtils;
 import com.jcweiho.scaffold.logging.annotation.Logging;
 import com.jcweiho.scaffold.logging.enums.BusinessTypeEnum;
 import com.jcweiho.scaffold.mp.controller.CommonController;
+import com.jcweiho.scaffold.redis.limiter.annotation.RateLimiter;
+import com.jcweiho.scaffold.redis.limiter.enums.LimitType;
 import com.jcweiho.scaffold.redis.util.RedisUtils;
 import com.jcweiho.scaffold.system.cache.service.CacheRefresh;
 import com.jcweiho.scaffold.system.entity.Menu;
@@ -58,6 +60,7 @@ public class MenuController extends CommonController<MenuService, Menu> {
 
     @ApiOperation("获取前端所需菜单")
     @GetMapping("/build")
+    @RateLimiter(limitType = LimitType.IP)
     public List<MenuVO> buildMenuList(HttpServletRequest request) {
         try {
             String username = SecurityUtils.getUsername();
@@ -77,6 +80,7 @@ public class MenuController extends CommonController<MenuService, Menu> {
     @ApiOperation("获取菜单树")
     @GetMapping("/tree")
     @PreAuthorize("@el.check('Role:list','Menu:list')")
+    @RateLimiter(limitType = LimitType.IP)
     public List<MenuTreeVO> getMenuTree(HttpServletRequest request) {
         return this.getBaseService().getMenuTree(this.getBaseService().findByParentId(0L), request);
     }

@@ -123,15 +123,19 @@ public class ParkLotServiceImpl extends CommonServiceImpl<ParkLotMapper, ParkLot
         wrapper.select(ParkLot::getId, ParkLot::getRegion);
         List<ParkLot> parkLots = this.getBaseMapper().selectList(wrapper);
         for (ParkLot parkLot : parkLots) {
-            // 获取小车车位数量
-            Integer typeCarCount = this.getCountByParkLotAndType(parkLot.getId(), ParkTypeEnum.CAR_PARK);
-            // 获取其他车位数量
-            Integer typeOtherCount = this.getCountByParkLotAndType(parkLot.getId(), ParkTypeEnum.OTHER_PARK);
-            // 当车位数量不大于规定的数量才放入数组
-            if (typeCarCount <= parkLot.getNumber() && typeOtherCount <= parkLot.getOtherNumber()) {
-                list.add(new VueSelectVO(IdSecureUtils.des().encrypt(parkLot.getId()), parkLot.getRegion()));
-            }
+            list.add(new VueSelectVO(IdSecureUtils.des().encrypt(parkLot.getId()), parkLot.getRegion()));
         }
         return list;
+    }
+
+    @Override
+    public boolean verifyParkLot(Long parkLotId) {
+        // 获取小车车位数量
+        Integer typeCarCount = this.getCountByParkLotAndType(parkLotId, ParkTypeEnum.CAR_PARK);
+        // 获取其他车位数量
+        Integer typeOtherCount = this.getCountByParkLotAndType(parkLotId, ParkTypeEnum.OTHER_PARK);
+        ParkLot parkLot = this.getById(parkLotId);
+        // 当车位数量不大于规定的数量才放入数组
+        return typeCarCount < parkLot.getNumber() && typeOtherCount < parkLot.getOtherNumber();
     }
 }

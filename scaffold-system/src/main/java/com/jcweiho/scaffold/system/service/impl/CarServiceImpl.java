@@ -4,13 +4,12 @@ import cn.hutool.core.util.ObjectUtil;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.github.pagehelper.PageInfo;
 import com.jcweiho.scaffold.common.exception.BadRequestException;
-import com.jcweiho.scaffold.common.util.FileUtils;
-import com.jcweiho.scaffold.common.util.ListUtils;
-import com.jcweiho.scaffold.common.util.PageUtils;
+import com.jcweiho.scaffold.common.util.*;
 import com.jcweiho.scaffold.common.util.secure.IdSecureUtils;
 import com.jcweiho.scaffold.mp.core.QueryHelper;
 import com.jcweiho.scaffold.mp.service.impl.CommonServiceImpl;
 import com.jcweiho.scaffold.system.entity.Car;
+import com.jcweiho.scaffold.system.entity.Owner;
 import com.jcweiho.scaffold.system.entity.convert.CarVOConvert;
 import com.jcweiho.scaffold.system.entity.convert.ParkVOConvert;
 import com.jcweiho.scaffold.system.entity.criteria.CarQueryCriteria;
@@ -34,6 +33,7 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 /**
  * <p>
@@ -61,13 +61,29 @@ public class CarServiceImpl extends CommonServiceImpl<CarMapper, Car> implements
             ParkVO parkVO = parkVOConvert.toPojo(parkService.getById(carVO.getParkId()));
             parkVO.setRegion(parkLotService.getById(parkVO.getParkLotId()).getRegion());
             carVO.setParkVO(parkVO);
+            List<String> parkInfo = ListUtils.list(false);
+            parkInfo.add(IdSecureUtils.des().encrypt(parkVO.getParkLotId()));
+            parkInfo.add(IdSecureUtils.des().encrypt(carVO.getParkId()));
+            carVO.setParkInfo(parkInfo);
         }
         return carVOList;
     }
 
     @Override
     public List<Car> findAll(CarQueryCriteria criteria) {
-        return this.getBaseMapper().selectList(CastUtils.cast(QueryHelper.getQueryWrapper(Car.class, criteria)));
+        // 先筛选所有符合基本条件的
+        List<Car> cars = this.getBaseMapper().selectList(CastUtils.cast(QueryHelper.getQueryWrapper(Car.class, criteria)));
+        // 根据传入的业主姓名模糊查询业主主键列表
+        if (StringUtils.isNotBlank(criteria.getName())) {
+            List<Long> owners = ownerService.getBaseMapper()
+                    .selectList(new LambdaQueryWrapper<Owner>().like(Owner::getName, LikeCipherUtils.likeEncrypt(criteria.getName())))
+                    .stream().map(Owner::getId).collect(Collectors.toList());
+            // 遍历上面的cars
+            if (CollUtils.isNotEmpty(owners)) {
+                return cars.stream().filter(i -> owners.contains(i.getOwnerId())).collect(Collectors.toList());
+            }
+        }
+        return cars;
     }
 
 
@@ -100,13 +116,20 @@ public class CarServiceImpl extends CommonServiceImpl<CarMapper, Car> implements
     @Transactional(rollbackFor = Exception.class)
     public boolean updateCar(CarVO resources) {
         IdSecureUtils.verifyIdNotNull(resources.getId());
+        System.err.println(resources.getId());
         Car car = this.getById(resources.getId());
+        if (!VerifyUtils.isPlateNumber(resources.getCarNumber())) {
+            throw new BadRequestException("请输入正确的车牌号！");
+        }
         Car carCarNumber = this.getOne(new LambdaQueryWrapper<Car>().eq(Car::getCarNumber, resources.getCarNumber()));
         if (ObjectUtil.isNotNull(carCarNumber) && !car.getId().equals(carCarNumber.getId())) {
             throw new BadRequestException("该车牌号已存在！");
         }
-        car.setOwnerId(resources.getOwnerId());
-        car.setParkId(resources.getParkId());
+        Car carParkId = this.getOne(new LambdaQueryWrapper<Car>().eq(Car::getParkId, IdSecureUtils.des().decrypt(resources.getParkInfo().get(1))));
+        if (ObjectUtil.isNotNull(carParkId) && !car.getId().equals(carParkId.getId())) {
+            throw new BadRequestException("该停车场已被占用!");
+        }
+        car.setParkId(IdSecureUtils.des().decrypt(resources.getParkInfo().get(1)));
         car.setCarNumber(resources.getCarNumber());
         car.setCarColor(resources.getCarColor());
         return this.saveOrUpdate(car);
@@ -116,10 +139,22 @@ public class CarServiceImpl extends CommonServiceImpl<CarMapper, Car> implements
     @Transactional(rollbackFor = Exception.class)
     public boolean addCar(CarVO resources) {
         IdSecureUtils.verifyIdNull(resources.getId());
+        if (StringUtils.isBlank(resources.getPhone())) {
+            throw new BadRequestException("业主手机不能为空！");
+        }
+        if (!VerifyUtils.isPlateNumber(resources.getCarNumber())) {
+            throw new BadRequestException("请输入正确的车牌号！");
+        }
         if (ObjectUtil.isNotNull(this.getOne(new LambdaQueryWrapper<Car>().eq(Car::getCarNumber, resources.getCarNumber())))) {
             throw new BadRequestException("该车牌号已存在！");
         }
+        if (ObjectUtil.isNotNull(this.getOne(new LambdaQueryWrapper<Car>().eq(Car::getParkId, IdSecureUtils.des().decrypt(resources.getParkInfo().get(1)))))) {
+            throw new BadRequestException("该停车场已被占用!");
+        }
         Car car = carVOConvert.toEntity(resources);
+        Long ownerId = ownerService.getOne(new LambdaQueryWrapper<Owner>().eq(Owner::getPhone, LikeCipherUtils.phoneLikeEncrypt(resources.getPhone()))).getId();
+        car.setOwnerId(ownerId);
+        car.setParkId(IdSecureUtils.des().decrypt(resources.getParkInfo().get(1)));
         if (!car.getCarColor().endsWith("色")) {
             car.setCarColor(car.getCarColor() + "色");
         }

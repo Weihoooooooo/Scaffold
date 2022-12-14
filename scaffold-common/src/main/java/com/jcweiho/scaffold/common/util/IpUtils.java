@@ -84,7 +84,7 @@ public class IpUtils extends NetUtil {
         if (StringUtils.isBlank(ip)) {
             return null;
         }
-        if (ping("https://hutool.cn")) {
+        if (ping("www.hutool.cn")) {
             String api = UrlBuilder.ofHttp("whois.pconline.com.cn")
                     .addPath("/ipJson.jsp").addQuery("ip", ip).addQuery("json", "true").build();
             String result = HttpUtil.get(api, 1000);

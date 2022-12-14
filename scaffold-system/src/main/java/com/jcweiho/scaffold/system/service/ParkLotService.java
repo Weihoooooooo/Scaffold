@@ -86,4 +86,12 @@ public interface ParkLotService extends CommonService<ParkLot> {
      * @return /
      */
     List<VueSelectVO> getDistinctRegionSelect();
+
+    /**
+     * 验证当前停车场数量是否未满
+     *
+     * @param parkLotId 停车场ID
+     * @return 是否未满
+     */
+    boolean verifyParkLot(Long parkLotId);
 }

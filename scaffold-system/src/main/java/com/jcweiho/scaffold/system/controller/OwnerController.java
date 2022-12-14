@@ -6,6 +6,8 @@ import com.jcweiho.scaffold.i18n.I18nMessagesUtils;
 import com.jcweiho.scaffold.logging.annotation.Logging;
 import com.jcweiho.scaffold.logging.enums.BusinessTypeEnum;
 import com.jcweiho.scaffold.mp.controller.CommonController;
+import com.jcweiho.scaffold.redis.limiter.annotation.RateLimiter;
+import com.jcweiho.scaffold.redis.limiter.enums.LimitType;
 import com.jcweiho.scaffold.system.entity.Owner;
 import com.jcweiho.scaffold.system.entity.convert.OwnerVOConvert;
 import com.jcweiho.scaffold.system.entity.criteria.OwnerQueryCriteria;
@@ -76,6 +78,7 @@ public class OwnerController extends CommonController<OwnerService, Owner> {
     @PostMapping("/owner")
     @PreAuthorize("@el.check('OwnerInfo:list')")
     @ApiImplicitParam(paramType = "query", name = "id", value = "业主主键", dataType = "Long", dataTypeClass = Long.class, required = true)
+    @RateLimiter(limitType = LimitType.IP)
     public Result getOwnerForId(@ApiIgnore @RequestBody Map<String, Object> map) {
         filterMapNull(map, I18nMessagesUtils.get("param.error"));
         return Result.success(this.getBaseService().getById(filterNullAndDecrypt(MapUtils.getStr(map, "id"), I18nMessagesUtils.get("param.null"))));

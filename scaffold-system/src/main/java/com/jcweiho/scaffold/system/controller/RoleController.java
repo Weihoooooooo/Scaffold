@@ -45,6 +45,7 @@ public class RoleController extends CommonController<RoleService, Role> {
     @GetMapping("/select")
     @ApiOperation("获取所有角色列表(带国际化)")
     @PreAuthorize("@el.check('Role:list')")
+    @RateLimiter(limitType = LimitType.IP)
     public Map<String, Object> getAllRoles(@Validated RoleQueryCriteria criteria, HttpServletRequest request,
                                            @PageableDefault(value = 2000, sort = {"level"}, direction = Sort.Direction.ASC) Pageable pageable) {
         return this.getBaseService().findAll(criteria, pageable, request);

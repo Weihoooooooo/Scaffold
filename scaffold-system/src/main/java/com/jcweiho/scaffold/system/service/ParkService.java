@@ -1,5 +1,6 @@
 package com.jcweiho.scaffold.system.service;
 
+import com.jcweiho.scaffold.common.util.result.VueCascadeVO;
 import com.jcweiho.scaffold.mp.service.CommonService;
 import com.jcweiho.scaffold.system.entity.Park;
 import com.jcweiho.scaffold.system.entity.criteria.ParkQueryCriteria;
@@ -77,4 +78,11 @@ public interface ParkService extends CommonService<Park> {
      * @return 是否成功
      */
     boolean deletePark(Set<Long> ids);
+
+    /**
+     * 获取停车场-停车位级联选择下拉框
+     *
+     * @return 级联下拉框
+     */
+    List<VueCascadeVO> getCascadeSelect();
 }
