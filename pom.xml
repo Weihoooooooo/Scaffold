@@ -13,6 +13,7 @@
         <module>scaffold-websocket</module>
         <module>scaffold-redis</module>
         <module>scaffold-tools</module>
+        <module>scaffold-rabbitmq</module>
     </modules>
 
     <parent>
@@ -171,12 +172,6 @@
         <dependency>
             <groupId>mysql</groupId>
             <artifactId>mysql-connector-java</artifactId>
-        </dependency>
-
-        <!-- 引入RabbitMQ模块 -->
-        <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-amqp</artifactId>
         </dependency>
 
         <!-- hutool工具包 -->

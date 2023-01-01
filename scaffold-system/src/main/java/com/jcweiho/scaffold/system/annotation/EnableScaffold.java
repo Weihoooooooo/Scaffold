@@ -3,6 +3,7 @@ package com.jcweiho.scaffold.system.annotation;
 import com.jcweiho.scaffold.common.config.ScaffoldCommonConfiguration;
 import com.jcweiho.scaffold.logging.config.ScaffoldLoggingConfiguration;
 import com.jcweiho.scaffold.mp.config.ScaffoldMybatisPlusConfiguration;
+import com.jcweiho.scaffold.rabbitmq.config.ScaffoldRabbitConfiguration;
 import com.jcweiho.scaffold.redis.config.ScaffoldRedisConfiguration;
 import com.jcweiho.scaffold.tools.config.ScaffoldToolsConfiguration;
 import com.jcweiho.scaffold.websocket.config.ScaffoldWebsocketConfiguration;
@@ -23,7 +24,8 @@ import java.lang.annotation.*;
         ScaffoldRedisConfiguration.class,
         ScaffoldToolsConfiguration.class,
         ScaffoldWebsocketConfiguration.class,
-        ScaffoldMybatisPlusConfiguration.class
+        ScaffoldMybatisPlusConfiguration.class,
+        ScaffoldRabbitConfiguration.class
 })
 public @interface EnableScaffold {
 }

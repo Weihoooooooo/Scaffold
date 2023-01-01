@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <parent>
+        <groupId>com.jcweiho.scaffold</groupId>
+        <artifactId>scaffold</artifactId>
+        <version>1.0</version>
+    </parent>
+
+    <groupId>com.jcweiho.scaffold.rabbitmq</groupId>
+    <artifactId>scaffold-rabbitmq</artifactId>
+    <version>1.0</version>
+
+    <name>消息队列模块</name>
+    <description>消息队列模块</description>
+
+    <properties>
+        <java.version>1.8</java.version>
+    </properties>
+
+    <dependencies>
+        <!-- 引入RabbitMQ模块 -->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-amqp</artifactId>
+        </dependency>
+
+        <!-- 引入项目公共模块 -->
+        <dependency>
+            <groupId>com.jcweiho.scaffold.common</groupId>
+            <artifactId>scaffold-common</artifactId>
+            <version>${jcweiho-scaffold.version}</version>
+        </dependency>
+    </dependencies>
+
+</project>

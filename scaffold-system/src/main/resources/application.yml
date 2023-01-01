@@ -203,11 +203,11 @@ scaffold:
     logging-monitor-enabled: true
   rabbitmq:
     # 队列名称
-    queue-name: ${spring.application.name}.middleware.mail.queue
+    queue-name: ${spring.application.name}.middleware.rabbit.queue
     # 队列交换机名称
-    exchange-name: ${spring.application.name}.mail.exchange
+    exchange-name: ${spring.application.name}.rabbit.exchange
     # 路由Key名称
-    routing-key-name: ${spring.application.name}.mail.routing.key
+    routing-key-name: ${spring.application.name}.rabbit.routing.key
   email:
     # 邮箱验证码的长度
     code-key: "Scaffold:EmailCode:"

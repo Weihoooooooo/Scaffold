@@ -11,7 +11,7 @@ import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Component;
 
 /**
- * 发送邮件消息消费者
+ * 发送邮件消费者
  *
  * @author Weiho
  * @since 2022/8/28

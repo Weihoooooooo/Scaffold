@@ -35,5 +35,12 @@
             <artifactId>scaffold-mybatis-plus</artifactId>
             <version>${jcweiho-scaffold.version}</version>
         </dependency>
+
+        <!-- 添加Rabbitmq模块 -->
+        <dependency>
+            <groupId>com.jcweiho.scaffold.rabbitmq</groupId>
+            <artifactId>scaffold-rabbitmq</artifactId>
+            <version>${jcweiho-scaffold.version}</version>
+        </dependency>
     </dependencies>
 </project>

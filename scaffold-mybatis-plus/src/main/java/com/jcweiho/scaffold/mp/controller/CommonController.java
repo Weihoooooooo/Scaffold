@@ -29,7 +29,7 @@ public abstract class CommonController<S extends CommonService<E>, E> {
 
     @Getter
     @RequiredArgsConstructor
-    public enum Operate {
+    protected enum Operate {
         ADD("add"),
         UPDATE("update"),
         DELETE("delete"),
@@ -38,16 +38,16 @@ public abstract class CommonController<S extends CommonService<E>, E> {
         private final String operate;
     }
 
-    private enum DecryptType {
+    protected enum DecryptType {
         DES,
         AES
     }
 
     /**
-     * 通用修改返回模板方法
+     * 通用返回模板方法
      *
      * @param operateType 业务操作
-     * @param operate     修改操作
+     * @param operate     修改/添加操作
      * @return Result实体
      */
     protected static Result resultMessage(Operate operateType, boolean operate) {
@@ -95,7 +95,6 @@ public abstract class CommonController<S extends CommonService<E>, E> {
      *
      * @param ids          传入的集合
      * @param errorMessage 异常的信息
-     * @return 处理后的数组
      */
     protected static void filterMapNull(Map<?, ?> ids, String errorMessage) {
         if (MapUtils.isEmpty(ids)) {
@@ -152,7 +151,6 @@ public abstract class CommonController<S extends CommonService<E>, E> {
      * 去空并将加密的字符串主键解密成Long
      *
      * @param id           加密的主键
-     * @param errorMessage 错误消息
      * @return 明文主键
      */
     protected static Long filterNullAndDecrypt(String id) {

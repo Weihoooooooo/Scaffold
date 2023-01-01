@@ -15,7 +15,7 @@ import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 /**
- * 配置跨域
+ * 配置跨域和MVC配置
  *
  * @author Weiho
  * @since 2022/7/29
@@ -23,7 +23,7 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 @Configuration
 @EnableWebMvc
 @RequiredArgsConstructor
-public class GlobalCorsConfig implements WebMvcConfigurer {
+public class GlobalMvcConfig implements WebMvcConfigurer {
     private final ScaffoldSystemProperties properties;
 
     @Bean

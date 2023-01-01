@@ -1,7 +1,6 @@
-package com.jcweiho.scaffold.tools.rabbitmq.core;
+package com.jcweiho.scaffold.rabbitmq.core;
 
 import com.jcweiho.scaffold.common.config.system.ScaffoldSystemProperties;
-import com.jcweiho.scaffold.tools.mail.entity.vo.EmailVO;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.amqp.core.MessageDeliveryMode;
@@ -31,7 +30,7 @@ public class MqPublisher {
      * @param o Email实体
      */
     @Async
-    public void sendEmailMqMessage(EmailVO o) {
+    public <T> void sendMqMessage(T o) {
         try {
             rabbitTemplate.setMessageConverter(new Jackson2JsonMessageConverter());
             rabbitTemplate.setExchange(properties.getRabbitMqProperties().getExchangeName());

@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.jcweiho.scaffold.system.mapper.HouseholdMapper">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="com.jcweiho.scaffold.system.entity.Household">
+        <id column="id" property="id"/>
+        <result column="owner_id" property="ownerId"/>
+        <result column="building_id" property="buildingId"/>
+        <result column="identity_id" property="identityId"/>
+        <result column="area" property="area"/>
+        <result column="meter_water" property="meterWater"/>
+        <result column="last_meter_water" property="lastMeterWater"/>
+        <result column="meter_electric" property="meterElectric"/>
+        <result column="last_meter_electric" property="lastMeterElectric"/>
+        <result column="people_number" property="peopleNumber"/>
+        <result column="is_live" property="isLive"/>
+        <result column="create_time" property="createTime"/>
+        <result column="update_time" property="updateTime"/>
+        <result column="is_del" property="isDel"/>
+    </resultMap>
+
+    <!-- 通用查询sql -->
+    <sql id="Base_Column_List">
+        SELECT id,
+               owner_id,
+               building_id,
+               identity_id,
+               area,
+               meter_water,
+               last_meter_water,
+               meter_electric,
+               last_meter_electric,
+               people_number,
+               is_live,
+               create_time,
+               update_time,
+               is_del
+        FROM household
+    </sql>
+
+</mapper>

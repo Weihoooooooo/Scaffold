@@ -63,6 +63,13 @@
             <version>${jcweiho-scaffold.version}</version>
         </dependency>
 
+        <!-- 引入Rabbitmq模块 -->
+        <dependency>
+            <groupId>com.jcweiho.scaffold.rabbitmq</groupId>
+            <artifactId>scaffold-rabbitmq</artifactId>
+            <version>${jcweiho-scaffold.version}</version>
+        </dependency>
+
         <!-- JWT支持 -->
         <dependency>
             <groupId>io.jsonwebtoken</groupId>

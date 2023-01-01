@@ -6,12 +6,12 @@ import com.jcweiho.scaffold.common.util.enums.EnumSelectVO;
 import com.jcweiho.scaffold.common.util.result.Result;
 import com.jcweiho.scaffold.i18n.I18nMessagesUtils;
 import com.jcweiho.scaffold.logging.annotation.Logging;
+import com.jcweiho.scaffold.rabbitmq.core.MqPublisher;
 import com.jcweiho.scaffold.redis.limiter.annotation.RateLimiter;
 import com.jcweiho.scaffold.redis.limiter.enums.LimitType;
 import com.jcweiho.scaffold.tools.mail.entity.vo.EmailVO;
 import com.jcweiho.scaffold.tools.mail.entity.vo.VerificationCodeVO;
 import com.jcweiho.scaffold.tools.mail.service.VerificationCodeService;
-import com.jcweiho.scaffold.tools.rabbitmq.core.MqPublisher;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
@@ -45,7 +45,7 @@ public class VerificationCodeController {
         Map<String, Object> codeResult = verificationCodeService.generatorEmailInfo(codeVO);
         EmailVO emailVO = (EmailVO) codeResult.get("emailVO");
         // 放入MQ消息队列
-        mqPublisher.sendEmailMqMessage(emailVO);
+        mqPublisher.sendMqMessage(emailVO);
         return Result.success(codeResult.get("uuid"));
     }
 

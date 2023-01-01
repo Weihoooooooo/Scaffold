@@ -1,4 +1,4 @@
-package com.jcweiho.scaffold.tools.rabbitmq.config;
+package com.jcweiho.scaffold.rabbitmq.config;
 
 import com.jcweiho.scaffold.common.config.system.ScaffoldSystemProperties;
 import lombok.RequiredArgsConstructor;

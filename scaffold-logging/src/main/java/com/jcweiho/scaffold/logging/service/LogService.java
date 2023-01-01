@@ -1,14 +1,12 @@
 package com.jcweiho.scaffold.logging.service;
 
-import com.jcweiho.scaffold.logging.annotation.Logging;
 import com.jcweiho.scaffold.logging.entity.Log;
 import com.jcweiho.scaffold.logging.entity.criteria.LogQueryCriteria;
 import com.jcweiho.scaffold.logging.enums.LogTypeEnum;
 import com.jcweiho.scaffold.mp.service.CommonService;
-import org.aspectj.lang.JoinPoint;
 import org.springframework.data.domain.Pageable;
+import org.springframework.scheduling.annotation.Async;
 
-import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.List;
@@ -44,14 +42,10 @@ public interface LogService extends CommonService<Log> {
     /**
      * 存储日志信息
      *
-     * @param joinPoint  AOP切点对象
-     * @param request    请求对象
-     * @param logging    注解
-     * @param log        Log对象
-     * @param e          异常
-     * @param jsonResult 响应结果
+     * @param log Log对象
      */
-    void saveLogInfo(final JoinPoint joinPoint, HttpServletRequest request, Logging logging, Log log, final Exception e, Object jsonResult);
+    @Async
+    void saveLogInfo(Log log);
 
     /**
      * 导出日志
