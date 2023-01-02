@@ -1,6 +1,7 @@
 package com.jcweiho.scaffold.rabbitmq.core;
 
 import com.jcweiho.scaffold.common.config.system.ScaffoldSystemProperties;
+import com.jcweiho.scaffold.rabbitmq.queue.Queue;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.amqp.core.MessageDeliveryMode;
@@ -25,16 +26,16 @@ public class MqPublisher {
     private final ScaffoldSystemProperties properties;
 
     /**
-     * 发送MQ发送邮件任务
+     * 发送MQ任务
      *
-     * @param o Email实体
+     * @param o 实体
      */
     @Async
-    public <T> void sendMqMessage(T o) {
+    public <T> void sendMqMessage(T o, Queue queue) {
         try {
             rabbitTemplate.setMessageConverter(new Jackson2JsonMessageConverter());
-            rabbitTemplate.setExchange(properties.getRabbitMqProperties().getExchangeName());
-            rabbitTemplate.setRoutingKey(properties.getRabbitMqProperties().getRoutingKeyName());
+            rabbitTemplate.setExchange(queue.getExchangeName());
+            rabbitTemplate.setRoutingKey(queue.getRoutingKeyName());
             rabbitTemplate.convertAndSend(o, message -> {
                 MessageProperties messageProperties = message.getMessageProperties();
                 messageProperties.setDeliveryMode(MessageDeliveryMode.PERSISTENT);

@@ -87,7 +87,7 @@ public class TokenFilter extends GenericFilterBean {
             authentication.setDetails(new WebAuthenticationDetailsSource().buildDetails(httpServletRequest));
             //放入Spring Security安全上下文
             SecurityContextHolder.getContext().setAuthentication(authentication);
-            log.info("Security -> 将身份验证设置为安全上下文,身份:{{}},uri:{{}}", authentication.getName(), requestUri);
+//            log.info("Security -> 将身份验证设置为安全上下文,身份:{{}},uri:{{}}", authentication.getName(), requestUri);
         } else {
             //否则移除缓存中的Token
             tokenUtils.removeToken(authToken);

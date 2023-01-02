@@ -1,6 +1,7 @@
 package com.jcweiho.scaffold.rabbitmq.config;
 
-import com.jcweiho.scaffold.common.config.system.ScaffoldSystemProperties;
+import com.jcweiho.scaffold.rabbitmq.queue.EmailQueue;
+import com.jcweiho.scaffold.rabbitmq.queue.LogQueue;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.amqp.core.*;
@@ -22,6 +23,8 @@ import org.springframework.context.annotation.Configuration;
 @Configuration
 @RequiredArgsConstructor
 public class RabbitMqConfig {
+    private final LogQueue logQueue;
+    private final EmailQueue emailQueue;
     /**
      * 连接工厂实例
      */
@@ -30,7 +33,6 @@ public class RabbitMqConfig {
      * 消息监听器所在容器工厂的配置实例
      */
     private final SimpleRabbitListenerContainerFactoryConfigurer factoryConfigurer;
-    private final ScaffoldSystemProperties properties;
 
     /**
      * 单一消费者
@@ -87,32 +89,50 @@ public class RabbitMqConfig {
     }
 
     /**
-     * 创建队列
-     *
-     * @return Queue
+     * 日志队列
      */
-    @Bean(name = "logQueue")
-    public Queue logQueue() {
-        return new Queue(properties.getRabbitMqProperties().getQueueName(), true);
+    @Bean
+    public Queue logRabbitQueue() {
+        return new Queue(logQueue.getQueueName(), true, false, false, null);
     }
 
     /**
-     * 创建交换机
-     *
-     * @return TopicExchange
+     * 日志交换机
      */
     @Bean
-    public TopicExchange logExchange() {
-        return new TopicExchange(properties.getRabbitMqProperties().getExchangeName(), true, false);
+    public TopicExchange logRabbitExchange() {
+        return new TopicExchange(logQueue.getExchangeName(), true, false, null);
     }
 
     /**
-     * 创建绑定
-     *
-     * @return Binding
+     * 日志路由Key
      */
     @Bean
-    public Binding logBinding() {
-        return BindingBuilder.bind(logQueue()).to(logExchange()).with(properties.getRabbitMqProperties().getRoutingKeyName());
+    public Binding logRabbitBinding() {
+        return BindingBuilder.bind(logRabbitQueue()).to(logRabbitExchange()).with(logQueue.getRoutingKeyName());
+    }
+
+    /**
+     * 邮件队列
+     */
+    @Bean
+    public Queue emailRabbitQueue() {
+        return new Queue(emailQueue.getQueueName(), true, false, false, null);
+    }
+
+    /**
+     * 邮件交换机
+     */
+    @Bean
+    public TopicExchange emailRabbitExchange() {
+        return new TopicExchange(emailQueue.getExchangeName(), true, false, null);
+    }
+
+    /**
+     * 邮件路由Key
+     */
+    @Bean
+    public Binding emailBinding() {
+        return BindingBuilder.bind(emailRabbitQueue()).to(emailRabbitExchange()).with(emailQueue.getRoutingKeyName());
     }
 }

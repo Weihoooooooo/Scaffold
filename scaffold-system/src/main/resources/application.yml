@@ -10,6 +10,9 @@ management:
 spring:
   application:
     name: Scaffold
+  devtools:
+    livereload:
+      port: 8889
   mvc:
     servlet:
       load-on-startup: 1 # 取消 DispatcherServlet 懒加载 ，加快重启后接口调用的速度
@@ -100,6 +103,7 @@ spring:
 logging:
   level:
     com.jcweiho.scaffold: DEBUG #开启Mybatis Log Plugin sql日志
+    org.springframework: WARN
 
 #Mybatis  - - -  resultMap 不用全写映射，当数据库中的某些字段不匹配时，只用写某些字段
 mybatis-plus:
@@ -201,13 +205,6 @@ scaffold:
     system-monitor-enabled: true
     # 是否开启实时控制台传输
     logging-monitor-enabled: true
-  rabbitmq:
-    # 队列名称
-    queue-name: ${spring.application.name}.middleware.rabbit.queue
-    # 队列交换机名称
-    exchange-name: ${spring.application.name}.rabbit.exchange
-    # 路由Key名称
-    routing-key-name: ${spring.application.name}.rabbit.routing.key
   email:
     # 邮箱验证码的长度
     code-key: "Scaffold:EmailCode:"

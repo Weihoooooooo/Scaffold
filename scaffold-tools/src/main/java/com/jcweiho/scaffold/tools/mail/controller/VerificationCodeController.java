@@ -7,6 +7,7 @@ import com.jcweiho.scaffold.common.util.result.Result;
 import com.jcweiho.scaffold.i18n.I18nMessagesUtils;
 import com.jcweiho.scaffold.logging.annotation.Logging;
 import com.jcweiho.scaffold.rabbitmq.core.MqPublisher;
+import com.jcweiho.scaffold.rabbitmq.queue.EmailQueue;
 import com.jcweiho.scaffold.redis.limiter.annotation.RateLimiter;
 import com.jcweiho.scaffold.redis.limiter.enums.LimitType;
 import com.jcweiho.scaffold.tools.mail.entity.vo.EmailVO;
@@ -32,20 +33,20 @@ import java.util.Map;
 public class VerificationCodeController {
     private final VerificationCodeService verificationCodeService;
     private final MqPublisher mqPublisher;
+    private final EmailQueue emailQueue;
 
     @Logging(title = "请求发送邮箱验证码", saveRequestData = false)
     @PostMapping(value = "/code")
     @ApiOperation("请求发送邮箱验证码")
     @RateLimiter(count = 1, limitType = LimitType.IP)// 一分钟之内只能请求1次
     public Result getEmailCode(@Validated @RequestBody VerificationCodeVO codeVO) {
-        System.err.println(codeVO.toString());
         if (!VerifyUtils.isEmail(codeVO.getAccount() + codeVO.getSuffix().getDisplay())) {
             throw new BadRequestException(I18nMessagesUtils.get("mail.error.no.email"));
         }
         Map<String, Object> codeResult = verificationCodeService.generatorEmailInfo(codeVO);
         EmailVO emailVO = (EmailVO) codeResult.get("emailVO");
         // 放入MQ消息队列
-        mqPublisher.sendMqMessage(emailVO);
+        mqPublisher.sendMqMessage(emailVO, emailQueue);
         return Result.success(codeResult.get("uuid"));
     }
 

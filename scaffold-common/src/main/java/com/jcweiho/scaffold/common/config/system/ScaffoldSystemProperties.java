@@ -24,15 +24,14 @@ public class ScaffoldSystemProperties {
     private MonitorProperties monitorProperties;
     private TaskThreadPoolProperties threadPoolProperties;
     private RSAProperties rsaProperties;
-    private RabbitMqProperties rabbitMqProperties;
     private EmailProperties emailProperties;
     private ResourcesProperties resourcesProperties;
 
     public ScaffoldSystemProperties(SwaggerProperties swaggerProperties, RateLimiterProperties rateLimiterProperties,
                                     JwtProperties jwtProperties, CodeProperties codeProperties,
                                     MonitorProperties monitorProperties, TaskThreadPoolProperties taskThreadPoolProperties,
-                                    RSAProperties rsaProperties, RabbitMqProperties rabbitMqProperties,
-                                    EmailProperties emailProperties, ResourcesProperties resourcesProperties) {
+                                    RSAProperties rsaProperties, EmailProperties emailProperties,
+                                    ResourcesProperties resourcesProperties) {
         this.swaggerProperties = swaggerProperties;
         this.rateLimiterProperties = rateLimiterProperties;
         this.jwtProperties = jwtProperties;
@@ -40,7 +39,6 @@ public class ScaffoldSystemProperties {
         this.monitorProperties = monitorProperties;
         this.threadPoolProperties = taskThreadPoolProperties;
         this.rsaProperties = rsaProperties;
-        this.rabbitMqProperties = rabbitMqProperties;
         this.emailProperties = emailProperties;
         this.resourcesProperties = resourcesProperties;
     }
@@ -158,19 +156,6 @@ public class ScaffoldSystemProperties {
     public static class RSAProperties {
         //RSA私钥
         private String privateKey;
-    }
-
-    @Getter
-    @Setter
-    @Configuration
-    @ConfigurationProperties(prefix = "scaffold.rabbitmq")
-    public static class RabbitMqProperties {
-        // 队列名称
-        private String queueName;
-        // 队列交换机名称
-        private String exchangeName;
-        // 路由Key名称
-        private String routingKeyName;
     }
 
     @Getter

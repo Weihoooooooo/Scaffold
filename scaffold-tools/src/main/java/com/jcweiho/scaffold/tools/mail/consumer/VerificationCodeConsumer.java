@@ -24,7 +24,7 @@ public class VerificationCodeConsumer {
     private final EmailConfigVOConvert emailConfigVOConvert;
 
     @Async
-    @RabbitListener(queues = "${scaffold.rabbitmq.queue-name}", containerFactory = "singleListenerContainer")
+    @RabbitListener(queues = "Scaffold.rabbit.queue.email", containerFactory = "singleListenerContainer")
     public void consumerEmailMessage(@Payload EmailVO o) {
         try {
             emailConfigService.send(o, emailConfigVOConvert.toPojo(emailConfigService.getConfig()));

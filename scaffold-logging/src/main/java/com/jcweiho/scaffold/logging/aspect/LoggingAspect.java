@@ -8,6 +8,7 @@ import com.jcweiho.scaffold.logging.entity.Log;
 import com.jcweiho.scaffold.logging.enums.BusinessStatusEnum;
 import com.jcweiho.scaffold.logging.enums.LogTypeEnum;
 import com.jcweiho.scaffold.rabbitmq.core.MqPublisher;
+import com.jcweiho.scaffold.rabbitmq.queue.LogQueue;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.aspectj.lang.JoinPoint;
@@ -34,6 +35,7 @@ import java.util.Map;
 @RequiredArgsConstructor
 public class LoggingAspect {
     private final MqPublisher mqPublisher;
+    private final LogQueue logQueue;
     private Log logInfo;
 
     @Before(value = "@annotation(logging)")
@@ -61,7 +63,7 @@ public class LoggingAspect {
         getControllerMethodDescription(joinPoint, logging, request, logInfo, jsonResult);
         logInfo.setStatus(BusinessStatusEnum.SUCCESS);
         // 发rabbit队列
-        mqPublisher.sendMqMessage(logInfo);
+        mqPublisher.sendMqMessage(logInfo, logQueue);
     }
 
     @AfterThrowing(value = "@annotation(logging)", throwing = "e")
@@ -75,7 +77,7 @@ public class LoggingAspect {
         logInfo.setStatus(BusinessStatusEnum.FAIL);
         logInfo.setExceptionDetail(StringUtils.substring(ThrowableUtils.getStackTrace(e), 0, 6000));
         // 发rabbit队列
-        mqPublisher.sendMqMessage(logInfo);
+        mqPublisher.sendMqMessage(logInfo, logQueue);
     }
 
     /**

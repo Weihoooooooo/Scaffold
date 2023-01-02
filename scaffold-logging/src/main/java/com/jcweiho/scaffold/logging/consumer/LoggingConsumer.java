@@ -20,7 +20,7 @@ public class LoggingConsumer {
     private final LogService logService;
 
     @Async
-    @RabbitListener(queues = "${scaffold.rabbitmq.queue-name}", containerFactory = "singleListenerContainer")
+    @RabbitListener(queues = "Scaffold.rabbit.queue.log", containerFactory = "singleListenerContainer")
     public void consumerLogMessage(@Payload Log logging) {
         try {
             logService.saveLogInfo(logging);
