@@ -71,12 +71,7 @@ public class ElevatorTypeServiceImpl extends CommonServiceImpl<ElevatorTypeMappe
         List<Map<String, Object>> list = ListUtils.list(false);
         for (ElevatorType elevatorType : all) {
             Map<String, Object> map = new LinkedHashMap<>();
-            map.put("电梯类型", elevatorType.getName());
-            map.put("电梯类型zh-CN", elevatorType.getNameZhCn());
-            map.put("电梯类型zh-HK", elevatorType.getNameZhHk());
-            map.put("电梯类型zh-TW", elevatorType.getNameZhHk());
-            map.put("电梯类型en-US", elevatorType.getNameEnUs());
-            map.put("创建时间", elevatorType.getCreateTime());
+            map.put(I18nMessagesUtils.get("download.elevator.type"), elevatorType.getName());
             map.put(I18nMessagesUtils.get("download.createTime"), elevatorType.getCreateTime());
             map.put(I18nMessagesUtils.get("download.updateTime"), elevatorType.getUpdateTime());
             list.add(map);

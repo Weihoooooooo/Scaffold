@@ -5,7 +5,9 @@ import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.github.pagehelper.PageInfo;
 import com.jcweiho.scaffold.common.exception.BadRequestException;
 import com.jcweiho.scaffold.common.util.*;
+import com.jcweiho.scaffold.common.util.result.VueSelectVO;
 import com.jcweiho.scaffold.common.util.secure.IdSecureUtils;
+import com.jcweiho.scaffold.i18n.I18nMessagesUtils;
 import com.jcweiho.scaffold.mp.core.QueryHelper;
 import com.jcweiho.scaffold.mp.service.impl.CommonServiceImpl;
 import com.jcweiho.scaffold.system.entity.Household;
@@ -77,18 +79,18 @@ public class HouseholdServiceImpl extends CommonServiceImpl<HouseholdMapper, Hou
         List<Map<String, Object>> list = ListUtils.list(false);
         for (HouseholdVO householdVO : all) {
             Map<String, Object> map = new LinkedHashMap<>();
-            map.put("业主姓名", householdVO.getOwnerName());
-            map.put("建筑栋号", householdVO.getBuildingNum());
-            map.put("梯户独立编号", householdVO.getIdentityId());
-            map.put("面积", householdVO.getArea());
-            map.put("水表读数", householdVO.getMeterWater());
-            map.put("上一次水表读数", householdVO.getLastMeterWater());
-            map.put("电表读数", householdVO.getMeterElectric());
-            map.put("上一次电表读数", householdVO.getLastMeterElectric());
-            map.put("常住人数", householdVO.getPeopleNumber());
-            map.put("是否居住", householdVO.getIsLive().getDisplay());
-            map.put("创建时间", householdVO.getCreateTime());
-            map.put("修改时间", householdVO.getUpdateTime());
+            map.put(I18nMessagesUtils.get("download.owner.name"), householdVO.getOwnerName());
+            map.put(I18nMessagesUtils.get("download.elevator.buildingNum"), householdVO.getBuildingNum());
+            map.put(I18nMessagesUtils.get("download.household.identity.id"), householdVO.getIdentityId());
+            map.put(I18nMessagesUtils.get("download.household.area"), householdVO.getArea());
+            map.put(I18nMessagesUtils.get("download.household.meter.water"), householdVO.getMeterWater());
+            map.put(I18nMessagesUtils.get("download.household.last.meter.water"), householdVO.getLastMeterWater());
+            map.put(I18nMessagesUtils.get("download.household.meter.electric"), householdVO.getMeterElectric());
+            map.put(I18nMessagesUtils.get("download.household.last.meter.electric"), householdVO.getLastMeterElectric());
+            map.put(I18nMessagesUtils.get("download.household.people.number"), householdVO.getPeopleNumber());
+            map.put(I18nMessagesUtils.get("download.household.isLive"), householdVO.getIsLive().getDisplay());
+            map.put(I18nMessagesUtils.get("download.createTime"), householdVO.getCreateTime());
+            map.put(I18nMessagesUtils.get("download.updateTime"), householdVO.getUpdateTime());
             list.add(map);
         }
         FileUtils.downloadExcel(list, response);
@@ -146,5 +148,18 @@ public class HouseholdServiceImpl extends CommonServiceImpl<HouseholdMapper, Hou
     @Transactional(rollbackFor = Exception.class)
     public boolean deleteHousehold(Set<Long> ids) {
         return this.removeByIds(ids);
+    }
+
+    @Override
+    public List<VueSelectVO> getDistinctHouseholdSelect(Long buildingId) {
+        List<VueSelectVO> list = ListUtils.list(false);
+        LambdaQueryWrapper<Household> wrapper = new LambdaQueryWrapper<>();
+        wrapper.select(Household::getId, Household::getIdentityId)
+                .eq(Household::getBuildingId, buildingId);
+        List<Household> households = this.getBaseMapper().selectList(wrapper);
+        for (Household household : households) {
+            list.add(new VueSelectVO(IdSecureUtils.des().encrypt(household.getId()), household.getIdentityId()));
+        }
+        return list;
     }
 }

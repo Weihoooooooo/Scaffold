@@ -57,7 +57,6 @@ public class SysSettingController extends CommonController<SysSettingService, Sy
     @PreAuthorize("@el.check('SystemSettings:use')")
     public Result updateSys(@Validated @RequestBody SysSettingVO sysSettingVO) {
         SysSettingVO sysSettingVO1 = sysSettingVOConvert.toPojo(this.getBaseService().getById(sysSettingVO.getId()));
-
         if (!sysSettingVO1.toString().equals(sysSettingVO.toString())) {
             return resultMessage(Operate.UPDATE, this.getBaseService().updateSysSettings(sysSettingVO));
         } else {

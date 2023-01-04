@@ -36,7 +36,7 @@ public class CodeGenerator {
         //父包名
         String parentPackageName = "com.jcweiho.scaffold.system";
         //要创建系列文件的表名
-        String[] tableNames = {"park_lot"};
+        String[] tableNames = {"village"};
         //若要设置Entity、Service、ServiceImpl、Controller的父类滑动下去修改
 
 

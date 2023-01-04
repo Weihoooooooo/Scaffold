@@ -4,6 +4,7 @@ import com.jcweiho.scaffold.system.cache.service.CacheRefresh;
 import com.jcweiho.scaffold.system.entity.Role;
 import com.jcweiho.scaffold.system.entity.SysSetting;
 import com.jcweiho.scaffold.system.entity.User;
+import com.jcweiho.scaffold.system.entity.Village;
 import com.jcweiho.scaffold.system.entity.dto.MenuDTO;
 import com.jcweiho.scaffold.system.service.MenuService;
 import com.jcweiho.scaffold.system.service.RoleService;
@@ -56,5 +57,11 @@ public class CacheRefreshImpl implements CacheRefresh {
     @CachePut(value = "Scaffold:System", key = "'settings'")
     public SysSetting updateSysSetting(SysSetting sysSetting) {
         return sysSetting;
+    }
+
+    @Override
+    @CachePut(value = "Scaffold:Village", key = "'settings'")
+    public Village updateVillage(Village village) {
+        return null;
     }
 }

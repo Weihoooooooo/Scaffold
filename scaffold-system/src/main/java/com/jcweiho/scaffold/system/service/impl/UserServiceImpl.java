@@ -271,7 +271,7 @@ public class UserServiceImpl extends CommonServiceImpl<UserMapper, User> impleme
             map.put(I18nMessagesUtils.get("download.sex"), userVO.getSex().getDisplay());
             map.put(I18nMessagesUtils.get("download.email"), userVO.getEmail());
             map.put(I18nMessagesUtils.get("download.phone"), userVO.getPhone());
-            map.put(I18nMessagesUtils.get("download.user.state"), userVO.isEnabled() ? "启用" : "禁用");
+            map.put(I18nMessagesUtils.get("download.user.state"), userVO.isEnabled() ? I18nMessagesUtils.get("download.yes") : I18nMessagesUtils.get("download.no"));
             map.put(I18nMessagesUtils.get("download.user.lastPass"), userVO.getLastPassResetTime());
             map.put(I18nMessagesUtils.get("download.user.add.time"), userVO.getCreateTime());
             list.add(map);

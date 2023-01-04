@@ -1,5 +1,6 @@
 package com.jcweiho.scaffold.system.service;
 
+import com.jcweiho.scaffold.common.util.result.VueSelectVO;
 import com.jcweiho.scaffold.mp.service.CommonService;
 import com.jcweiho.scaffold.system.entity.Household;
 import com.jcweiho.scaffold.system.entity.criteria.HouseholdQueryCriteria;
@@ -77,4 +78,12 @@ public interface HouseholdService extends CommonService<Household> {
      * @return 是否成功
      */
     boolean deleteHousehold(Set<Long> ids);
+
+    /**
+     * 根据楼宇ID查找梯户列表
+     *
+     * @param buildingId 楼宇ID
+     * @return 梯户列表
+     */
+    List<VueSelectVO> getDistinctHouseholdSelect(Long buildingId);
 }

@@ -90,7 +90,7 @@ public class FeedbackServiceImpl extends CommonServiceImpl<FeedbackMapper, Feedb
         List<Map<String, Object>> list = ListUtils.list(false);
         for (FeedbackVO feedbackVO : all) {
             Map<String, Object> map = new LinkedHashMap<>();
-            map.put(I18nMessagesUtils.get("download.feedback.ownername"), feedbackVO.getOwnerName());
+            map.put(I18nMessagesUtils.get("download.owner.name"), feedbackVO.getOwnerName());
             map.put(I18nMessagesUtils.get("download.feedback.username"), feedbackVO.getUsername());
             map.put(I18nMessagesUtils.get("download.feedback.type"), feedbackVO.getType().getDisplay());
             map.put(I18nMessagesUtils.get("download.feedback.title"), feedbackVO.getTitle());

@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.jcweiho.scaffold.system.mapper.VisitorMapper">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="com.jcweiho.scaffold.system.entity.Visitor">
+        <id column="id" property="id"/>
+        <result column="name" property="name"/>
+        <result column="phone" property="phone"/>
+        <result column="building_id" property="buildingId"/>
+        <result column="household_id" property="householdId"/>
+        <result column="create_time" property="createTime"/>
+        <result column="update_time" property="updateTime"/>
+        <result column="is_del" property="isDel"/>
+    </resultMap>
+
+    <!-- 通用查询sql -->
+    <sql id="Base_Column_List">
+        SELECT id,
+               name,
+               phone,
+               building_id,
+               household_id,
+               create_time,
+               update_time,
+               is_del
+        FROM visitor
+    </sql>
+
+</mapper>

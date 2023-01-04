@@ -3,6 +3,7 @@ package com.jcweiho.scaffold.system.cache.service;
 import com.jcweiho.scaffold.system.entity.Role;
 import com.jcweiho.scaffold.system.entity.SysSetting;
 import com.jcweiho.scaffold.system.entity.User;
+import com.jcweiho.scaffold.system.entity.Village;
 import com.jcweiho.scaffold.system.entity.dto.MenuDTO;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 
@@ -56,4 +57,12 @@ public interface CacheRefresh {
      * @return
      */
     SysSetting updateSysSetting(SysSetting sysSetting);
+
+    /**
+     * 更新小区参数
+     *
+     * @param village 新的小区参数
+     * @return
+     */
+    Village updateVillage(Village village);
 }

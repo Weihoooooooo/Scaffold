@@ -11,6 +11,7 @@ import com.jcweiho.scaffold.common.util.PageUtils;
 import com.jcweiho.scaffold.common.util.result.VueCascadeVO;
 import com.jcweiho.scaffold.common.util.result.VueSelectVO;
 import com.jcweiho.scaffold.common.util.secure.IdSecureUtils;
+import com.jcweiho.scaffold.i18n.I18nMessagesUtils;
 import com.jcweiho.scaffold.mp.core.QueryHelper;
 import com.jcweiho.scaffold.mp.service.impl.CommonServiceImpl;
 import com.jcweiho.scaffold.system.entity.Park;
@@ -77,12 +78,13 @@ public class ParkServiceImpl extends CommonServiceImpl<ParkMapper, Park> impleme
         List<Map<String, Object>> list = ListUtils.list(false);
         for (ParkVO parkVO : all) {
             Map<String, Object> map = new LinkedHashMap<>();
-            map.put("停车场区域", parkVO.getRegion());
-            map.put("车位类型", parkVO.getType().getDisplay());
-            map.put("是否被购买", parkVO.getIsBuy().getDisplay());
-            map.put("车位独立编号", parkVO.getIdentityId());
-            map.put("车位价格", parkVO.getPrice());
-            map.put("创建时间", parkVO.getCreateTime());
+            map.put(I18nMessagesUtils.get("download.park.region"), parkVO.getRegion());
+            map.put(I18nMessagesUtils.get("download.park.type"), parkVO.getType().getDisplay());
+            map.put(I18nMessagesUtils.get("download.park.isBuy"), parkVO.getIsBuy().getDisplay());
+            map.put(I18nMessagesUtils.get("download.park.identityId"), parkVO.getIdentityId());
+            map.put(I18nMessagesUtils.get("download.park.price"), parkVO.getPrice());
+            map.put(I18nMessagesUtils.get("download.createTime"), parkVO.getCreateTime());
+            map.put(I18nMessagesUtils.get("download.updateTime"), parkVO.getUpdateTime());
             list.add(map);
         }
         FileUtils.downloadExcel(list, response);

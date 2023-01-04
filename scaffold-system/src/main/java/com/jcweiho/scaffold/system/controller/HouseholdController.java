@@ -1,9 +1,12 @@
 package com.jcweiho.scaffold.system.controller;
 
 import com.jcweiho.scaffold.common.util.result.Result;
+import com.jcweiho.scaffold.common.util.result.VueSelectVO;
 import com.jcweiho.scaffold.logging.annotation.Logging;
 import com.jcweiho.scaffold.logging.enums.BusinessTypeEnum;
 import com.jcweiho.scaffold.mp.controller.CommonController;
+import com.jcweiho.scaffold.redis.limiter.annotation.RateLimiter;
+import com.jcweiho.scaffold.redis.limiter.enums.LimitType;
 import com.jcweiho.scaffold.system.entity.Household;
 import com.jcweiho.scaffold.system.entity.criteria.HouseholdQueryCriteria;
 import com.jcweiho.scaffold.system.entity.vo.HouseholdVO;
@@ -18,6 +21,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
@@ -72,5 +76,13 @@ public class HouseholdController extends CommonController<HouseholdService, Hous
     @DeleteMapping
     public Result deleteHousehold(@RequestBody Set<String> ids) {
         return resultMessage(Operate.DELETE, this.getBaseService().deleteHousehold(filterCollNullAndDecrypt(ids)));
+    }
+
+    @ApiOperation("根据楼宇ID获取梯户列表")
+    @GetMapping("/buildingNum/{id}")
+    @PreAuthorize("@el.check('Building:list','Household:list')")
+    @RateLimiter(limitType = LimitType.IP)
+    public List<VueSelectVO> getDistinctHouseholdSelect(@PathVariable String id) {
+        return this.getBaseService().getDistinctHouseholdSelect(filterNullAndDecrypt(id));
     }
 }

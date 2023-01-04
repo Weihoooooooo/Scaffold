@@ -6,6 +6,7 @@ import com.github.pagehelper.PageInfo;
 import com.jcweiho.scaffold.common.exception.BadRequestException;
 import com.jcweiho.scaffold.common.util.*;
 import com.jcweiho.scaffold.common.util.secure.IdSecureUtils;
+import com.jcweiho.scaffold.i18n.I18nMessagesUtils;
 import com.jcweiho.scaffold.mp.core.QueryHelper;
 import com.jcweiho.scaffold.mp.service.impl.CommonServiceImpl;
 import com.jcweiho.scaffold.system.entity.Car;
@@ -99,14 +100,14 @@ public class CarServiceImpl extends CommonServiceImpl<CarMapper, Car> implements
         List<Map<String, Object>> list = ListUtils.list(false);
         for (CarVO carVO : all) {
             Map<String, Object> map = new LinkedHashMap<>();
-            map.put("业主姓名", carVO.getName());
-            map.put("车位区域", carVO.getParkVO().getRegion());
-            map.put("车位编号", carVO.getParkVO().getIdentityId());
-            map.put("车位类型", carVO.getParkVO().getType().getDisplay());
-            map.put("车牌号码", carVO.getCarNumber());
-            map.put("车辆颜色", carVO.getCarColor());
-            map.put("创建时间", carVO.getCreateTime());
-            map.put("修改时间", carVO.getUpdateTime());
+            map.put(I18nMessagesUtils.get("download.owner.name"), carVO.getName());
+            map.put(I18nMessagesUtils.get("download.car.region"), carVO.getParkVO().getRegion());
+            map.put(I18nMessagesUtils.get("download.car.identityId"), carVO.getParkVO().getIdentityId());
+            map.put(I18nMessagesUtils.get("download.car.type"), carVO.getParkVO().getType().getDisplay());
+            map.put(I18nMessagesUtils.get("download.car.number"), carVO.getCarNumber());
+            map.put(I18nMessagesUtils.get("download.car.color"), carVO.getCarColor());
+            map.put(I18nMessagesUtils.get("download.createTime"), carVO.getCreateTime());
+            map.put(I18nMessagesUtils.get("download.updateTime"), carVO.getUpdateTime());
             list.add(map);
         }
         FileUtils.downloadExcel(list, response);

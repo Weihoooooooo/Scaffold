@@ -91,7 +91,7 @@ public class ElevatorServiceImpl extends CommonServiceImpl<ElevatorMapper, Eleva
             map.put(I18nMessagesUtils.get("download.elevator.type"), elevatorVO.getElevatorTypes().stream().map(e -> I18nMessagesUtils.getNameForI18n(request, e)).collect(Collectors.toSet()));
             map.put(I18nMessagesUtils.get("download.elevator.maintain.people"), elevatorVO.getMaintainPeople());
             map.put(I18nMessagesUtils.get("download.elevator.maintain.phone"), elevatorVO.getMaintainPeoplePhone());
-            map.put(I18nMessagesUtils.get("download.elevator.enabled"), elevatorVO.isEnabled() ? "是" : "否");
+            map.put(I18nMessagesUtils.get("download.elevator.enabled"), elevatorVO.isEnabled() ? I18nMessagesUtils.get("download.yes") : I18nMessagesUtils.get("download.no"));
             map.put(I18nMessagesUtils.get("download.createTime"), elevatorVO.getCreateTime());
             map.put(I18nMessagesUtils.get("download.updateTime"), elevatorVO.getUpdateTime());
             list.add(map);

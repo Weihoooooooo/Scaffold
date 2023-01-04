@@ -192,9 +192,9 @@ public class MenuServiceImpl extends CommonServiceImpl<MenuMapper, Menu> impleme
             map.put(I18nMessagesUtils.get("download.menu.icon"), menuDTO.getIconCls());
             map.put(I18nMessagesUtils.get("download.menu.url"), menuDTO.getUrl());
             map.put(I18nMessagesUtils.get("download.menu.permission"), menuDTO.getPermission());
-            map.put(I18nMessagesUtils.get("download.menu.keep.live"), menuDTO.getKeepAlive() ? "是" : "否");
-            map.put(I18nMessagesUtils.get("download.menu.hidden"), menuDTO.getHidden() ? "是" : "否");
-            map.put(I18nMessagesUtils.get("download.menu.enabled"), menuDTO.getEnabled() ? "启用" : "禁用");
+            map.put(I18nMessagesUtils.get("download.menu.keep.live"), menuDTO.getKeepAlive() ? I18nMessagesUtils.get("download.yes") : I18nMessagesUtils.get("download.no"));
+            map.put(I18nMessagesUtils.get("download.menu.hidden"), menuDTO.getHidden() ? I18nMessagesUtils.get("download.yes") : I18nMessagesUtils.get("download.no"));
+            map.put(I18nMessagesUtils.get("download.menu.enabled"), menuDTO.getEnabled() ? I18nMessagesUtils.get("download.yes") : I18nMessagesUtils.get("download.no"));
             map.put(I18nMessagesUtils.get("download.menu.type"), menuDTO.getType().getDisplay());
             map.put(I18nMessagesUtils.get("download.menu.sort"), menuDTO.getSort());
             map.put(I18nMessagesUtils.get("download.createTime"), menuDTO.getCreateTime());

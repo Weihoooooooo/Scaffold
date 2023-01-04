@@ -62,11 +62,11 @@ public class ParkLotServiceImpl extends CommonServiceImpl<ParkLotMapper, ParkLot
         List<Map<String, Object>> list = ListUtils.list(false);
         for (ParkLot parkLot : all) {
             Map<String, Object> map = new LinkedHashMap<>();
-            map.put("停车区域", parkLot.getRegion());
-            map.put("小车车位数", parkLot.getNumber());
-            map.put("停车场层数", parkLot.getFloor());
-            map.put("其他车位数", parkLot.getOtherNumber());
-            map.put("是否启用", parkLot.isEnabled() ? '是' : '否');
+            map.put(I18nMessagesUtils.get("download.parkLot.region"), parkLot.getRegion());
+            map.put(I18nMessagesUtils.get("download.parkLot.number"), parkLot.getNumber());
+            map.put(I18nMessagesUtils.get("download.parkLot.floor"), parkLot.getFloor());
+            map.put(I18nMessagesUtils.get("download.parkLot.otherNumber"), parkLot.getOtherNumber());
+            map.put(I18nMessagesUtils.get("download.household.enabled"), parkLot.isEnabled() ? I18nMessagesUtils.get("download.yes") : I18nMessagesUtils.get("download.no"));
             map.put(I18nMessagesUtils.get("download.createTime"), parkLot.getCreateTime());
             map.put(I18nMessagesUtils.get("download.updateTime"), parkLot.getUpdateTime());
             list.add(map);
