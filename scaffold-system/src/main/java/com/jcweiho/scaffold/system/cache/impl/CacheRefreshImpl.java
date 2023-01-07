@@ -62,6 +62,6 @@ public class CacheRefreshImpl implements CacheRefresh {
     @Override
     @CachePut(value = "Scaffold:Village", key = "'settings'")
     public Village updateVillage(Village village) {
-        return null;
+        return village;
     }
 }

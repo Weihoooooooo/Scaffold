@@ -33,7 +33,7 @@ public class VillageController extends CommonController<VillageService, Village>
 
     @ApiOperation("获取小区参数")
     @GetMapping
-    @PreAuthorize("el.check('Village:use')")
+    @PreAuthorize("@el.check('Village:use')")
     @RateLimiter(limitType = LimitType.IP)
     public Village getVillage() {
         return villageService.getVillage();
@@ -42,7 +42,7 @@ public class VillageController extends CommonController<VillageService, Village>
     @Logging(title = "修改小区参数", businessType = BusinessTypeEnum.UPDATE)
     @ApiOperation("修改小区参数")
     @PutMapping
-    @PreAuthorize("@el.check('Village:use,Village:update')")
+    @PreAuthorize("@el.check('Village:use, Village:update')")
     public Result updateVillage(@Validated @RequestBody Village village) {
         Village village1 = this.getBaseService().getById(village.getId());
         if (!village1.toString().equals(village.toString())) {
