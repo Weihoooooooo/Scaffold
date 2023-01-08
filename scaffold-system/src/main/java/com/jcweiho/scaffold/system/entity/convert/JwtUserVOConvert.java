@@ -4,6 +4,7 @@ import com.jcweiho.scaffold.common.mapstruct.MapStructConvert;
 import com.jcweiho.scaffold.system.entity.User;
 import com.jcweiho.scaffold.system.security.vo.JwtUserVO;
 import org.mapstruct.Mapper;
+import org.mapstruct.MappingConstants;
 import org.mapstruct.ReportingPolicy;
 
 /**
@@ -12,6 +13,6 @@ import org.mapstruct.ReportingPolicy;
  * @author Weiho
  * @since 2022/7/29
  */
-@Mapper(componentModel = "spring", uses = {}, unmappedTargetPolicy = ReportingPolicy.IGNORE)
+@Mapper(componentModel = MappingConstants.ComponentModel.SPRING, unmappedTargetPolicy = ReportingPolicy.IGNORE)
 public interface JwtUserVOConvert extends MapStructConvert<User, JwtUserVO> {
 }

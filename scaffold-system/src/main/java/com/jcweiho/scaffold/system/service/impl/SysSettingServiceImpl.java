@@ -9,7 +9,6 @@ import com.jcweiho.scaffold.system.entity.SysSetting;
 import com.jcweiho.scaffold.system.entity.convert.SysLogoTitleVOConvert;
 import com.jcweiho.scaffold.system.entity.convert.SysSettingVOConvert;
 import com.jcweiho.scaffold.system.entity.vo.SysLogoTitleVO;
-import com.jcweiho.scaffold.system.entity.vo.SysSettingVO;
 import com.jcweiho.scaffold.system.mapper.SysSettingMapper;
 import com.jcweiho.scaffold.system.service.SysSettingService;
 import lombok.RequiredArgsConstructor;
@@ -53,14 +52,13 @@ public class SysSettingServiceImpl extends CommonServiceImpl<SysSettingMapper, S
     }
 
     @Override
-    public boolean updateSysSettings(SysSettingVO resources) {
+    public boolean updateSysSettings(SysSetting resources) {
         IdSecureUtils.verifyIdNotNull(resources.getId());
-        SysSetting sysSetting = sysSettingVOConvert.toEntity(resources);
-        sysSetting.setUserInitPassword(AesUtils.encrypt(sysSetting.getUserInitPassword()));
-        boolean flag = this.saveOrUpdate(sysSetting);
+        resources.setUserInitPassword(AesUtils.encrypt(resources.getUserInitPassword()));
+        boolean flag = this.saveOrUpdate(resources);
         if (flag) {
             // 更新缓存
-            cacheRefresh.updateSysSetting(sysSetting);
+            cacheRefresh.updateSysSetting(resources);
         }
         return flag;
     }

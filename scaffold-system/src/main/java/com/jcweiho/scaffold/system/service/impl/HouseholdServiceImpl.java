@@ -28,10 +28,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.util.LinkedHashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 
 /**
  * <p>
@@ -98,7 +95,7 @@ public class HouseholdServiceImpl extends CommonServiceImpl<HouseholdMapper, Hou
 
     @Override
     @Transactional(rollbackFor = Exception.class)
-    public boolean updateHousehold(HouseholdVO resources) {
+    public Map<String, Object> updateHousehold(HouseholdVO resources) {
         IdSecureUtils.verifyIdNotNull(resources.getId());
         Household household = this.getById(resources.getId());
         // 验证户号
@@ -107,21 +104,19 @@ public class HouseholdServiceImpl extends CommonServiceImpl<HouseholdMapper, Hou
         if (ObjectUtil.isNotNull(householdIdentityId) && !household.getId().equals(householdIdentityId.getId())) {
             throw new BadRequestException("该户号已被占用！");
         }
+
+        if (resources.getMeterWater() < household.getMeterWater() || resources.getMeterElectric() < household.getMeterWater()) {
+            throw new BadRequestException("填入的水表读数和电表读数不能小于上一次读数");
+        }
+
         household.setIdentityId(resources.getIdentityId());
         household.setPeopleNumber(resources.getPeopleNumber());
         household.setIsLive(resources.getIsLive());
 
-        // 修改上一次的水表读数
-        household.setLastMeterWater(household.getMeterWater());
-        // 放入本次修改的水表读数
-        household.setMeterWater(resources.getMeterWater());
-
-        // 修改上一次的电表读数
-        household.setLastMeterElectric(household.getMeterElectric());
-        // 放入本次修改的电表读数
-        household.setMeterElectric(resources.getMeterElectric());
-
-        return this.saveOrUpdate(household);
+        Map<String, Object> result = new HashMap<>();
+        result.put("flag", this.saveOrUpdate(household));
+        result.put("household", household);
+        return result;
     }
 
     @Override
@@ -138,9 +133,6 @@ public class HouseholdServiceImpl extends CommonServiceImpl<HouseholdMapper, Hou
         Long ownerId = ownerService.getOne(new LambdaQueryWrapper<Owner>()
                 .eq(Owner::getPhone, LikeCipherUtils.phoneLikeEncrypt(resources.getPhone()))).getId();
         household.setOwnerId(ownerId);
-        // 手动设置上一次的水电读数
-        household.setLastMeterElectric(0.00);
-        household.setLastMeterWater(0.00);
         return this.save(household);
     }
 

@@ -55,10 +55,10 @@ public class SysSettingController extends CommonController<SysSettingService, Sy
     @ApiOperation("修改系统参数")
     @PutMapping
     @PreAuthorize("@el.check('SystemSettings:use')")
-    public Result updateSys(@Validated @RequestBody SysSettingVO sysSettingVO) {
-        SysSettingVO sysSettingVO1 = sysSettingVOConvert.toPojo(this.getBaseService().getById(sysSettingVO.getId()));
-        if (!sysSettingVO1.toString().equals(sysSettingVO.toString())) {
-            return resultMessage(Operate.UPDATE, this.getBaseService().updateSysSettings(sysSettingVO));
+    public Result updateSys(@Validated @RequestBody SysSetting resources) {
+        SysSetting sysSetting = this.getBaseService().getById(resources.getId());
+        if (!sysSetting.toString().equals(resources.toString())) {
+            return resultMessage(Operate.UPDATE, this.getBaseService().updateSysSettings(resources));
         } else {
             return Result.success(I18nMessagesUtils.get("update.success.tip"));
         }

@@ -59,7 +59,7 @@ public class Household extends CommonEntity {
     private String identityId;
 
     @TableField("area")
-    @ApiModelProperty("面积(m^3)")
+    @ApiModelProperty("面积(m^2)")
     @DecimalMin(value = "0.01", message = "面积至少0.01！")
     @Digits(message = "该项必须为数字！", integer = 8, fraction = 2)
     private Double area;

@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.jcweiho.scaffold.system.mapper.HouseholdPayMapper">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="com.jcweiho.scaffold.system.entity.HouseholdPay">
+        <id column="id" property="id"/>
+        <result column="household_id" property="householdId"/>
+        <result column="pay_water" property="payWater"/>
+        <result column="pay_electric" property="payElectric"/>
+        <result column="year" property="year"/>
+        <result column="month" property="month"/>
+        <result column="pay_property" property="payProperty"/>
+        <result column="is_pay_water" property="isPayWater"/>
+        <result column="is_pay_electric" property="isPayElectric"/>
+        <result column="is_pay_property" property="isPayProperty"/>
+        <result column="create_time" property="createTime"/>
+        <result column="update_time" property="updateTime"/>
+        <result column="is_del" property="isDel"/>
+    </resultMap>
+
+    <!-- 通用查询sql -->
+    <sql id="Base_Column_List">
+        SELECT id,
+               household_id,
+               pay_water,
+               pay_electric,
+               year,
+               month,
+               pay_property,
+               is_pay_water,
+               is_pay_electric,
+               is_pay_property,
+               create_time,
+               update_time,
+               is_del
+        FROM household_pay
+    </sql>
+
+</mapper>

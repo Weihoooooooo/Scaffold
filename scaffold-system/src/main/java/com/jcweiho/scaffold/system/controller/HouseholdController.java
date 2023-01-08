@@ -1,5 +1,11 @@
 package com.jcweiho.scaffold.system.controller;
 
+import cn.hutool.core.convert.Convert;
+import cn.hutool.core.util.NumberUtil;
+import cn.hutool.core.util.ObjectUtil;
+import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import com.jcweiho.scaffold.common.util.DateUtils;
+import com.jcweiho.scaffold.common.util.MapUtils;
 import com.jcweiho.scaffold.common.util.result.Result;
 import com.jcweiho.scaffold.common.util.result.VueSelectVO;
 import com.jcweiho.scaffold.logging.annotation.Logging;
@@ -8,9 +14,13 @@ import com.jcweiho.scaffold.mp.controller.CommonController;
 import com.jcweiho.scaffold.redis.limiter.annotation.RateLimiter;
 import com.jcweiho.scaffold.redis.limiter.enums.LimitType;
 import com.jcweiho.scaffold.system.entity.Household;
+import com.jcweiho.scaffold.system.entity.HouseholdPay;
+import com.jcweiho.scaffold.system.entity.Village;
 import com.jcweiho.scaffold.system.entity.criteria.HouseholdQueryCriteria;
 import com.jcweiho.scaffold.system.entity.vo.HouseholdVO;
+import com.jcweiho.scaffold.system.service.HouseholdPayService;
 import com.jcweiho.scaffold.system.service.HouseholdService;
+import com.jcweiho.scaffold.system.service.VillageService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
@@ -21,6 +31,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -38,6 +49,8 @@ import java.util.Set;
 @RequestMapping("/api/v1/households")
 @RequiredArgsConstructor
 public class HouseholdController extends CommonController<HouseholdService, Household> {
+    private final VillageService villageService;
+    private final HouseholdPayService householdPayService;
 
     @ApiOperation("查询梯户列表")
     @PreAuthorize("@el.check('Household:list')")
@@ -67,7 +80,52 @@ public class HouseholdController extends CommonController<HouseholdService, Hous
     @PreAuthorize("@el.check('Household:update')")
     @PutMapping
     public Result updateHousehold(@RequestBody @Validated HouseholdVO resources) {
-        return resultMessage(Operate.UPDATE, this.getBaseService().updateHousehold(resources));
+        Map<String, Object> map = this.getBaseService().updateHousehold(resources);
+        Boolean updateFlag = MapUtils.get(map, "flag", Boolean.class);
+        Household household = MapUtils.get(map, "household", Household.class);
+
+        // 先判断该年该月是否存在记录
+        Date now = DateUtils.getNowDate();
+        Long year = Convert.toLong(DateUtils.year(now));
+        Integer month = DateUtils.month(now) + 1;
+        HouseholdPay flag = householdPayService.getOne(new LambdaQueryWrapper<HouseholdPay>()
+                .eq(HouseholdPay::getHouseholdId, household.getId())
+                .eq(HouseholdPay::getYear, year).eq(HouseholdPay::getMonth, month));
+
+        // 该年该月没有记录则插入
+        if (ObjectUtil.isNull(flag)) {
+            if (resources.getMeterWater() > household.getMeterWater() || resources.getMeterElectric() > household.getMeterWater()) {
+                // 修改上一次的水表读数
+                Double lastMeterWater = household.getMeterWater();
+                // 放入本次修改的水表读数
+                Double meterWater = resources.getMeterWater();
+                // 修改上一次的电表读数
+                Double lastMeterElectric = household.getMeterElectric();
+                // 放入本次修改的电表读数
+                Double meterElectric = resources.getMeterElectric();
+
+                // 更新
+                this.getBaseService().lambdaUpdate().set(Household::getLastMeterWater, lastMeterWater)
+                        .set(Household::getMeterWater, meterWater)
+                        .set(Household::getLastMeterElectric, lastMeterElectric)
+                        .set(Household::getMeterElectric, meterElectric)
+                        .eq(Household::getId, household.getId()).update();
+
+                // 计算价格
+                Village village = villageService.getVillage();
+
+                // 该年该月没有记录则插入
+                HouseholdPay householdPay = new HouseholdPay();
+                householdPay.setHouseholdId(resources.getId());
+                householdPay.setPayWater(Convert.toDouble(NumberUtil.round(NumberUtil.mul(Convert.toDouble(NumberUtil.sub(meterWater, lastMeterWater)), village.getWater()), 2)));
+                householdPay.setPayElectric(Convert.toDouble(NumberUtil.round(NumberUtil.mul(Convert.toDouble(NumberUtil.sub(meterElectric, lastMeterElectric)), village.getElectric()), 2)));
+                householdPay.setPayProperty(Convert.toDouble(NumberUtil.round(NumberUtil.mul(household.getArea(), village.getProperty()), 2)));
+                householdPay.setYear(year);
+                householdPay.setMonth(month);
+                return resultMessage(Operate.UPDATE, updateFlag && householdPayService.addHouseholdPay(householdPay));
+            }
+        }
+        return resultMessage(Operate.UPDATE, updateFlag);
     }
 
     @Logging(title = "删除梯户信息", businessType = BusinessTypeEnum.DELETE)

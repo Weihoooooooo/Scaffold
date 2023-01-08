@@ -61,7 +61,7 @@ public interface HouseholdService extends CommonService<Household> {
      * @param resources 新梯户
      * @return 是否成功
      */
-    boolean updateHousehold(HouseholdVO resources);
+    Map<String, Object> updateHousehold(HouseholdVO resources);
 
     /**
      * 添加梯户

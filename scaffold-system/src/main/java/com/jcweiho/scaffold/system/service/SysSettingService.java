@@ -2,7 +2,6 @@ package com.jcweiho.scaffold.system.service;
 
 import com.jcweiho.scaffold.mp.service.CommonService;
 import com.jcweiho.scaffold.system.entity.SysSetting;
-import com.jcweiho.scaffold.system.entity.vo.SysSettingVO;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.Map;
@@ -38,5 +37,5 @@ public interface SysSettingService extends CommonService<SysSetting> {
      * @param resources 新的配置
      * @return /
      */
-    boolean updateSysSettings(SysSettingVO resources);
+    boolean updateSysSettings(SysSetting resources);
 }
